@@ -1,0 +1,48 @@
+@import "../theme";
+@import "../views/Login";
+@import "../views/CustomizeGameParameter";
+
+.BaseContainer{
+  @extend .BaseContainer;
+  padding: 20px;
+}
+
+.BaseDiv{
+  @extend .BaseDiv;
+  padding: 40px;
+}
+
+.user-profile-header {
+  @extend .h2-title;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: solid $textColor;
+  padding-right: 40px;
+}
+
+.user-profile-name {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.user-profile-stats h3 {
+  color: $textColor;
+  border-bottom: 1px solid white;
+  padding-bottom: 10px;
+}
+
+.user-stats {
+  color: $textColor;
+  padding: 10px 0;
+  border-bottom: 1px solid white;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  color: $textColor;
+  font-weight: bold;
+}

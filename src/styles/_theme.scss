@@ -8,10 +8,21 @@
    feel free to play around with these and see what other look you can come up with! :D
 */
 
-$accent: #97ABFF;
-$accentDark: #123597;
-$textColor: white;
-$background: #262632;
+$accent: #5D48DF;
+$accentDark: #7262D6;
+$lightviolet: #7262D6;
+$textColor: #D9D9D9;
+$background: #0E525E;
+$warning: #FF4589;
+$turquise: #00A1B3;
+$spotifygreen: 	#1DB954;
+$inputblue: #006FFC;
+$backgroundgrey: #494554;
+
+$buttonedge: 50px;
+$divedge: 20px;
+
+$inputfontsize: 18px;
 
 /* some constants */
 
@@ -22,12 +33,12 @@ $SMALL_WIDTH: 768px;
 
 /* some standard elements */
 /* fonts */
-$fontDefault: "M PLUS Rounded 1c", sans-serif;
+$fontDefault: "M PLUS Rounded 1ac", sans-serif;
 $fontMono: "Roboto Mono", monospace;
 
 /* a standard drop shadow */
-$dropShadow: 0 0.25em 0.25em rgba(0, 0, 0, 0.25);
-
+$dropShadow: 0.3em 0.3em 0.25em rgba(0, 0, 0, 0.25);
+//10px 10px 4px rgba(0, 0, 0, 0.25);
 $borderRadius: 0.75em;
 
 /* mixins
@@ -39,4 +50,35 @@ $borderRadius: 0.75em;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+
+//scrollbar
+
+
+::-webkit-scrollbar {
+  width: 5px;
+  border-radius: $borderRadius;
+}
+::-webkit-scrollbar-track {
+  background: $textColor;
+  //border-right: 10px $lightviolet solid;
+  //border-left: 10px $lightviolet solid;
+
+  background-clip: padding-box;
+  border-radius: $borderRadius;
+
+}
+::-webkit-scrollbar-thumb {
+  background: $turquise;
+  //border-right: 10px $lightviolet solid;
+  //border-left: 10px $lightviolet solid;
+
+  background-clip: padding-box;
+  border-radius: $borderRadius;
+
+
+}
+::-webkit-scrollbar-thumb:hover {
+  background: $inputblue;
 }

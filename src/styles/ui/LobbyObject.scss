@@ -1,0 +1,84 @@
+@import "../theme";
+@import "../views/Login";
+@import "../views/CustomizeGameParameter";
+
+.BaseDivLobby{
+  @extend .BaseDiv;
+  border: solid $textColor;
+  width: 1000px;
+  max-width: $DESKTOP_WIDTH;
+  max-height: ($DESKTOP_WIDTH / 1) + 20;
+  min-height: 100px; // Adjust this value based on your needs
+
+}
+
+.playlist-join-card {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // Creates two columns of equal width
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 5px;
+  grid-row-gap: 20px;
+  background: $lightviolet; /* Or any other color that matches your design */
+  border-radius: $borderRadius; /* Adjust as needed */
+  padding: 20px 10px 20px 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adjust as needed */
+  width: 100%; /* Adjust based on where you place this component */
+  border: solid 2px $textColor;
+}
+
+.first-column-item {
+  grid-column: 1 / 2; // Starts at column 1, ends at column 2
+  grid-row: 1 / span 2; // Spans two rows
+  align-self: center;
+  justify-self: center;
+}
+
+.second-column-top-item {
+  grid-column: 2 / 3; // Starts at column 2, ends at column 3
+  grid-row: 1; // Only in the first row
+  align-self: center;
+  justify-self: center;
+  color: $textColor;
+}
+
+.second-column-bottom-item {
+  grid-column: 2 / 3; // Starts at column 2, ends at column 3
+  grid-row: 2; // Only in the second row
+  display: flex;
+  align-self: center;
+  justify-self: center;
+}
+
+.third-column-item {
+  grid-column: 3 / 4; // Starts at column 3, ends at column 4
+  grid-row: 1 / span 2; // Spans two rows
+  align-self: center;
+  justify-self: center;
+}
+
+.playlist-cover {
+  margin-right: 20px; /* Space between cover and details */
+}
+
+.playlist-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+
+.playlist-name {
+  @include center;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-right: 20px;
+}
+
+
+.join-button {
+  @extend .join-button
+}
+
+
+

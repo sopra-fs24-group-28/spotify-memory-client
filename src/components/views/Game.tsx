@@ -1,113 +1,143 @@
 import React, { useEffect, useState } from "react";
-import { api, handleError } from "helpers/api";
-import { Spinner } from "components/ui/Spinner";
-import { Button } from "components/ui/Button";
-import {useNavigate} from "react-router-dom";
-import BaseContainer from "components/ui/BaseContainer";
-import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import "styles/views/Game.scss";
-import { User } from "types";
+import BaseContainer from "../ui/BaseContainer";
+import { UserStatWithIcon } from "../ui/UserStatWithIcon";
+import { Button } from "../ui/Button";
+import cardData from "../../models/SetofCardData.js";
+import Card from "../ui/Card";
 
-const Player = ({ user }: { user: User }) => (
-  <div className="player container">
-    <div className="player username">{user.username}</div>
-    <div className="player name">{user.name}</div>
-    <div className="player id">id: {user.id}</div>
-  </div>
-);
-
-Player.propTypes = {
-  user: PropTypes.object,
-};
 
 //added comment to make initial push
 const Game = () => {
   // use react-router-dom's hook to access navigation, more info: https://reactrouter.com/en/main/hooks/use-navigate 
   const navigate = useNavigate();
 
-  // define a state variable (using the state hook).
-  // if this variable changes, the component will re-render, but the variable will
-  // keep its value throughout render cycles.
-  // a component can have as many state variables as you like.
-  // more information can be found under https://react.dev/learn/state-a-components-memory and https://react.dev/reference/react/useState 
-  const [users, setUsers] = useState<User[]>(null);
+  const [gameFinished, setGameFinished] = useState(false);
+  const [cards, setCards] = useState(cardData);
+  const [currentlyFlipped, setCurrentlyFlipped] = useState([]);
+  const [showMessage, SetShowMessage] = useState("");
+  const [matchedPairs, setMatchedPairs] = useState([]);
 
-  const logout = (): void => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-
-  // the effect hook can be used to react to change in your component.
-  // in this case, the effect hook is only run once, the first time the component is mounted
-  // this can be achieved by leaving the second argument an empty array.
-  // for more information on the effect hook, please see https://react.dev/reference/react/useEffect 
   useEffect(() => {
-    // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
-    async function fetchData() {
-      try {
-        const response = await api.get("/users");
-
-        // delays continuous execution of an async operation for 1 second.
-        // This is just a fake async call, so that the spinner can be displayed
-        // feel free to remove it :)
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // Get the returned users and update the state.
-        setUsers(response.data);
-
-        // This is just some data for you to see what is available.
-        // Feel free to remove it.
-        console.log("request to:", response.request.responseURL);
-        console.log("status code:", response.status);
-        console.log("status text:", response.statusText);
-        console.log("requested data:", response.data);
-
-        // See here to get more data.
-        console.log(response);
-      } catch (error) {
-        console.error(
-          `Something went wrong while fetching the users: \n${handleError(
-            error
-          )}`
-        );
-        console.error("Details:", error);
-        alert(
-          "Something went wrong while fetching the users! See the console for details."
-        );
-      }
+    if (matchedPairs.length === cards.length) {
+      setGameFinished(prev => !prev);
     }
 
-    fetchData();
-  }, []);
+  }, [matchedPairs, cards.length]);
 
-  let content = <Spinner />;
+  useEffect(() => {
+    if (currentlyFlipped.length === 2) {
+      const [firstCardId, secondCardId] = currentlyFlipped;
 
-  if (users) {
-    content = (
-      <div className="game">
-        <ul className="game user-list">
-          {users.map((user: User) => (
-            <li key={user.id}>
-              <Player user={user} />
-            </li>
-          ))}
-        </ul>
-        <Button width="100%" onClick={() => logout()}>
-          Logout
-        </Button>
-      </div>
-    );
+      setCards(prevCards => {
+        const firstCard = findCardById(prevCards, firstCardId);
+        const secondCard = findCardById(prevCards, secondCardId);
+
+        if (firstCard.sameIdx === secondCard.sameIdx && firstCard.id !== secondCard.id) {
+          console.log("found a pair");
+          setMatchedPairs(prev => [...prev, firstCard.sameIdx]);
+          displayMsg("Found a pair, your awesome!", 2000);
+        } else {
+          displayMsg("Sorry, try again :(", 2000);
+          setTimeout(() => {
+            setCards(prevCards => prevCards.map(card => {
+              if (card.isFlipped) {
+                return { ...card, isFlipped: false };
+              }
+              return card;
+            }));
+          }, 1000);
+        }
+        setCurrentlyFlipped([]);
+
+        // Return the updated cards
+        return prevCards;
+      });
+    }
+  }, [currentlyFlipped]);
+
+  function displayMsg(msg, ms) {
+    SetShowMessage(msg);
+    setTimeout(() => {
+      SetShowMessage("");
+    }, ms);
   }
 
-  return (
-    <BaseContainer className="game container">
-      <h2>Happy Coding!</h2>
-      <p className="game paragraph">
-        Get all users from secure endpoint:
-      </p>
-      {content}
-    </BaseContainer>
-  );
+  function findCardById(cards, id) {
+    return cards.find(card => card.id === id);
+  }
+
+
+  function flip(id: number) {
+
+    if (matchedPairs.includes(findCardById(cards, id).sameIdx)) {
+      return;
+    }
+
+    setCards(prevCards => {
+      const newCards = prevCards.map(card => {
+        if (card.id === id) {
+          return {
+            ...card, isFlipped: !card.isFlipped, content: card.content === "Background" ? "Foreground" : "Background",
+          };
+        }
+        return card;
+      });
+      return newCards;
+    });
+
+    setCurrentlyFlipped(prevFlipped => [...prevFlipped, id]);
+  }
+
+
+  function restartGame() {
+    setGameFinished(false);
+    setCards(cardData);
+    setCurrentlyFlipped([]);
+    SetShowMessage("");
+    setMatchedPairs([]);
+
+  }
+
+
+  return (<BaseContainer>
+    <div className="BaseContainer">
+      <div className="screen-gridhandler">
+        <div className="BaseDivGame col6">
+          <div className="basicCardContainer">
+            {cards.map((card, index) => (
+              <Card key={card.id} isFlipped={card.isFlipped} isGreyed={matchedPairs.includes(card.sameIdx)}
+                    content={card.content}
+                    flip={() => flip(card.id)} />))}
+          </div>
+        </div>
+        <div className="BaseDivGame col7">
+          <div className="gridhandler-stats">
+            <div className="gameMessageposition">
+              {showMessage && !gameFinished && <div className="alert gameMessageContainer">
+                <div className="gameMessage">{showMessage}</div>
+              </div>}
+            </div>
+            <div className="stats">
+              <h2 className="h2-title">Current Score</h2>
+              <UserStatWithIcon className="test" username={"Henry"} currentStanding={"1"} />
+              <UserStatWithIcon username={"Elias"} currentStanding={"2"} />
+              <UserStatWithIcon username={"Niklas"} currentStanding={"3"} />
+              <UserStatWithIcon username={"Diyar"} currentStanding={"4"} />
+            </div>
+            <div>
+              <Button width={"100%"}>Leave Game</Button>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </BaseContainer>);
+
+
 };
 
 export default Game;
