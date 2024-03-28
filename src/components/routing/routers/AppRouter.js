@@ -5,7 +5,7 @@ import GameRouter from "./GameRouter";
 import {LoginGuard} from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
 import LobbyOverview from "../../views/LobbyOverview";
-import CustomizeGameParameter from "../../ui/CustomizeGameParameter";
+import CustomizeGameParameter from "../../views/CustomizeGameParameter";
 
 /**
  * Main router of your application.
