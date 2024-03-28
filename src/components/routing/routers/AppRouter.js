@@ -30,6 +30,10 @@ const AppRouter = () => {
 
         <Route path="/auth_callback" element={<AuthCallback />}/>
 
+        <Route path="/overview" element={<GameGuard />}>
+          <Route path="/overview" element={<GameRouter base="/overview"/>} />
+        </Route>
+
         <Route path="/" element={
           <Navigate to="/game" replace />
         }/>
