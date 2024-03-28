@@ -25,7 +25,6 @@ const AuthCallback = () => {
       } catch (error) {
         console.log(error);
         setResponseMessage(`${error.message ?? "There was as error, please try again"} ${error.response?.data?.message ?? ""}`);
-        console.log(responseMessage);
       }
     }
 
