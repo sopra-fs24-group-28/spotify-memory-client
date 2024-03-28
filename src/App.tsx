@@ -5,7 +5,6 @@ import Navbar from "./components/ui/Navbar";
 const App = () => {
   return (
     <div>
-      <Navbar height="100" />
       <AppRouter />
     </div>
   );
