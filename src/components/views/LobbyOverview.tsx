@@ -12,11 +12,7 @@ const LobbyOverview = () => {
   const navigate = useNavigate();
   const [receivedGameStates, setReceivedGameStates] = useState([]);
 
-  function doReturn() {
-    navigate("/");
-  }
-
-  async function fetchData(){
+  async function fetchData() {
     try {
       const response = await api.get("/ws/overview");
 
@@ -43,7 +39,7 @@ const LobbyOverview = () => {
 
   useEffect(() => {
     //get current overviewdto via rest call
-    fetchData()
+    fetchData();
 
     //get websocket conectionn
     const stompClient = new Client({

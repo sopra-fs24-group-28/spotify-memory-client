@@ -2,6 +2,7 @@
 
 .login {
   &.container {
+    width: 100%;
     display: flex;
     margin-top: 2em;
     min-height: 300px;
@@ -39,8 +40,6 @@
       justify-content: center;
       align-items: center;
       opacity: 0.8;
-
-
     }
   }
   &.field {
@@ -64,6 +63,7 @@
     font-weight: 300;
   }
   &.button-container {
+    width: 100%;
     display: flex;
     justify-content: center;
     margin-top: 2em;

@@ -26,15 +26,15 @@ const HomeSVG = (props) => {
       </defs>
     </svg>
 
-  )
-}
+  );
+};
 
 HomeSVG.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
 };
 
-export default HomeSVG
+export default HomeSVG;
 
 
 
