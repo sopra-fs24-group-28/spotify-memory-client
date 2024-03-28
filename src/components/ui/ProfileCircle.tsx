@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 
 const ProfileCircle = (props) => {
   const profilePictureStyles = {
+    alignSelf: "center",
+    justifyContent: "center",
     boxSizing: "border-box",
     height: props.height !== null ? props.height : 200,
     width: props.width !== null ? props.width : 200,
@@ -24,7 +26,7 @@ const ProfileCircle = (props) => {
 export default ProfileCircle;
 
 ProfileCircle.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
+  width: PropTypes.string,
+  height: PropTypes.string,
   url: PropTypes.string,
 };

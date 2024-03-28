@@ -1,0 +1,73 @@
+@import "../theme";
+@import "../views/Login";
+@import "../views/CustomizeGameParameter";
+
+.BaseDivLobby{
+  @extend .BaseDiv;
+  border: solid red;
+  width: 1000px;
+  max-width: $DESKTOP_WIDTH;
+  max-height: ($DESKTOP_WIDTH / 1) + 20;
+  min-height: 100px; // Adjust this value based on your needs
+
+}
+
+.gridhandler{
+  @include center;
+  overflow-wrap: anywhere;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); // Creates two columns of equal width
+  grid-template-rows: auto;
+  grid-row-gap: 40px;
+  grid-column-gap: 20px; // Keeps a constant gap between both rows and columns
+  justify-content: start;
+  align-items: start;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.centerwrapper{
+  @include center;
+  display: flex;
+}
+
+.spotifyPlaylistContainer{
+  overflow: auto;
+  @include center;
+  background: $accent;
+  border: solid $textColor 2px;
+  border-radius: $borderRadius;
+  width: 80%;
+  padding: 20px;
+  height: 400px;
+  box-shadow: $dropShadow;
+
+}
+
+.buttonContainer{
+  @include center;
+  width: 80%;
+  justify-content: space-between;
+
+}
+
+.playergrid{
+  @extend .gridhandler;
+  @include center;
+  flex-direction: column;
+  grid-template-columns: repeat(1, 1fr);
+  grid-row-gap: 15px;
+  background: $accent;
+  border: solid $textColor 2px;
+  border-radius: $borderRadius;
+  width: 85%;
+  padding: 20px;
+  box-shadow: $dropShadow;
+
+}
+
+.h3-title{
+  font-size: large;
+  font-weight: bold;
+  color: $textColor;
+}

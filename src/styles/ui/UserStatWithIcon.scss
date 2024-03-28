@@ -1,0 +1,32 @@
+@import "../theme";
+@import "../views/CustomizeGameParameter";
+
+.userbox{
+  @extend .normalInput;
+  @include center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: $turquise;
+  width: 200px;
+  border-radius: $borderRadius;
+  max-height: 50px;
+
+}
+
+.button-label{
+  @include center;
+}
+
+.notification-bubble {
+  @include center;
+  height: 35px;
+  width: 35px;
+  background-color: $turquise;
+  border-radius: 50%;
+  border: solid $textColor 2px;
+  color: $textColor;
+  padding: 2px 6px;
+  position: relative;
+  top: -20px;
+  right: -50px;
+}
