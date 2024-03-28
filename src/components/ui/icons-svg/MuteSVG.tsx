@@ -26,15 +26,14 @@ const MuteSVG = (props) => {
       </defs>
     </svg>
 
-  )
-}
-
-MuteSVG.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
+  );
 };
 
-export default MuteSVG
+MuteSVG.propTypes = {
+  width: PropTypes.number, height: PropTypes.number,
+};
+
+export default MuteSVG;
 
 
 

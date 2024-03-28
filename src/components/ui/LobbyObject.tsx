@@ -10,8 +10,8 @@ const LobbyObject = (props) => {
   const [playlistImg, setPlaylistImg] = useState("");
   const [avatarImg, setAvatarImg] = useState("img");
 
-  function join(){
-    navigate("/Game1")
+  function join() {
+    navigate("/Game1");
   }
 
   return (
@@ -28,7 +28,7 @@ const LobbyObject = (props) => {
       <Button width="70%" height="50%" className="lobby-overview-button third-column-item" onClick={join}>Join</Button>
     </div>);
 
-}
+};
 
 
 export default LobbyObject;

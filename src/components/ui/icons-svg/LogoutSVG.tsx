@@ -10,7 +10,7 @@ const LogoutSVG = (props) => {
       </g>
       <defs>
         <filter id="filter0_d_87_808" x="0" y="0" width="70.5" height="70.5" filterUnits="userSpaceOnUse"
-               colorInterpolationFilters="sRGB">
+                colorInterpolationFilters="sRGB">
           <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                          result="hardAlpha" />
@@ -25,15 +25,15 @@ const LogoutSVG = (props) => {
     </svg>
 
 
-  )
-}
+  );
+};
 
 LogoutSVG.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
 };
 
-export default LogoutSVG
+export default LogoutSVG;
 
 
 

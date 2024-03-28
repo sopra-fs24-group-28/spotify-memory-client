@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
 import { Spinner } from "components/ui/Spinner";
 import { Button } from "components/ui/Button";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import "styles/views/Game.scss";
@@ -67,12 +67,12 @@ const Game = () => {
       } catch (error) {
         console.error(
           `Something went wrong while fetching the users: \n${handleError(
-            error
-          )}`
+            error,
+          )}`,
         );
         console.error("Details:", error);
         alert(
-          "Something went wrong while fetching the users! See the console for details."
+          "Something went wrong while fetching the users! See the console for details.",
         );
       }
     }

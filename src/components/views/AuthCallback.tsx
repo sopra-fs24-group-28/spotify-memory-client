@@ -44,21 +44,19 @@ const AuthCallback = () => {
   if (responseMessage) {
     console.log(responseMessage);
     body = (<div>
-      <div>{responseMessage}</div>
+      <div className="h2-title">{responseMessage}</div>
       <div className="login button-container">
-        <Button width="20em"
-                onClick={() => returnToLogin()}>Return to Login</Button>
+        <Button
+          className="spotifyButton"
+          onClick={() => returnToLogin()}>Return to Login</Button>
       </div>
     </div>);
-
-
   }
-  return (<BaseContainer>
+
+  return(<BaseContainer>
     <div className="login container">
       <div className="login form">
-        <div className="login button-container">
-          {body}
-        </div>
+        {body}
       </div>
     </div>
   </BaseContainer>);
