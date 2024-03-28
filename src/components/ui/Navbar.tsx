@@ -4,10 +4,17 @@ import GameIconSVG from "./icons-svg/GameIconSVG";
 import LogoutSVG from "./icons-svg/LogoutSVG";
 import MuteSVG from "./icons-svg/MuteSVG";
 import PreferencesSVG from "./icons-svg/PreferencesSVG";
-
+import { logout } from "../../helpers/auth/logoutfunction.js";
+import { useNavigate } from "react-router-dom";
 
 
 const Navbar = () => {
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout(navigate);
+  };
+
   return (<nav className="navbar">
     <div className="navbar-container">
       <span href="/" className="navbar-brand">
@@ -15,13 +22,13 @@ const Navbar = () => {
       </span>
       <div className="navbar-icons">
 
-        <a href="/lobbyOverview"  className="iconItems">
+        <a href="/lobbyOverview" className="iconItems">
           <GameIconSVG></GameIconSVG>
         </a>
-        <a href="/login"  className="iconItems">
+        <a onClick={handleLogout} className="iconItems">
           <LogoutSVG />
         </a>
-        <a href="/"  className="iconItems">
+        <a href="/" className="iconItems">
           <MuteSVG />
         </a>
         <a href="/profilePage" className="iconItems">

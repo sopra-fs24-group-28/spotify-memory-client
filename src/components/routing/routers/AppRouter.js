@@ -6,6 +6,7 @@ import {LoginGuard} from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
 import LobbyOverview from "../../views/LobbyOverview";
 import CustomizeGameParameter from "../../views/CustomizeGameParameter";
+import Navbar from "../../ui/Navbar";
 
 /**
  * Main router of your application.
@@ -19,6 +20,7 @@ import CustomizeGameParameter from "../../views/CustomizeGameParameter";
 const AppRouter = () => {
   return (
     <BrowserRouter>
+      <Navbar height="100" />
       <Routes>
 
         <Route path="/game/*" element={<GameGuard />}>
