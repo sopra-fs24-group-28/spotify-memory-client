@@ -1,15 +1,14 @@
 class GameParameter {
   constructor(data = {}) {
-    this.gameId = data.gameId ;
-    this.playerLimit = data.playerLimit ;
-    this.numberOfSets = data.numberOfSets;
-    this.numberOfCardsPerSet = data.numberOfCardsPerSet ;
-    this.category = data.category;
+    this.playerLimit = data.playerLimit;
+    this.numOfSets = data.numOfSets;
+    this.numOfCardsPerSet = data.numOfCardsPerSet;
+    this.gameCategory = data.gameCategory;
     this.playlist = data.playlist;
-    this.streakStart = data.streakStart ;
+    this.streakStart = data.streakStart;
     this.streakMultiplier = data.streakMultiplier;
-    this.timePerTurnNormal = data.timePerTurnNormal;
-    this.timePerTurnPowerup = data.timePerTurnPowerup;
+    this.timePerTurn = data.timePerTurn;
+    this.timePerTurnPowerUp = data.timePerTurnPowerUp;
     Object.assign(this, data);
   }
 

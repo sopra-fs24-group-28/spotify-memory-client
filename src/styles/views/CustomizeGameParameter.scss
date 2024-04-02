@@ -88,3 +88,16 @@
   margin: 15px;
   //border: solid 1px $textColor;
 }
+.error-message-container{
+  @include center;
+  margin: 10px;
+  width: 80%;
+  padding: 20px;
+  border-radius: $borderRadius;
+  background: $warning;
+}
+.error-messages{
+
+  @extend .label;
+  width: 100%;
+}

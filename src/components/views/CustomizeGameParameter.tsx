@@ -1,85 +1,92 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "styles/views/CustomizeGameParameter.scss";
 import { api, handleError } from "helpers/api";
 import GameParameter from "../../models/GameParameter";
+import Game from "../../models/Game.js";
 import { useNavigate } from "react-router-dom";
 
 
 const CustomizeGameParameter = () => {
   const navigate = useNavigate();
   const [playerLimit, setPlayerLimit] = useState(4);
-  const [numberOfSets, setNumberOfSets] = useState(1);
-  const [numberOfCardsPerSet, setNumberOfCardsPerSet] = useState(2);
-  const [category, setCategory] = useState("");
-  const [playlist, setPlaylist] = useState("");
+  const [numOfSets, setNumOfSets] = useState(1);
+  const [numOfCardsPerSet, setNumOfCardsPerSet] = useState(2);
+  const [gameCategory, setGameCategory] = useState("STANDARDALBUMCOVER");
+  const [playlist, setPlaylist] = useState("dfadfad");
   const [streakStart, setStreakStart] = useState(3);
   const [streakMultiplier, setStreakMultiplier] = useState(2);
-  const [timePerTurnNormal, setTimePerTurnNormal] = useState(10);
-  const [timePerTurnPowerup, setTimePerTurnPowerup] = useState(5);
+  const [timePerTurn, setTmePerTurn] = useState(10);
+  const [timePerTurnPowerUp, setTmePerTurnPowerUp] = useState(12);
   const [gameParameters, setGameParameters] = useState();
+  const [errorMessages, setErrorMessages] = useState<string>("");
+  const [availablePlaylists, setAvailablePlaylists] = useState([]);
+
+  useEffect(() => {
+    //fetch users playlists to set availableplaylists
+
+
+  }, []);
 
   function startGame(e) {
     e.preventDefault();
-    //form validation:
-    if (!playerLimit || playerLimit <= 0) {
-      alert("Please enter a positive player limit.");
-      return;
-    }
-    if (!numberOfSets || numberOfSets <= 0) {
-      alert("Please enter a positive number of sets.");
-      return;
-    }
-    if (!numberOfCardsPerSet || numberOfCardsPerSet <= 0) {
-      alert("Please enter a positive number of cards per set.");
-      return;
-    }
-    if (!category) {
-      alert("Please select a category.");
-      return;
-    }
-    if (!playlist) {
-      alert("Please select a playlist.");
-      return;
-    }
-    if (!streakStart || streakStart <= 0) {
-      alert("Please select a positive number for the streak start.");
-      return;
-    }
-    if (!streakMultiplier || streakMultiplier <= 1) {
-      alert("Please select a positive number greater than on for the streak multiplier.");
-      return;
-    }
+    // Validation conditions
+    const validations: {
+      check: () => boolean, errorMessage: string
+    }[] = [{
+      check: () => !playerLimit || playerLimit <= 0, errorMessage: "Please enter a positive player limit.",
+    }, {
+      check: () => !numOfSets || numOfSets <= 0, errorMessage: "Please enter a positive number of sets.",
+    }, {
+      check: () => !numOfCardsPerSet || numOfCardsPerSet <= 0,
+      errorMessage: "Please enter a positive number of cards per set.",
+    }, { check: () => !gameCategory, errorMessage: "Please select a gameCategory." }, {
+      check: () => !playlist, errorMessage: "Please select a playlist.",
+    }, {
+      check: () => !streakStart || streakStart <= 0,
+      errorMessage: "Please select a positive number for the streak start.",
+    }, {
+      check: () => !streakMultiplier || streakMultiplier <= 1,
+      errorMessage: "Please select a positive number greater than one for the streak multiplier.",
+    }, {
+      check: () => !timePerTurn || timePerTurn < 10 || timePerTurn > 60,
+      errorMessage: "Please select a positive number between 10 and 60 seconds for normal turn time.",
+    }, {
+      check: () => !timePerTurnPowerUp || timePerTurnPowerUp < 10 || timePerTurnPowerUp > 60,
+      errorMessage: "Please select a positive number between 10 and 60 seconds for powerup turn time.",
+    }];
 
-    if (!timePerTurnNormal || timePerTurnNormal < 10 || timePerTurnNormal > 60) {
-      alert("Please select a positive number between 10 and 60 seconds.");
-      return;
-    }
+    // Check each validation condition
+    const invalidMessages = validations.filter(({ check }) => check()).map(({ errorMessage }) => errorMessage);
+    const errorMessage = invalidMessages.join("\n").trim();
 
-    if (!timePerTurnPowerup || timePerTurnPowerup < 10 || timePerTurnPowerup > 60) {
-      alert("Please select a positive number between 10 and 60 seconds.");
+    if (errorMessage) {
+      setErrorMessages(errorMessage);
       return;
     }
 
 
     setGameParameters(new GameParameter({
       playerLimit: playerLimit,
-      numberOfSets: numberOfSets,
-      numberOfCardsPerSet: numberOfCardsPerSet,
-      category: category,
+      numOfSets: numOfSets,
+      numOfCardsPerSet: numOfCardsPerSet,
+      gameCategory: gameCategory,
       playlist: playlist,
       streakStart: streakStart,
       streakMultiplier: streakMultiplier,
-      timePerTurnNormal: timePerTurnNormal,
-      timePerTurnPowerup: timePerTurnPowerup,
+      timePerTurn: timePerTurn,
+      timePerTurnPowerUp: timePerTurnPowerUp,
     }));
-
-    sendApiRequest();
 
   }
 
+  useEffect(() => {
+    if (gameParameters) {
+      sendLobbyCreationRequest();
+    }
+  }, [gameParameters]);
 
-// @ts-ignore
-  async function sendApiRequest() {
+
+  async function sendLobbyCreationRequest() {
     try {
       //api call to send parameters
       //TODO: check token with Backend Guys and adjust them accordingly
@@ -87,13 +94,30 @@ const CustomizeGameParameter = () => {
       //   "Authorization": `Bearer ${localStorage.getItem("token")}`,
       // };
 
+      console.log(gameParameters);
       const requestBody = JSON.stringify(gameParameters);
       const response = await api.post("/game", requestBody);
+      console.log(response);
 
 
-      if (response.status === 200) {
-        setGameParameters(new GameParameter(response.data));
-        // console.log(gameParameters);
+      if (response.status === 201) {
+
+        if (!response.data.gameID) {
+          alert("the server did not return a valid lobby id, please try again.");
+        }
+
+        //setting up the game
+        let game: Game;
+        let returnedGameParameters: GameParameter;
+
+        returnedGameParameters = new GameParameter(response.data.gameParameters);
+        game = new Game(response.data.gameId);
+        game.gameParameter = returnedGameParameters;
+        game.host = localStorage.getItem("userId"); //TODO: maybe change lateron
+        game.addPlayer(game.host);
+        console.log(game);
+
+
         //navigate(`game/${gameParameters.gameId}`); //TODO: uncomment when backend is ready
       } else {
         alert("Something went wrong setting up the lobby.");
@@ -123,38 +147,37 @@ const CustomizeGameParameter = () => {
             />
           </div>
           <div className={"inputpair"}>
-            <label className="label" htmlFor="numberOfSets">Number of Sets:</label>
+            <label className="label" htmlFor="numOfSets">Number of Sets:</label>
             <input
-              id="numberOfSets"
+              id="numOfSets"
               className="normalInput"
               type="number"
 
-              value={numberOfSets}
-              onChange={e => setNumberOfSets(e.target.value)}
+              value={numOfSets}
+              onChange={e => setNumOfSets(e.target.value)}
             />
           </div>
           <div className={"inputpair"}>
-            <label className="label" htmlFor="numberOfCardsPerSet">Cards per Set:</label>
+            <label className="label" htmlFor="numOfCardsPerSet">Cards per Set:</label>
             <input
-              id="numberOfCardsPerSet"
+              id="numOfCardsPerSet"
               className="normalInput"
               type="number"
               placeholder="Number of Cards per Set"
-              value={numberOfCardsPerSet}
-              onChange={e => setNumberOfCardsPerSet(e.target.value)}
+              value={numOfCardsPerSet}
+              onChange={e => setNumOfCardsPerSet(e.target.value)}
             />
           </div>
           <div className={"inputpair"}>
-            <label className="label" htmlFor="category">Category:</label>
+            <label className="label" htmlFor="gameCategory">gameCategory:</label>
             <select
-              id="category"
+              id="gameCategory"
               className="normalInput"
-              value={category}
-              onChange={e => setCategory(e.target.value)}
+              value={gameCategory}
+              onChange={e => setGameCategory(e.target.value)}
             >
-              <option value="Normal">Normal</option>
-              <option value="Advanced">Advanced</option>
-              <option value="Speed">Speed</option>
+              <option value="STANDARDSONG">Normal</option>
+              <option value="STANDARDALBUMCOVER">Album Cover</option>
             </select>
           </div>
           <div className={"inputpair"}>
@@ -190,25 +213,25 @@ const CustomizeGameParameter = () => {
             />
           </div>
           <div className={"inputpair"}>
-            <label className="label" htmlFor="timePerTurnNormal">Time per Turn (Normal):</label>
+            <label className="label" htmlFor="timePerTurn">Time per Turn (Normal):</label>
             <input
-              id="timePerTurnNormal"
+              id="timePerTurn"
               className="normalInput"
               type="number"
               placeholder="Time per Turn Normal"
-              value={timePerTurnNormal}
-              onChange={e => setTimePerTurnNormal(e.target.value)}
+              value={timePerTurn}
+              onChange={e => setTmePerTurn(e.target.value)}
             />
           </div>
           <div className={"inputpair"}>
-            <label className="label" htmlFor="timePerTurnPowerup">Time per Turn (Powerup):</label>
+            <label className="label" htmlFor="timePerTurnPowerUp">Time per Turn (Powerup):</label>
             <input
-              id="timePerTurnPowerup"
+              id="timePerTurnPowerUp"
               className="normalInput"
               type="number"
               placeholder="Time per Turn Powerup"
-              value={timePerTurnPowerup}
-              onChange={e => setTimePerTurnPowerup(e.target.value)}
+              value={timePerTurnPowerUp}
+              onChange={e => setTmePerTurnPowerUp(e.target.value)}
             />
           </div>
           <div className="button-section">
@@ -218,6 +241,12 @@ const CustomizeGameParameter = () => {
               className="customizebtn"
               onClick={startGame}>Start Game
             </button>
+            <div className={errorMessages ? "error-message-container" : "hidden"}>
+              <div className="error-messages">
+                {errorMessages && <p>{errorMessages}</p>}
+              </div>
+              <p>{playerLimit}</p>
+            </div>
           </div>
         </form>
       </div>
