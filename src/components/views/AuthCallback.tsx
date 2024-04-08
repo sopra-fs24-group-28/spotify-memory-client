@@ -16,6 +16,7 @@ const AuthCallback = () => {
       try {
         const requestBody = JSON.stringify({ code });
         console.log("successfully fetched token");
+        console.log(code);
         const response = await api.post("/auth/token", requestBody);
         // assuming response already 200, otherwise would have been caught by handleError
         localStorage.setItem("token", response.data);

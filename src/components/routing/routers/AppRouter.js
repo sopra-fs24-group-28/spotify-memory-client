@@ -8,6 +8,7 @@ import AuthCallback from "../../views/AuthCallback";
 import LobbyOverview from "../../views/LobbyOverview";
 import CustomizeGameParameter from "../../views/CustomizeGameParameter";
 import Navbar from "../../ui/Navbar";
+import LobbyWaitingRoom from "../../views/LobbyWaitingRoom";
 
 
 /**
@@ -42,6 +43,8 @@ const AppRouter = () => {
         {/*just for testing*/}
         <Route path="/lobbyOverview" element={<LobbyOverview />} />
         <Route path="/customizeGame" element={<CustomizeGameParameter />} />
+        <Route path="/lobby" element={<LobbyWaitingRoom />} />
+
 
         <Route path="/" element={
           <Navigate to="/game" replace />

@@ -4,17 +4,17 @@ class OverViewDTO {
   }
 
   addOrUpdateGame(gameID, data) {
-    // This method creates a new Lobby instance with the provided data or updates an existing one
+    //add game
     this.Lobbies[gameID] = new Lobby(data);
   }
 
   getGame(gameID) {
-    // This method returns the Lobby instance for the given gameID, or undefined if not found
+    // return the Lobby instance for the given gameID, or undefined if not found
     return this.Lobbies[gameID];
   }
 
   removeGame(gameID) {
-    // This method removes the Lobby instance associated with the given gameID
+    // remove game with gameID
     delete this.Lobbies[gameID];
   }
 }
