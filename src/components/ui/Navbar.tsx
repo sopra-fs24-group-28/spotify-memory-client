@@ -4,7 +4,7 @@ import GameIconSVG from "./icons-svg/GameIconSVG";
 import LogoutSVG from "./icons-svg/LogoutSVG";
 import MuteSVG from "./icons-svg/MuteSVG";
 import PreferencesSVG from "./icons-svg/PreferencesSVG";
-import { logout } from "../../helpers/auth/logoutfunction.js";
+import { logout } from "../../helpers/auth/logoutfunction";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
