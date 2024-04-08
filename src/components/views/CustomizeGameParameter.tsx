@@ -22,8 +22,7 @@ const CustomizeGameParameter = () => {
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
 
   useEffect(() => {
-    //fetch users playlists to set availableplaylists
-
+    //TODO: fetch users playlists to set availableplaylists
 
   }, []);
 
@@ -103,7 +102,7 @@ const CustomizeGameParameter = () => {
       if (response.status === 201) {
 
         if (!response.data.gameID) {
-          alert("the server did not return a valid lobby id, please try again.");
+          alert("The server did not return a valid lobby id, please try again.");
         }
 
         //setting up the game

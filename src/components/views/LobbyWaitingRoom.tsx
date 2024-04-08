@@ -13,9 +13,7 @@ const LobbyWaitingRoom = (props) => {
   useEffect(() => {
       //TODO Diyar spotify sdk might have to be initialised here i guess?
 
-
-    //mock Gamestate
-
+    //mocking, to be removed once websocket is ready
     setLobbyParams({
       GameParameters:{something: "something"},
       players: [{name: "Elias"},{name: "Niklas"}]
