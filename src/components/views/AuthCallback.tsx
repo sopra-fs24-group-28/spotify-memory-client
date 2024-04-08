@@ -15,14 +15,14 @@ const AuthCallback = () => {
     async function auth_user() {
       try {
         const requestBody = JSON.stringify({ code });
-        console.log("successfully fetched token");
-        console.log(code);
         const response = await api.post("/auth/token", requestBody);
         // assuming response already 200, otherwise would have been caught by handleError
-        localStorage.setItem("token", response.data);
-        // routing user to lobby overview screen upon successful login
-        navigate("/overview");
 
+        localStorage.setItem("token", response.data?.sessionToken);
+        const headers: { Authorization: string } = { "Authorization": `Bearer ${localStorage.getItem("token")}` };
+        const getResponse = await api.get("/auth/token", { headers });
+        localStorage.setItem("accessToken", getResponse.data?.accessToken);
+        navigate("/lobbyoverview"); //TODO: make real once ready
       } catch (error) {
         console.log(error);
         setResponseMessage(`${error.message ?? "There was as error, please try again"} ${error.response?.data?.message ?? ""}`);
@@ -54,7 +54,7 @@ const AuthCallback = () => {
     </div>);
   }
 
-  return(<BaseContainer>
+  return (<BaseContainer>
     <div className="login container">
       <div className="login form">
         {body}

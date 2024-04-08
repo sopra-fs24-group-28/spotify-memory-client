@@ -87,21 +87,14 @@ const CustomizeGameParameter = () => {
 
   async function sendLobbyCreationRequest() {
     try {
-      //api call to send parameters
-      //TODO: check token with Backend Guys and adjust them accordingly
-      // const headers: { Authorization: string } = {
-      //   "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      // };
-
       console.log(gameParameters);
       const requestBody = JSON.stringify(gameParameters);
       const response = await api.post("/game", requestBody);
       console.log(response);
 
-
       if (response.status === 201) {
 
-        if (!response.data.gameID) {
+        if (!response.data?.gameId) {
           alert("The server did not return a valid lobby id, please try again.");
         }
 
@@ -112,9 +105,14 @@ const CustomizeGameParameter = () => {
         returnedGameParameters = new GameParameter(response.data.gameParameters);
         game = new Game(response.data.gameId);
         game.gameParameter = returnedGameParameters;
-        game.host = localStorage.getItem("userId"); //TODO: maybe change lateron
-        game.addPlayer(game.host);
+        game.host = localStorage.getItem("userId"); //TODO: redirect this task to backenend once they are ready
+        game.addPlayer(game.host); //TODO:  remove once backend is ready
         console.log(game);
+
+        //TODO: Initialise game Websocket
+        //...
+
+
 
 
         //navigate(`game/${gameParameters.gameId}`); //TODO: uncomment when backend is ready
