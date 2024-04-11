@@ -12,54 +12,60 @@ const LobbyOverview = () => {
   const navigate = useNavigate();
   const [receivedGameStates, setReceivedGameStates] = useState([]);
 
-  async function fetchData() {
-    try {
-      const response = await api.get("/ws/overview");
+  // async function fetchData() {
+  //   try {
+  //     const response = await api.get("/overview");
+  //     const overviewData = response.data;
+  //     const initialOverview = new OverviewDTO();
 
-      if (response.status !== "101") {
-        alert("There was a Problem fetching the Gameoverview in its initial state. Please try again.");
-      }
+  //     Object.entries(overviewData).forEach(([gameID, data]) => {
+  //       initialOverview.addOrUpdateGame(gameID, data);
+  //     });
+  //     console.log(initialOverview);
 
-      const overviewData = response.data;
+  //   } catch (error) {
+  //     console.log(error);
+  //     console.error(`Something went wrong while fetching the Gameoverview: \n${handleError(error)}`);
+  //     console.error("Details:", error);
+  //     alert("Something went wrong while fetching the Gameoverview! See the console for details.");
+  //   }
 
-      const initialOverview = new OverviewDTO();
-
-      Object.entries(overviewData).forEach(([gameID, data]) => {
-        initialOverview.addOrUpdateGame(gameID, data);
-      });
-      console.log(initialOverview);
-
-    } catch (error) {
-      console.error(`Something went wrong while fetching the Gameoverview: \n${handleError(error)}`);
-      console.error("Details:", error);
-      alert("Something went wrong while fetching the Gameoverview! See the console for details.");
-    }
-
-  }
+  // }
 
   useEffect(() => {
     //get current overviewdto via rest call
-    fetchData();
+    // fetchData();
 
     //get websocket conectionn
-    const stompClient = new Client({
-      brokerURL: "ws://localhost:8080/ws", onConnect: () => {
-        console.log("Connected");
-        stompClient.subscribe("/ws/overview", (greeting) => {
-          setReceivedGameStates(prev => [...prev, JSON.parse(greeting.body).content]);
-        });
-      },
-    });
-    try {
-      stompClient.activate();
-    } catch (error) {
-      alert("Something went wrong setting up the websocket. Try again later.");
+    const client = new Client();
+    client.brokerURL = "ws://localhost:8080/ws";
+    client.onConnect = function (frame) {
+      client.subscribe("/topic/overview", () => {console.log("Received")})
+      console.log("Connected")
     }
 
-    //cleanup once we leave
-    return () => {
-      stompClient.deactivate();
-    };
+    client.activate();
+    client.publish({
+      destination: "/app/overview",
+      body: "Hello"
+  });
+
+
+    // try {
+    //   stompClient.activate();
+    //   stompClient.publish({
+    //     destination: "/app/overview",
+    //   })
+    // } catch (error) {
+    //   console.log(stompClient)
+    //   console.log(error);
+    //   alert("Something went wrong setting up the websocket. Try again later.");
+    // }
+
+    // //cleanup once we leave
+    // return () => {
+    //   stompClient.deactivate();
+    // };
   }, []);
 
 
