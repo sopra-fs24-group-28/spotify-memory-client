@@ -12,43 +12,55 @@ const LobbyOverview = () => {
   const navigate = useNavigate();
   const [receivedGameStates, setReceivedGameStates] = useState([]);
 
-  // async function fetchData() {
-  //   try {
-  //     const response = await api.get("/overview");
-  //     const overviewData = response.data;
-  //     const initialOverview = new OverviewDTO();
+  async function fetchData() {
+    try {
+      const response = await api.get("/game");
+      const overviewData = response.data;
+      const initialOverview = new OverviewDTO();
 
-  //     Object.entries(overviewData).forEach(([gameID, data]) => {
-  //       initialOverview.addOrUpdateGame(gameID, data);
-  //     });
-  //     console.log(initialOverview);
+      Object.entries(overviewData).forEach(([gameID, data]) => {
+        initialOverview.addOrUpdateGame(gameID, data);
+      });
+      console.log(initialOverview);
 
-  //   } catch (error) {
-  //     console.log(error);
-  //     console.error(`Something went wrong while fetching the Gameoverview: \n${handleError(error)}`);
-  //     console.error("Details:", error);
-  //     alert("Something went wrong while fetching the Gameoverview! See the console for details.");
-  //   }
-
-  // }
-
-  useEffect(() => {
-    //get current overviewdto via rest call
-    // fetchData();
-
-    //get websocket conectionn
-    const client = new Client();
-    client.brokerURL = "ws://localhost:8080/ws";
-    client.onConnect = function (frame) {
-      client.subscribe("/topic/overview", () => {console.log("Received")})
-      console.log("Connected")
+    } catch (error) {
+      console.error(`Something went wrong while fetching the Gameoverview: \n${handleError(error)}`);
     }
 
+  }
+
+  useEffect(() => {
+    fetchData();
+
+    // Assuming Client() comes from a STOMP JS library
+    const client = new Client();
+    client.brokerURL = "ws://localhost:8080/ws";
+
+    client.onConnect = function (frame) {
+      // Connection is now established, you can safely publish messages
+      console.log("Connected");
+
+      client.subscribe("/topic/overview", (obj) => {
+        console.log("Received");
+        console.log(obj.body)
+        // assign the changes correcly
+      });
+
+      client.publish({
+        destination: "/app/overview",
+        body: "Hello"
+      });
+    };
+
     client.activate();
-    client.publish({
-      destination: "/app/overview",
-      body: "Hello"
-  });
+
+    // Cleanup function to disconnect the client when the component unmounts
+    return () => {
+      if (client.connected) {
+        client.deactivate();
+      }
+    };
+
 
 
     // try {

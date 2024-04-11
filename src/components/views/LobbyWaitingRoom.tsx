@@ -3,7 +3,7 @@ import "styles/views/LobbyWaitingRoom.scss";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 
 const LobbyWaitingRoom = (props) => {
@@ -11,7 +11,7 @@ const LobbyWaitingRoom = (props) => {
   const [lobbyParams, setLobbyParams] = useState(props.lobbyParams ? props.lobbyParams : null)
 
   useEffect(() => {
-      //TODO Diyar spotify sdk might have to be initialised here i guess?
+    //TODO Diyar spotify sdk might have to be initialised here i guess?
 
     //mocking, to be removed once websocket is ready
     setLobbyParams({
