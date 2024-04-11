@@ -47,7 +47,7 @@ const AppRouter = () => {
 
 
         <Route path="/" element={
-          <Navigate to="/game" replace />
+          <Navigate to="/lobbyOverview" replace />
         } />
 
       </Routes>
