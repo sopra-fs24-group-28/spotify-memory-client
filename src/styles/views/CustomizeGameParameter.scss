@@ -2,13 +2,13 @@
 @import "../views/Login";
 @import "../ui/Button";
 
-.BaseContainer{
+.BaseContainer {
   @extend .login, .container;
   border: solid $textColor;
   padding: 40px;
 }
 
-.BaseDiv{
+.BaseDiv {
   @extend .login, .form;
   height: 600px;
   display: flex;
@@ -30,7 +30,7 @@
 }
 
 
-.normalInput{
+.normalInput {
   padding: 2px;
   width: 200px;
   max-height: 50%;
@@ -44,21 +44,23 @@
   font-weight: bold;
   text-align: center;
   font-size: $inputfontsize;
+
   &:hover {
     //transform: translateY(-1px);
     border: 2px solid $warning;
   }
+
   cursor: pointer;
 }
 
-.hr{
+.hr {
   margin-top: 20px;
   margin-bottom: 20px;
   color: $textColor;
   width: 100%;
 }
 
-.customizebtn{
+.customizebtn {
   @include center;
   @extend .join-button;
   height: 40px;
@@ -67,13 +69,13 @@
   font-size: $inputfontsize
 }
 
-.buttongroup{
+.buttongroup {
   @include center;
   flex-direction: row;
   flex-grow: 1;
 }
 
-.label{
+.label {
   color: $textColor;
   font-weight: bold;
   align-self: start;
@@ -81,14 +83,15 @@
   font-size: $inputfontsize;
 }
 
-.inputpair{
+.inputpair {
   @include center;
   display: flex;
   flex-direction: column;
   margin: 15px;
   //border: solid 1px $textColor;
 }
-.error-message-container{
+
+.error-message-container {
   @include center;
   margin: 10px;
   width: 80%;
@@ -96,7 +99,8 @@
   border-radius: $borderRadius;
   background: $warning;
 }
-.error-messages{
+
+.error-messages {
 
   @extend .label;
   width: 100%;

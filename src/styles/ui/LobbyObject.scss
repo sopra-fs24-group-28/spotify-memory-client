@@ -2,7 +2,7 @@
 //@import "../views/Login";
 @import "../views/CustomizeGameParameter";
 
-.BaseDivLobby{
+.BaseDivLobby {
   @extend .BaseDiv;
   border: solid $textColor;
   width: 1000px;

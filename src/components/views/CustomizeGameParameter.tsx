@@ -60,6 +60,7 @@ const CustomizeGameParameter = () => {
 
     if (errorMessage) {
       setErrorMessages(errorMessage);
+
       return;
     }
 
@@ -111,8 +112,6 @@ const CustomizeGameParameter = () => {
 
         //TODO: Initialise game Websocket
         //...
-
-
 
 
         //navigate(`game/${gameParameters.gameId}`); //TODO: uncomment when backend is ready

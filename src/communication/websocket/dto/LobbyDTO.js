@@ -7,4 +7,4 @@ class Lobby {
   }
 }
 
-export default Lobby
+export default Lobby;

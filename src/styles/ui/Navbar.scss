@@ -37,18 +37,21 @@
   align-items: center;
 }
 
-.iconItems{
+.iconItems {
   &:hover {
     transform: translateY(-2px);
     cursor: pointer;
   }
+
   &:disabled {
     cursor: default;
     opacity: 0.4;
+
     &:hover {
       transform: none;
     }
   }
+
   display: flex;
   //border: solid red; //comment out afterwards
   align-items: center;
