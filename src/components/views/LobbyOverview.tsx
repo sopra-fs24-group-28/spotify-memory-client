@@ -43,7 +43,7 @@ const LobbyOverview = () => {
       client.subscribe("/topic/overview", (obj) => {
         console.log("Received");
         console.log(obj.body)
-        // assign the changes correcly
+        // TODO: appropriately consume the update 
       });
 
       client.publish({
