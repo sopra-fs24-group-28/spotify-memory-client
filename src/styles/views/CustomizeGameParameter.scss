@@ -1,0 +1,103 @@
+@import "../theme";
+@import "../views/Login";
+@import "../ui/Button";
+
+.BaseContainer{
+  @extend .login, .container;
+  border: solid $textColor;
+  padding: 40px;
+}
+
+.BaseDiv{
+  @extend .login, .form;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: solid $textColor;
+  overflow: auto;
+
+}
+
+
+.title-section, .input-section, .button-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  padding: 5px;
+}
+
+
+.normalInput{
+  padding: 2px;
+  width: 200px;
+  max-height: 50%;
+  display: flex;
+  background: $inputblue;
+  border: 2px solid $textColor;
+  box-shadow: $dropShadow;
+  border-radius: 60px;
+  margin-top: 3px;
+  color: $textColor;
+  font-weight: bold;
+  text-align: center;
+  font-size: $inputfontsize;
+  &:hover {
+    //transform: translateY(-1px);
+    border: 2px solid $warning;
+  }
+  cursor: pointer;
+}
+
+.hr{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: $textColor;
+  width: 100%;
+}
+
+.customizebtn{
+  @include center;
+  @extend .join-button;
+  height: 40px;
+  width: 200px;
+  text-size-adjust: auto;
+  font-size: $inputfontsize
+}
+
+.buttongroup{
+  @include center;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.label{
+  color: $textColor;
+  font-weight: bold;
+  align-self: start;
+  width: 200px;
+  font-size: $inputfontsize;
+}
+
+.inputpair{
+  @include center;
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+  //border: solid 1px $textColor;
+}
+.error-message-container{
+  @include center;
+  margin: 10px;
+  width: 80%;
+  padding: 20px;
+  border-radius: $borderRadius;
+  background: $warning;
+}
+.error-messages{
+
+  @extend .label;
+  width: 100%;
+}

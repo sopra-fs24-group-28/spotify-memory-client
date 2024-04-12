@@ -1,0 +1,28 @@
+@import "../theme";
+@import "../views/Login";
+@import "../views/CustomizeGameParameter";
+
+.BaseDivLobby{
+  @extend .BaseDiv;
+  //border: solid red;
+  width: 1000px;
+  max-width: $DESKTOP_WIDTH;
+  max-height: ($DESKTOP_WIDTH / 1) + 20;
+  min-height: 100px; // Adjust this value based on your needs
+
+}
+
+.gridhandler{
+  overflow-wrap: anywhere;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); // Creates two columns of equal width
+  grid-template-rows: auto;
+  grid-row-gap: 20px;
+  grid-column-gap: 20px; // Keeps a constant gap between both rows and columns
+  justify-content: start;
+  align-items: start;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+

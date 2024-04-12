@@ -5,7 +5,7 @@ import "../../styles/ui/Button.scss";
 export const Button = props => (
   <button
     {...props}
-    style={{width: props.width, ...props.style}}
+    style={{ width: props.width ? props.width : "100%", ...props.style }}
     className={`primary-button ${props.className}`}>
     {props.children}
   </button>
@@ -13,7 +13,7 @@ export const Button = props => (
 
 
 Button.propTypes = {
-  width: PropTypes.number,
+  width: PropTypes.string,
   style: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.node,
