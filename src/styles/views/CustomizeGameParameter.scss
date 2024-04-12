@@ -78,7 +78,7 @@
 .label {
   color: $textColor;
   font-weight: bold;
-  align-self: start;
+  align-self: flex-start;
   width: 200px;
   font-size: $inputfontsize;
 }
@@ -101,7 +101,6 @@
 }
 
 .error-messages {
-
   @extend .label;
   width: 100%;
 }
