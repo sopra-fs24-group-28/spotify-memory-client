@@ -1,7 +1,7 @@
 @import "../theme";
 @import "../views/CustomizeGameParameter";
 
-.userbox{
+.userbox {
   @extend .normalInput;
   @include center;
   display: grid;
@@ -13,7 +13,7 @@
 
 }
 
-.button-label{
+.button-label {
   @include center;
 }
 

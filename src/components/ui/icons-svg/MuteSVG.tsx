@@ -34,7 +34,3 @@ MuteSVG.propTypes = {
 };
 
 export default MuteSVG;
-
-
-
-

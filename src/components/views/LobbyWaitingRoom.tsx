@@ -8,26 +8,26 @@ import PropTypes from "prop-types";
 
 const LobbyWaitingRoom = (props) => {
   const navigate = useNavigate();
-  const [lobbyParams, setLobbyParams] = useState(props.lobbyParams ? props.lobbyParams : null)
+  const [lobbyParams, setLobbyParams] = useState(props.lobbyParams ? props.lobbyParams : null);
 
   useEffect(() => {
     //TODO Diyar spotify sdk might have to be initialised here i guess?
 
     //mocking, to be removed once websocket is ready
     setLobbyParams({
-      GameParameters:{something: "something"},
-      players: [{name: "Elias"},{name: "Niklas"}]
-    })
+      GameParameters: { something: "something" },
+      players: [{ name: "Elias" }, { name: "Niklas" }],
+    });
     console.log(lobbyParams);
 
   }, []);
 
-  function handleLeave (){
+  function handleLeave() {
     //TODO: kill websocket connection
-    navigate("/lobbyOverview")
+    navigate("/lobbyOverview");
   }
 
-  function handleReady(){
+  function handleReady() {
     //TODO: send ready state via websocket connection:
   }
 

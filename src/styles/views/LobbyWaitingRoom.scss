@@ -2,7 +2,7 @@
 @import "../views/Login";
 @import "../views/CustomizeGameParameter";
 
-.BaseDivLobby{
+.BaseDivLobby {
   @extend .BaseDiv;
   border: solid red;
   width: 1000px;
@@ -12,7 +12,7 @@
 
 }
 
-.gridhandler{
+.gridhandler {
   @include center;
   overflow-wrap: anywhere;
   display: grid;
@@ -26,12 +26,12 @@
   padding-top: 10px;
 }
 
-.centerwrapper{
+.centerwrapper {
   @include center;
   display: flex;
 }
 
-.spotifyPlaylistContainer{
+.spotifyPlaylistContainer {
   overflow: auto;
   @include center;
   background: $accent;
@@ -44,14 +44,14 @@
 
 }
 
-.buttonContainer{
+.buttonContainer {
   @include center;
   width: 80%;
   justify-content: space-between;
 
 }
 
-.playergrid{
+.playergrid {
   @extend .gridhandler;
   @include center;
   flex-direction: column;
@@ -66,7 +66,7 @@
 
 }
 
-.h3-title{
+.h3-title {
   font-size: large;
   font-weight: bold;
   color: $textColor;

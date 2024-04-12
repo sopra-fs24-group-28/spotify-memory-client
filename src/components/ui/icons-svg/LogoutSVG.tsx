@@ -29,12 +29,7 @@ const LogoutSVG = (props) => {
 };
 
 LogoutSVG.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
+  width: PropTypes.number, height: PropTypes.number,
 };
 
 export default LogoutSVG;
-
-
-
-

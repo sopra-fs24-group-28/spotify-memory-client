@@ -11,9 +11,6 @@ class GameParameter {
     this.timePerTurnPowerUp = data.timePerTurnPowerUp;
     Object.assign(this, data);
   }
-
-
-
 }
 
 export default GameParameter;

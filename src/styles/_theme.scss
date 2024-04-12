@@ -15,7 +15,7 @@ $textColor: #D9D9D9;
 $background: #0E525E;
 $warning: #FF4589;
 $turquise: #00A1B3;
-$spotifygreen: 	#1DB954;
+$spotifygreen: #1DB954;
 $inputblue: #006FFC;
 $backgroundgrey: #494554;
 
@@ -57,6 +57,7 @@ $borderRadius: 0.75em;
   width: 5px;
   border-radius: $borderRadius;
 }
+
 ::-webkit-scrollbar-track {
   background: $textColor;
   //border-right: 10px $lightviolet solid;
@@ -66,6 +67,7 @@ $borderRadius: 0.75em;
   border-radius: $borderRadius;
 
 }
+
 ::-webkit-scrollbar-thumb {
   background: $turquise;
   //border-right: 10px $lightviolet solid;
@@ -76,6 +78,7 @@ $borderRadius: 0.75em;
 
 
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: $inputblue;
 }
