@@ -23,7 +23,6 @@ const CustomizeGameParameter = () => {
 
   useEffect(() => {
     //TODO: fetch users playlists to set availableplaylists
-
   }, []);
 
   function startGame(e) {
@@ -75,7 +74,6 @@ const CustomizeGameParameter = () => {
       timePerTurn: timePerTurn,
       timePerTurnPowerUp: timePerTurnPowerUp,
     }));
-
   }
 
   useEffect(() => {
@@ -87,13 +85,10 @@ const CustomizeGameParameter = () => {
 
   async function sendLobbyCreationRequest() {
     try {
-      console.log(gameParameters);
       const requestBody = JSON.stringify(gameParameters);
       const response = await api.post("/game", requestBody);
-      console.log(response);
 
       if (response.status === 201) {
-
         //setting up the game
         let game: Game;
         let returnedGameParameters: GameParameter;
@@ -103,7 +98,6 @@ const CustomizeGameParameter = () => {
         game.gameParameter = returnedGameParameters;
         game.host = localStorage.getItem("userId"); //TODO: redirect this task to backenend once they are ready
         game.addPlayer(game.host); //TODO:  remove once backend is ready
-        console.log(game);
 
         //TODO: Initialise game Websocket
         //...
@@ -114,7 +108,6 @@ const CustomizeGameParameter = () => {
     } catch (error) {
       alert(`Something went wrong setting up the lobby. \n${handleError(error)}`);
     }
-
   }
 
   return (<>
