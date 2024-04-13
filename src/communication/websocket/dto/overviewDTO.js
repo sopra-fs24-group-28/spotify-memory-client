@@ -1,3 +1,5 @@
+import Lobby from "models/Lobby"
+
 class OverViewDTO {
   constructor() {
     this.Lobbies = {};
