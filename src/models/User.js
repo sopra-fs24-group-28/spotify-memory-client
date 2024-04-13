@@ -1,13 +1,8 @@
-/**
- * User model
- */
 class User {
   constructor(data = {}) {
-    this.id = null;
-    this.name = null;
+    this.userId = null;
     this.username = null;
-    this.token = null;
-    this.status = null;
+    this.profileImageUrl = null;
     Object.assign(this, data);
   }
 }
