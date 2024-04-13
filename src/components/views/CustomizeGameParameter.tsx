@@ -64,7 +64,6 @@ const CustomizeGameParameter = () => {
       return;
     }
 
-
     setGameParameters(new GameParameter({
       playerLimit: playerLimit,
       numOfSets: numOfSets,
@@ -95,10 +94,6 @@ const CustomizeGameParameter = () => {
 
       if (response.status === 201) {
 
-        if (!response.data?.gameId) {
-          alert("The server did not return a valid lobby id, please try again.");
-        }
-
         //setting up the game
         let game: Game;
         let returnedGameParameters: GameParameter;
@@ -112,8 +107,6 @@ const CustomizeGameParameter = () => {
 
         //TODO: Initialise game Websocket
         //...
-
-
         //navigate(`game/${gameParameters.gameId}`); //TODO: uncomment when backend is ready
       } else {
         alert("Something went wrong setting up the lobby.");
@@ -123,7 +116,6 @@ const CustomizeGameParameter = () => {
     }
 
   }
-
 
   return (<>
     <div className="BaseContainer">
