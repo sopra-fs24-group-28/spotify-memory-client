@@ -9,7 +9,7 @@ const Login = () => {
     try {
       const client_id: string = "5aac3ff5093942be92372c19a12fdecd";
       const scope: string = "streaming playlist-read-private playlist-read-collaborative user-modify-playback-state user-read-currently-playing playlist-read-private user-read-private";
-      const redirect_uri: string = `${window.location.origin}/auth_callback/`;
+      const redirect_uri: string = `${window.location.origin}/auth_callback`;
       console.log(redirect_uri);
       const urlBase: string = "https://accounts.spotify.com/authorize?";
       const params = {
