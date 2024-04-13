@@ -15,8 +15,6 @@ const GameRouter = () => {
 
         <Route path="*" element={<Navigate to="dashboard" replace />} />
 
-        {//<Route path="overview" element={<Overview />} />
-        }
 
       </Routes>
 
