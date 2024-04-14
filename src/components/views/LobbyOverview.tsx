@@ -1,111 +1,82 @@
 import React, { useEffect, useState } from "react";
+import { Spinner } from "../ui/Spinner";
 import "styles/views/LobbyOverview.scss";
-import { api, handleError } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import LobbyObject from "../ui/LobbyObject";
 import { Button } from "../ui/Button";
-import { Client } from "@stomp/stompjs";
-import OverviewDTO from "../../communication/websocket/dto/overviewDTO.js";
+import WSHandler from "helpers/wsHandler";
+import Lobby from "models/Lobby";
 
 
 const LobbyOverview = () => {
   const navigate = useNavigate();
+  
+  // creating stomp client
+  const restEndpoint = "/game";
+  const wsEndpoint = "/topic/overview";
+  const wsDestination = "/app/overview";
+  const receiverFunction = (data) => {
+    console.log(data); // TODO: update game state when ws receives updateDTO 
+    // setReceivedGameStates(data); // set received game state each time overview update dto is received
+  };
+  const wsHandler = new WSHandler(restEndpoint, wsEndpoint, wsDestination, receiverFunction);
   const [receivedGameStates, setReceivedGameStates] = useState([]);
-
-  async function fetchData() {
-    try {
-      const response = await api.get("/game");
-      const overviewData = response.data;
-      const initialOverview = new OverviewDTO();
-
-      Object.entries(overviewData).forEach(([gameID, data]) => {
-        initialOverview.addOrUpdateGame(gameID, data);
-      });
-      console.log(initialOverview);
-
-    } catch (error) {
-      console.error(`Something went wrong while fetching the Gameoverview: \n${handleError(error)}`);
-    }
-
-  }
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchData = async () => {
+      // Perform asynchronous operation to fetch initial data
+      const data = await wsHandler.fetchData();
+      console.log(data);
+      console.log("here");
+      setReceivedGameStates(data);
+      wsHandler.connect()
+      setLoading(false);
+    };
+
     fetchData();
+    
 
-    // Assuming Client() comes from a STOMP JS library
-    const client = new Client();
-    client.brokerURL = "ws://localhost:8080/ws";
-
-    client.onConnect = function (frame) {
-      // Connection is now established, you can safely publish messages
-      console.log("Connected");
-
-      client.subscribe("/topic/overview", (obj) => {
-        console.log("Received");
-        console.log(obj.body)
-        // TODO: appropriately consume the update 
-      });
-
-      client.publish({
-        destination: "/app/overview",
-        body: "Hello"
-      });
-    };
-
-    client.activate();
-
-    // Cleanup function to disconnect the client when the component unmounts
+    // Clean-up function
     return () => {
-      if (client.connected) {
-        client.deactivate();
-      }
+      // Perform any necessary clean-up
+      wsHandler.disconnect();
     };
-
-
-
-    // try {
-    //   stompClient.activate();
-    //   stompClient.publish({
-    //     destination: "/app/overview",
-    //   })
-    // } catch (error) {
-    //   console.log(stompClient)
-    //   console.log(error);
-    //   alert("Something went wrong setting up the websocket. Try again later.");
-    // }
-
-    // //cleanup once we leave
-    // return () => {
-    //   stompClient.deactivate();
-    // };
   }, []);
 
+  
 
   function createlobby() {
     navigate("/customizeGame");
   }
 
+  let content = <Spinner />;
+   
+  if (receivedGameStates.length > 0) {
+    content = (
+      <div className="gridhandler">
+      {receivedGameStates.map((lobby: Lobby) => (
+        <div key={lobby.id} className="grid-item">
+          <LobbyObject props={lobby} />
+        </div>
+      ))}
+      </div>
+    )
+  } else if (receivedGameStates.length === 0) {
+    content = (
+      <div style={{"text-align": "center", "align-align": "middle", "line-height": "400px"}}>
+        Be the first to start a game!
+      </div>
+    )
+  }
 
   return (<div className="BaseContainer">
     <div className="BaseDivLobby">
-      <div className="gridhandler">
-        <Button width={"80%"} height={"30%"} onClick={createlobby}>Create new Lobby</Button>
-        {/*dummy for ws testing TODO: replace with adjusting the games accordingly*/}
-        <div>
-          Messages:
-          {receivedGameStates.map((msg, index) => (<div key={index}>{msg}</div>))}
+      <div>
+        <div className="newGameButton">
+          <Button width={"45%"} height={"30%"} onClick={createlobby}>Create new Lobby</Button>
         </div>
-        {/*dummy ends// TODO: replace with real objects*/}
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
+        {content}
       </div>
     </div>
   </div>);
