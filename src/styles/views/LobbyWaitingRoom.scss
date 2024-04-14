@@ -4,12 +4,11 @@
 
 .BaseDivLobby {
   @extend .BaseDiv;
-  border: solid red;
   width: 1000px;
   max-width: $DESKTOP_WIDTH;
   max-height: ($DESKTOP_WIDTH / 1) + 20;
   min-height: 100px; // Adjust this value based on your needs
-
+  padding: 50px;
 }
 
 .gridhandler {
@@ -18,7 +17,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr); // Creates two columns of equal width
   grid-template-rows: auto;
-  grid-row-gap: 40px;
+  grid-row-gap: 20px;
   grid-column-gap: 20px; // Keeps a constant gap between both rows and columns
   justify-content: flex-start;
   align-items: flex-start;
@@ -28,7 +27,6 @@
 
 .centerwrapper {
   @include center;
-  display: flex;
 }
 
 .spotifyPlaylistContainer {
@@ -38,10 +36,24 @@
   border: solid $textColor 2px;
   border-radius: $borderRadius;
   width: 80%;
+  height: 300px;
   padding: 20px;
-  height: 400px;
   box-shadow: $dropShadow;
+  justify-content: center;
+}
 
+.imgContainer{
+  @extend .spotifyPlaylistContainer;
+  background: transparent;
+  border: 0px;
+  box-shadow: None;
+  padding: 0px;
+}
+
+.img{
+  box-shadow: $dropShadow;
+  border: solid $textColor 2px;
+  border-radius: $borderRadius;
 }
 
 .buttonContainer {

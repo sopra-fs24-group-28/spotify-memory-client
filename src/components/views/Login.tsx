@@ -29,7 +29,7 @@ const Login = () => {
 
         <div className="h2-title">Login with your Spotify Credentials</div>
         <div className="logoContainer">
-          <SpotifyLogoWithTextSVG width="100" height="100"></SpotifyLogoWithTextSVG>
+          <SpotifyLogoWithTextSVG width="1" height="1"></SpotifyLogoWithTextSVG>
         </div>
         <div className="login button-container">
           <Button
