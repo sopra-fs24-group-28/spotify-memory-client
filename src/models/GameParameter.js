@@ -1,5 +1,5 @@
 class GameParameter {
-  constructor(data = {}) {
+  constructor(data={}) {
     this.playerLimit = data.playerLimit;
     this.numOfSets = data.numOfSets;
     this.numOfCardsPerSet = data.numOfCardsPerSet;
@@ -9,7 +9,8 @@ class GameParameter {
     this.streakMultiplier = data.streakMultiplier;
     this.timePerTurn = data.timePerTurn;
     this.timePerTurnPowerUp = data.timePerTurnPowerUp;
-    Object.assign(this, data);
+    this.playlistImageUrl = data.playlistImageUrl;
+    //Object.assign(this, data);
   }
 }
 
