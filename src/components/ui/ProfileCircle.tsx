@@ -11,9 +11,10 @@ const ProfileCircle = (props) => {
     height: props.height !== null ? props.height : 200,
     width: props.width !== null ? props.width : 200,
     background: props.url ? `url(${props.url}) center/cover` : "black",
-    border: "3px solid #FFFFFF",
-    filter: "drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.25))",
+    border: "1px solid #D9D9D9",
+    //filter: "drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.25))",
     borderRadius: "50%",
+    marginRight: "3px" // Adjust margin to allow overlap
   };
 
   return (
