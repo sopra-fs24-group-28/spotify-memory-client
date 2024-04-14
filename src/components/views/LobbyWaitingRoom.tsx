@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "styles/views/LobbyWaitingRoom.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 import PropTypes from "prop-types";
@@ -8,21 +8,22 @@ import { api, handleError } from "helpers/api";
 import SpotifyLogoWithTextSVG from "../ui/icons-svg/SpotifyLogoWithTextSVG";
 
 
-const LobbyWaitingRoom = (props) => {
+const LobbyWaitingRoom = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const gameId = props.gameId;
-  const [lobbyParams, setLobbyParams] = useState(props.lobbyParams ? props.lobbyParams : null);
+  const gameId = useParams()
+  const [gameParameter, setGameParameter] = useState(location.state.gameParameter ? location.state.gameParameter : null);
 
 
   useEffect(() => {
     //TODO Diyar spotify sdk might have to be initialised here i guess?
 
     //mocking, to be removed once websocket is ready
-    setLobbyParams({
-      // GameParameters: { playlist: { images: ["https://mosaic.scdn.co/640/ab67616d00001e021677f484125173d96fd1f4fdab67616d00001e021a3804c279594ebceecec4a2ab67616d00001e021b96e645016c4d431842aa93ab67616d00001e023a8b694ef93dbb4ca2c68fc2"] } },
-      players: [{ userId: 1, username: "Elias" }, { userId: 2, username: "Niklas" }],
-    });
-    console.log(lobbyParams);
+    // setGameParameter({
+    //   // GameParameters: { playlist: { images: ["https://mosaic.scdn.co/640/ab67616d00001e021677f484125173d96fd1f4fdab67616d00001e021a3804c279594ebceecec4a2ab67616d00001e021b96e645016c4d431842aa93ab67616d00001e023a8b694ef93dbb4ca2c68fc2"] } },
+    //   players: [{ userId: 1, username: "Elias" }, { userId: 2, username: "Niklas" }],
+    // });
+    // console.log(gameParameter);
 
   }, []);
 
@@ -34,7 +35,6 @@ const LobbyWaitingRoom = (props) => {
       if (response.ok) {
         //TODO: kill websocket connection
 
-        //
         navigate("lobbyoverview") //Todo: anpassen wenn klar wie
 
       } else {
@@ -55,10 +55,10 @@ const LobbyWaitingRoom = (props) => {
     <div className="BaseDivLobby">
       <div className="gridhandler">
         <div className="centerwrapper">
-          <div className={lobbyParams?.GameParameters?.playlist?.images?.[0] ? "imgContainer" : "spotifyPlaylistContainer"} >
-            {lobbyParams?.GameParameters?.playlist?.images?.[0] ? (
+          <div className={gameParameter?.GameParameters?.playlist?.images?.[0] ? "imgContainer" : "spotifyPlaylistContainer"} >
+            {gameParameter?.GameParameters?.playlist?.images?.[0] ? (
               <img
-                src={lobbyParams.GameParameters.playlist.images[0]}
+                src={gameParameter.GameParameters.playlist.images[0]}
                 alt="Spotify Playlist Image"
                 width="85%"
                 height="85%"
@@ -72,7 +72,7 @@ const LobbyWaitingRoom = (props) => {
         <div className="centerwrapper">
           <div className="playergrid">
             <div className="h3-title">These players are already waiting!!</div>
-            {lobbyParams && lobbyParams.players && lobbyParams.players.map((player, index) => (
+            {gameParameter && gameParameter.players && gameParameter.players.map((player, index) => (
               <UserStatWithIcon key={index} username={player.username} currentStanding="?"></UserStatWithIcon>
             ))}
           </div>
