@@ -1,7 +1,7 @@
 import { Client } from "@stomp/stompjs";
 import { getWSDomain } from "./getDomain";
 import { api, handleError } from "./api";
-import OverviewDTO from "../communication/websocket/dto/overviewDTO.js";
+import Lobby from "models/Lobby";
 
 class WSHandler {
   constructor(restEndpoint, wsEndpoint, wsDestination, receiverFunction) {
@@ -18,21 +18,23 @@ class WSHandler {
       console.log("Connected");
       this.client.subscribe(this.wsEndpoint, this.receiverFunction);
     };
-    await this.fetchData();
     this.client.activate();
   }
+
+  // TODO: fetchData should not be defined here but passed as a parameter
+  // in current state only useful for lobby overview
 
   async fetchData() {
     try {
       const response = await api.get(this.restEndpoint);
       const overviewData = response.data;
-      const initialOverview = new OverviewDTO({});
+      console.log(overviewData);
+      const initialOverview = [];
 	  
-      Object.entries(overviewData).forEach(([gameID, data]) => {
-		  initialOverview.addOrUpdateGame(gameID, data);
+      Object.entries(overviewData["games"]).forEach(([gameID, data]) => {
+		  initialOverview.push(new Lobby(gameID, data));
 		});
-	  console.log(initialOverview);
-	  
+
 	  return initialOverview;
 	  
     } catch (error) {
