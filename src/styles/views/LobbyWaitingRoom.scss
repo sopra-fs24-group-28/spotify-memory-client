@@ -42,15 +42,16 @@
   justify-content: center;
 }
 
-.imgContainer{
+.imgContainer {
   @extend .spotifyPlaylistContainer;
   background: transparent;
-  border: 0px;
+  border: 0;
   box-shadow: None;
-  padding: 0px;
+  padding: 0;
+  align-items: baseline;
 }
 
-.img{
+.img {
   box-shadow: $dropShadow;
   border: solid $textColor 2px;
   border-radius: $borderRadius;

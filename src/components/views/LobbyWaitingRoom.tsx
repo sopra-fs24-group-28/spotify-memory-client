@@ -19,7 +19,7 @@ const LobbyWaitingRoom = (props) => {
 
     //mocking, to be removed once websocket is ready
     setLobbyParams({
-      // GameParameters: { playlist: { images: ["https://mosaic.scdn.co/640/ab67616d00001e021677f484125173d96fd1f4fdab67616d00001e021a3804c279594ebceecec4a2ab67616d00001e021b96e645016c4d431842aa93ab67616d00001e023a8b694ef93dbb4ca2c68fc2"] } },
+      GameParameters: { playlist: { images: ["https://mosaic.scdn.co/640/ab67616d00001e021677f484125173d96fd1f4fdab67616d00001e021a3804c279594ebceecec4a2ab67616d00001e021b96e645016c4d431842aa93ab67616d00001e023a8b694ef93dbb4ca2c68fc2"] } },
       players: [{ userId: 1, username: "Elias" }, { userId: 2, username: "Niklas" }],
     });
     console.log(lobbyParams);
@@ -35,7 +35,7 @@ const LobbyWaitingRoom = (props) => {
         //TODO: kill websocket connection
 
         //
-        navigate("lobbyoverview") //Todo: anpassen wenn klar wie
+        navigate("lobbyoverview"); //Todo: anpassen wenn klar wie
 
       } else {
         alert("There was a error when trying to leave the lobby. Please try again later");
@@ -55,7 +55,8 @@ const LobbyWaitingRoom = (props) => {
     <div className="BaseDivLobby">
       <div className="gridhandler">
         <div className="centerwrapper">
-          <div className={lobbyParams?.GameParameters?.playlist?.images?.[0] ? "imgContainer" : "spotifyPlaylistContainer"} >
+          <div
+            className={lobbyParams?.GameParameters?.playlist?.images?.[0] ? "imgContainer" : "spotifyPlaylistContainer"}>
             {lobbyParams?.GameParameters?.playlist?.images?.[0] ? (
               <img
                 src={lobbyParams.GameParameters.playlist.images[0]}
