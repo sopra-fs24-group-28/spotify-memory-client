@@ -7,7 +7,7 @@ class OverViewDTO {
 
   addOrUpdateGame(gameID, data) {
     //add game
-    this.Lobbies[gameID] = new Lobby(data);
+    this.Lobbies[gameID] = new Lobby(gameID, data);
   }
 
   getGame(gameID) {
