@@ -39,7 +39,7 @@ const LobbyWaitingRoom = (props) => {
         //TODO: kill websocket connection
 
         //
-        navigate("lobbyoverview"); //Todo: anpassen wenn klar wie
+        navigate("/lobbyOverview"); //Todo: anpassen wenn klar wie
 
       } else {
         alert("There was a error when trying to leave the lobby. Please try again later");
