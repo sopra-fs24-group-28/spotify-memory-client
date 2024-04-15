@@ -5,6 +5,8 @@ import GameParameter from "../../models/GameParameter";
 import Game from "../../models/Game.js";
 import { useNavigate } from "react-router-dom";
 import { getSpotifyPlaylist } from "../../helpers/spotifyrelated/getPlaylists";
+import { Button } from "components/ui/Button"
+import { updateFunctionDeclaration } from "typescript";
 
 
 const CustomizeGameParameter = () => {
@@ -123,6 +125,12 @@ const CustomizeGameParameter = () => {
     }
   }
 
+  function cancel() {
+    navigate("/lobbyOverview")
+  }
+
+  
+
   return (<>
       <div className="BaseContainer">
         <div className="BaseDiv">
@@ -235,16 +243,17 @@ const CustomizeGameParameter = () => {
             </div>
             <div className="button-section">
               <hr />
-              <button
-                type="submit"
-                className="customizebtn"
-                onClick={startGame}>Start Game
-              </button>
               <div className={errorMessages ? "error-message-container" : "hidden"}>
                 <div className="error-messages">
                   {errorMessages && <p>{errorMessages}</p>}
                 </div>
               </div>
+              <button
+                type="submit"
+                className="customizebtn"
+                onClick={startGame}>Start Game
+              </button>
+              <button className="customizebtn" style={{"margin": "10px"}} onClick={cancel}>Cancel</button>
             </div>
           </form>
         </div>
