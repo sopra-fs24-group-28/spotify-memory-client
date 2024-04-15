@@ -113,7 +113,23 @@ const CustomizeGameParameter = () => {
 
         //TODO: Initialise game Websocket
         //...
-        //navigate(`game/${gameParameters.gameId}`); //TODO: uncomment when backend is ready
+        navigate(`/lobby/${response.data.gameId}`, { state: { gameParameter: returnedGameParameters } }) //TODO this is mocked, remove once its ready
+
+        //TODO; ucomment the following once the backedn is ready
+        // try {
+        //   if (response.data.gameId) {
+        //     const response = await api.put(`/game/player/${gameId}`);
+        //     if (response.ok && response.data?.gameId && response.data.gameParameter) {
+        //       navigate(`/lobby/${response.data.gameId}`, { state: { gameParameter: response.data.gameParameter } });
+        //     } else {
+        //       alert("something went wrong while trying to set up a new lobby)
+        //     }
+        //   } else {
+        //     alert("no valid Game-id could be associated with the selected lobby. Please try again later. ");
+        //   }
+        // } catch (error) {
+        //   console.error("An error occurred:", error);
+        // }
       } else {
         alert("Something went wrong setting up the lobby.");
       }
@@ -129,124 +145,127 @@ const CustomizeGameParameter = () => {
           <h2 className="h2-title">Customize your Game!</h2>
         </div>
         <form className="input-section" onSubmit={startGame}>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="playerLimit">Player Limit:</label>
-            <input
-              id="playerLimit"
-              className="normalInput"
-              value={playerLimit}
-              type="number"
-              onChange={e => setPlayerLimit(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="numOfSets">Number of Sets:</label>
-            <input
-              id="numOfSets"
-              className="normalInput"
-              type="number"
+          <div className="grid">
+            <div className={"inputpair"}>
+              <label className="label" htmlFor="playerLimit">Player Limit:</label>
+              <input
+                id="playerLimit"
+                className="normalInput"
+                value={playerLimit}
+                type="number"
+                onChange={e => setPlayerLimit(e.target.value)}
+              />
+            </div>
+            <div className={"inputpair"}>
+              <label className="label" htmlFor="numOfSets">Number of Sets:</label>
+              <input
+                id="numOfSets"
+                className="normalInput"
+                type="number"
 
-              value={numOfSets}
-              onChange={e => setNumOfSets(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="numOfCardsPerSet">Cards per Set:</label>
-            <input
-              id="numOfCardsPerSet"
-              className="normalInput"
-              type="number"
-              placeholder="Number of Cards per Set"
-              value={numOfCardsPerSet}
-              onChange={e => setNumOfCardsPerSet(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="gameCategory">gameCategory:</label>
-            <select
-              id="gameCategory"
-              className="normalInput"
-              value={gameCategory}
-              onChange={e => setGameCategory(e.target.value)}
-            >
-              <option value="STANDARDSONG">Normal</option>
-              <option value="STANDARDALBUMCOVER">Album Cover</option>
-            </select>
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="playlist">Playlist:</label>
-            <select
-              id="playlist"
-              className="normalInput"
-              value={playlist}
-              onChange={e => setPlaylist(e.target.value)}
-            >
-              {availablePlaylists.map((playlist, index) => (
-                <option key={index} value={playlist.id}>{playlist.name}</option>
-              ))}
-            </select>
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="streakStart">Streak Start:</label>
-            <input
-              id="streakStart"
-              className="normalInput"
-              type="number"
-              placeholder="Streak Start"
-              value={streakStart}
-              onChange={e => setStreakStart(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="streakMultiplier">Streak Multiplier:</label>
-            <input
-              id="streakMultiplier"
-              className="normalInput"
-              type="number"
-              placeholder="Streak Multiplier"
-              value={streakMultiplier}
-              onChange={e => setStreakMultiplier(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="timePerTurn">Time per Turn (Normal):</label>
-            <input
-              id="timePerTurn"
-              className="normalInput"
-              type="number"
-              placeholder="Time per Turn Normal"
-              value={timePerTurn}
-              onChange={e => setTmePerTurn(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="timePerTurnPowerUp">Time per Turn (Powerup):</label>
-            <input
-              id="timePerTurnPowerUp"
-              className="normalInput"
-              type="number"
-              placeholder="Time per Turn Powerup"
-              value={timePerTurnPowerUp}
-              onChange={e => setTmePerTurnPowerUp(e.target.value)}
-            />
-          </div>
-          <div className="button-section">
-            <hr />
-            <button
-              type="submit"
-              className="customizebtn"
-              onClick={startGame}>Start Game
-            </button>
-            <div className={errorMessages ? "error-message-container" : "hidden"}>
-              <div className="error-messages">
-                {errorMessages && <p>{errorMessages}</p>}
-              </div>
+                value={numOfSets}
+                onChange={e => setNumOfSets(e.target.value)}
+              />
+            </div>
+            <div className={"inputpair"}>
+              <label className="label" htmlFor="numOfCardsPerSet">Cards per Set:</label>
+              <input
+                id="numOfCardsPerSet"
+                className="normalInput"
+                type="number"
+                placeholder="Number of Cards per Set"
+                value={numOfCardsPerSet}
+                onChange={e => setNumOfCardsPerSet(e.target.value)}
+              />
+            </div>
+            <div className={"inputpair"}>
+              <label className="label" htmlFor="gameCategory">Game Category:</label>
+              <select
+                id="gameCategory"
+                className="normalInput"
+                value={gameCategory}
+                onChange={e => setGameCategory(e.target.value)}
+              >
+                <option value="STANDARDSONG">Normal</option>
+                <option value="STANDARDALBUMCOVER">Album Cover</option>
+              </select>
+            </div>
+            <div className={"inputpair"}>
+              <label className="label" htmlFor="playlist">Playlist:</label>
+              <select
+                id="playlist"
+                className="normalInput"
+                value={playlist}
+                onChange={e => setPlaylist(e.target.value)}
+              >
+                {availablePlaylists.map((playlist, index) => (
+                  <option key={index} value={playlist.id}>{playlist.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className={"inputpair"}>
+              <label className="label" htmlFor="streakStart">Streak Start:</label>
+              <input
+                id="streakStart"
+                className="normalInput"
+                type="number"
+                placeholder="Streak Start"
+                value={streakStart}
+                onChange={e => setStreakStart(e.target.value)}
+              />
+            </div>
+            <div className={"inputpair"}>
+              <label className="label" htmlFor="streakMultiplier">Streak Multiplier:</label>
+              <input
+                id="streakMultiplier"
+                className="normalInput"
+                type="number"
+                placeholder="Streak Multiplier"
+                value={streakMultiplier}
+                onChange={e => setStreakMultiplier(e.target.value)}
+              />
+            </div>
+            <div className={"inputpair"}>
+              <label className="label" htmlFor="timePerTurn">Time per Turn (Normal):</label>
+              <input
+                id="timePerTurn"
+                className="normalInput"
+                type="number"
+                placeholder="Time per Turn Normal"
+                value={timePerTurn}
+                onChange={e => setTmePerTurn(e.target.value)}
+              />
+            </div>
+            <div className={"inputpair"}>
+              <label className="label" htmlFor="timePerTurnPowerUp">Time per Turn (Powerup):</label>
+              <input
+                id="timePerTurnPowerUp"
+                className="normalInput"
+                type="number"
+                placeholder="Time per Turn Powerup"
+                value={timePerTurnPowerUp}
+                onChange={e => setTmePerTurnPowerUp(e.target.value)}
+              />
             </div>
           </div>
+            <div className="button-section">
+              <hr />
+              <button
+                type="submit"
+                className="customizebtn"
+                onClick={startGame}>Start Game
+              </button>
+              <div className={errorMessages ? "error-message-container" : "hidden"}>
+                <div className="error-messages">
+                  {errorMessages && <p>{errorMessages}</p>}
+                </div>
+              </div>
+            </div>
         </form>
       </div>
     </div>
-  </>);
+  </>
+);
 };
 
 export default CustomizeGameParameter;
