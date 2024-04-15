@@ -4,9 +4,8 @@ export async function getSpotifyPlaylist() {
   const accessToken = localStorage.getItem("accessToken");
   if (accessToken) {
     try {
-      const response = await api.get(`/user/playlist/names?accessToken=${accessToken}`);
+      const response = await api.get(`spotify/user/playlist/names?accessToken=${accessToken}`);
       if (response.status === 200) {
-        console.log(response);
 
         return response.data.playlists;
       }
