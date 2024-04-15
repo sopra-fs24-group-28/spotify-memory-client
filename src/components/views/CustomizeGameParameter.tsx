@@ -4,6 +4,7 @@ import { api, handleError } from "helpers/api";
 import GameParameter from "../../models/GameParameter";
 import Game from "../../models/Game.js";
 import { useNavigate } from "react-router-dom";
+import { getSpotifyPlaylist } from "../../helpers/spotifyrelated/getPlaylists";
 
 
 const CustomizeGameParameter = () => {
@@ -12,7 +13,7 @@ const CustomizeGameParameter = () => {
   const [numOfSets, setNumOfSets] = useState(1);
   const [numOfCardsPerSet, setNumOfCardsPerSet] = useState(2);
   const [gameCategory, setGameCategory] = useState("STANDARDALBUMCOVER");
-  const [playlist, setPlaylist] = useState("dfadfad");
+  const [playlist, setPlaylist] = useState();
   const [streakStart, setStreakStart] = useState(3);
   const [streakMultiplier, setStreakMultiplier] = useState(2);
   const [timePerTurn, setTmePerTurn] = useState(10);
@@ -22,8 +23,17 @@ const CustomizeGameParameter = () => {
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
 
   useEffect(() => {
-    //TODO: fetch users playlists to set availableplaylists
+    async function fetchAvailablePlaylists() {
+      try {
+        const playlists = await getSpotifyPlaylist();
+        setAvailablePlaylists(playlists);
+        console.log(availablePlaylists);
+      } catch (error) {
+        console.error("Error fetching playlists:", error);
+      }
+    }
 
+    fetchAvailablePlaylists();
   }, []);
 
   function startGame(e) {
@@ -64,7 +74,6 @@ const CustomizeGameParameter = () => {
       return;
     }
 
-
     setGameParameters(new GameParameter({
       playerLimit: playerLimit,
       numOfSets: numOfSets,
@@ -76,7 +85,6 @@ const CustomizeGameParameter = () => {
       timePerTurn: timePerTurn,
       timePerTurnPowerUp: timePerTurnPowerUp,
     }));
-
   }
 
   useEffect(() => {
@@ -88,32 +96,23 @@ const CustomizeGameParameter = () => {
 
   async function sendLobbyCreationRequest() {
     try {
-      console.log(gameParameters);
       const requestBody = JSON.stringify(gameParameters);
       const response = await api.post("/game", requestBody);
-      console.log(response);
 
       if (response.status === 201) {
-
-        if (!response.data?.gameId) {
-          alert("The server did not return a valid lobby id, please try again.");
-        }
-
         //setting up the game
         let game: Game;
         let returnedGameParameters: GameParameter;
 
         returnedGameParameters = new GameParameter(response.data.gameParameters);
+        console.log(returnedGameParameters);
         game = new Game(response.data.gameId);
         game.gameParameter = returnedGameParameters;
         game.host = localStorage.getItem("userId"); //TODO: redirect this task to backenend once they are ready
         game.addPlayer(game.host); //TODO:  remove once backend is ready
-        console.log(game);
 
         //TODO: Initialise game Websocket
         //...
-
-
         //navigate(`game/${gameParameters.gameId}`); //TODO: uncomment when backend is ready
       } else {
         alert("Something went wrong setting up the lobby.");
@@ -121,9 +120,7 @@ const CustomizeGameParameter = () => {
     } catch (error) {
       alert(`Something went wrong setting up the lobby. \n${handleError(error)}`);
     }
-
   }
-
 
   return (<>
     <div className="BaseContainer">
@@ -178,13 +175,16 @@ const CustomizeGameParameter = () => {
           </div>
           <div className={"inputpair"}>
             <label className="label" htmlFor="playlist">Playlist:</label>
-            <input
+            <select
               id="playlist"
               className="normalInput"
-              placeholder="Playlist"
               value={playlist}
               onChange={e => setPlaylist(e.target.value)}
-            />
+            >
+              {availablePlaylists.map((playlist, index) => (
+                <option key={index} value={playlist.id}>{playlist.name}</option>
+              ))}
+            </select>
           </div>
           <div className={"inputpair"}>
             <label className="label" htmlFor="streakStart">Streak Start:</label>
@@ -241,7 +241,6 @@ const CustomizeGameParameter = () => {
               <div className="error-messages">
                 {errorMessages && <p>{errorMessages}</p>}
               </div>
-              <p>{playerLimit}</p>
             </div>
           </div>
         </form>

@@ -3,8 +3,26 @@ import { getDomain } from "./getDomain";
 
 export const api = axios.create({
   baseURL: getDomain(), //'https://4dde5a2c-b954-4f99-903d-c8a1b51fbf88.mock.pstmn.io', //Todo: switch back to getDomain()
-  headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+  headers: {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    ...(localStorage.getItem("token") ? { "Authorization": `Bearer ${localStorage.getItem("token")}` } : {})
+  },
 });
+api.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  error => {
+
+    return Promise.reject(error);
+  }
+);
 
 export const handleError = error => {
   const response = error.response;

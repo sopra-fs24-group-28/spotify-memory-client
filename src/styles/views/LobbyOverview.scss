@@ -17,6 +17,16 @@
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px; /* shorthand for grid-row-gap and grid-column-gap */
   padding: 20px;
+  // overflow-wrap: anywhere;
+  // display: grid;
+  // grid-template-columns: repeat(2, 1fr); // Creates two columns of equal width
+  // grid-template-rows: auto;
+  // grid-row-gap: 20px;
+  // grid-column-gap: 20px; // Keeps a constant gap between both rows and columns
+  // justify-content: flex-start;
+  // align-items: flex-start;
+  // padding-bottom: 10px;
+  // padding-top: 10px;
 }
 
 .newGameButton {
