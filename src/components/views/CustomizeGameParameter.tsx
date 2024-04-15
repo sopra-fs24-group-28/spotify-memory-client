@@ -113,7 +113,8 @@ const CustomizeGameParameter = () => {
 
         //TODO: Initialise game Websocket
         //...
-        //navigate(`game/${gameParameters.gameId}`); //TODO: uncomment when backend is ready
+        navigate(`/lobby/${response.data.gameId}`, { state: { gameParameter: returnedGameParameters } }); //TODO this is mocked, remove once its ready
+
       } else {
         alert("Something went wrong setting up the lobby.");
       }
@@ -123,130 +124,133 @@ const CustomizeGameParameter = () => {
   }
 
   return (<>
-    <div className="BaseContainer">
-      <div className="BaseDiv">
-        <div className="title-section">
-          <h2 className="h2-title">Customize your Game!</h2>
-        </div>
-        <form className="input-section" onSubmit={startGame}>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="playerLimit">Player Limit:</label>
-            <input
-              id="playerLimit"
-              className="normalInput"
-              value={playerLimit}
-              type="number"
-              onChange={e => setPlayerLimit(e.target.value)}
-            />
+      <div className="BaseContainer">
+        <div className="BaseDiv">
+          <div className="title-section">
+            <h2 className="h2-title">Customize your Game!</h2>
           </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="numOfSets">Number of Sets:</label>
-            <input
-              id="numOfSets"
-              className="normalInput"
-              type="number"
+          <form className="input-section" onSubmit={startGame}>
+            <div className="grid">
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="playerLimit">Player Limit:</label>
+                <input
+                  id="playerLimit"
+                  className="normalInput"
+                  value={playerLimit}
+                  type="number"
+                  onChange={e => setPlayerLimit(e.target.value)}
+                />
+              </div>
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="numOfSets">Number of Sets:</label>
+                <input
+                  id="numOfSets"
+                  className="normalInput"
+                  type="number"
 
-              value={numOfSets}
-              onChange={e => setNumOfSets(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="numOfCardsPerSet">Cards per Set:</label>
-            <input
-              id="numOfCardsPerSet"
-              className="normalInput"
-              type="number"
-              placeholder="Number of Cards per Set"
-              value={numOfCardsPerSet}
-              onChange={e => setNumOfCardsPerSet(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="gameCategory">gameCategory:</label>
-            <select
-              id="gameCategory"
-              className="normalInput"
-              value={gameCategory}
-              onChange={e => setGameCategory(e.target.value)}
-            >
-              <option value="STANDARDSONG">Normal</option>
-              <option value="STANDARDALBUMCOVER">Album Cover</option>
-            </select>
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="playlist">Playlist:</label>
-            <select
-              id="playlist"
-              className="normalInput"
-              value={playlist}
-              onChange={e => setPlaylist(e.target.value)}
-            >
-              {availablePlaylists.map((playlist, index) => (
-                <option key={index} value={playlist.id}>{playlist.name}</option>
-              ))}
-            </select>
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="streakStart">Streak Start:</label>
-            <input
-              id="streakStart"
-              className="normalInput"
-              type="number"
-              placeholder="Streak Start"
-              value={streakStart}
-              onChange={e => setStreakStart(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="streakMultiplier">Streak Multiplier:</label>
-            <input
-              id="streakMultiplier"
-              className="normalInput"
-              type="number"
-              placeholder="Streak Multiplier"
-              value={streakMultiplier}
-              onChange={e => setStreakMultiplier(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="timePerTurn">Time per Turn (Normal):</label>
-            <input
-              id="timePerTurn"
-              className="normalInput"
-              type="number"
-              placeholder="Time per Turn Normal"
-              value={timePerTurn}
-              onChange={e => setTmePerTurn(e.target.value)}
-            />
-          </div>
-          <div className={"inputpair"}>
-            <label className="label" htmlFor="timePerTurnPowerUp">Time per Turn (Powerup):</label>
-            <input
-              id="timePerTurnPowerUp"
-              className="normalInput"
-              type="number"
-              placeholder="Time per Turn Powerup"
-              value={timePerTurnPowerUp}
-              onChange={e => setTmePerTurnPowerUp(e.target.value)}
-            />
-          </div>
-          <div className="button-section">
-            <hr />
-            <button
-              type="submit"
-              className="customizebtn"
-              onClick={startGame}>Start Game
-            </button>
-            <div className={errorMessages ? "error-message-container" : "hidden"}>
-              <div className="error-messages">
-                {errorMessages && <p>{errorMessages}</p>}
+                  value={numOfSets}
+                  onChange={e => setNumOfSets(e.target.value)}
+                />
+              </div>
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="numOfCardsPerSet">Cards per Set:</label>
+                <input
+                  id="numOfCardsPerSet"
+                  className="normalInput"
+                  type="number"
+                  placeholder="Number of Cards per Set"
+                  value={numOfCardsPerSet}
+                  onChange={e => setNumOfCardsPerSet(e.target.value)}
+                />
+              </div>
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="gameCategory">Game Category:</label>
+                <select
+                  id="gameCategory"
+                  className="normalInput"
+                  value={gameCategory}
+                  onChange={e => setGameCategory(e.target.value)}
+                >
+                  <option value="STANDARDSONG">Normal</option>
+                  <option value="STANDARDALBUMCOVER">Album Cover</option>
+                </select>
+              </div>
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="playlist">Playlist:</label>
+                <select
+                  id="playlist"
+                  className="normalInput"
+                  value={playlist}
+                  onChange={e => setPlaylist(e.target.value)}
+                >
+                  {availablePlaylists.map((playlist, index) => (
+                    <option key={index} value={playlist.id}>{playlist.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="streakStart">Streak Start:</label>
+                <input
+                  id="streakStart"
+                  className="normalInput"
+                  type="number"
+                  placeholder="Streak Start"
+                  value={streakStart}
+                  onChange={e => setStreakStart(e.target.value)}
+                />
+              </div>
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="streakMultiplier">Streak Multiplier:</label>
+                <input
+                  id="streakMultiplier"
+                  className="normalInput"
+                  type="number"
+                  placeholder="Streak Multiplier"
+                  value={streakMultiplier}
+                  onChange={e => setStreakMultiplier(e.target.value)}
+                />
+              </div>
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="timePerTurn">Time per Turn (Normal):</label>
+                <input
+                  id="timePerTurn"
+                  className="normalInput"
+                  type="number"
+                  placeholder="Time per Turn Normal"
+                  value={timePerTurn}
+                  onChange={e => setTmePerTurn(e.target.value)}
+                />
+              </div>
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="timePerTurnPowerUp">Time per Turn (Powerup):</label>
+                <input
+                  id="timePerTurnPowerUp"
+                  className="normalInput"
+                  type="number"
+                  placeholder="Time per Turn Powerup"
+                  value={timePerTurnPowerUp}
+                  onChange={e => setTmePerTurnPowerUp(e.target.value)}
+                />
               </div>
             </div>
-          </div>
-        </form>
+            <div className="button-section">
+              <hr />
+              <button
+                type="submit"
+                className="customizebtn"
+                onClick={startGame}>Start Game
+              </button>
+              <div className={errorMessages ? "error-message-container" : "hidden"}>
+                <div className="error-messages">
+                  {errorMessages && <p>{errorMessages}</p>}
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  </>);
+    </>
+  );
 };
 
 export default CustomizeGameParameter;

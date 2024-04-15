@@ -43,7 +43,7 @@ const AppRouter = () => {
         {/*just for testing*/}
         <Route path="/lobbyOverview" element={<LobbyOverview />} />
         <Route path="/customizeGame" element={<CustomizeGameParameter />} />
-        <Route path="/lobby" element={<LobbyWaitingRoom />} />
+        <Route path="/lobby/:gameid" element={<LobbyWaitingRoom />} />
 
 
         <Route path="/" element={

@@ -11,6 +11,8 @@
 .BaseDiv {
   @extend .login, .form;
   height: 600px;
+  width: 1000px;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -32,7 +34,7 @@
 
 .normalInput {
   padding: 2px;
-  width: 200px;
+  width: 280px;
   max-height: 50%;
   display: flex;
   background: $inputblue;
@@ -79,7 +81,7 @@
   color: $textColor;
   font-weight: bold;
   align-self: flex-start;
-  width: 200px;
+  width: 280px;
   font-size: $inputfontsize;
 }
 
@@ -104,3 +106,18 @@
   @extend .label;
   width: 100%;
 }
+
+.grid{
+  @include center;
+  overflow-wrap: anywhere;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // Creates two columns of equal width
+  grid-template-rows: auto;
+  grid-row-gap: 5px;
+  grid-column-gap: 10px; // Keeps a constant gap between both rows and columns
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
