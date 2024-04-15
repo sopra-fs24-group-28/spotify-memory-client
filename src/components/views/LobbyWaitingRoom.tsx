@@ -34,7 +34,7 @@ const LobbyWaitingRoom = (props) => {
 
     // rest call that player delete request with
     try {
-      const response = await api.delete(`game/0/player`);
+      const response = await api.delete(`game/${lobbyParams.lobbyId}/player`);
       if (response.status === 204) {
         //TODO: kill websocket connection
 
