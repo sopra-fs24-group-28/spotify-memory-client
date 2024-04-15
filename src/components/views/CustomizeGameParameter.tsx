@@ -113,7 +113,7 @@ const CustomizeGameParameter = () => {
 
         //TODO: Initialise game Websocket
         //...
-        navigate(`/lobby/${response.data.gameId}`, { state: { gameParameter: returnedGameParameters } }); //TODO this is mocked, remove once its ready
+        navigate(`/lobby/${response.data.gameId}`, { state: { lobby: returnedGameParameters } }); //TODO this is mocked, remove once its ready
 
       } else {
         alert("Something went wrong setting up the lobby.");

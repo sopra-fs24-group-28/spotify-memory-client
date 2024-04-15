@@ -16,12 +16,16 @@ const LobbyOverview = () => {
   const wsEndpoint = "/topic/overview";
   const wsDestination = "/app/overview";
   const receiverFunction = (data) => {
-    console.log(data); // TODO: update game state when ws receives updateDTO 
-    // setReceivedGameStates(data); // set received game state each time overview update dto is received
+    console.log(data); // TODO: update game state when ws receives updateDTO
+    //setReceivedGameStates(data); // set received game state each time overview update dto is received
   };
   const wsHandler = new WSHandler(restEndpoint, wsEndpoint, wsDestination, receiverFunction);
   const [receivedGameStates, setReceivedGameStates] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    console.log("ws something changed");
+  }, [receivedGameStates]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +61,7 @@ const LobbyOverview = () => {
       <div className="gridhandler">
       {receivedGameStates.map((lobby: Lobby) => (
         <div key={lobby.id} className="grid-item">
-          <LobbyObject props={lobby} />
+          <LobbyObject lobby={lobby}   />
         </div>
       ))}
       </div>

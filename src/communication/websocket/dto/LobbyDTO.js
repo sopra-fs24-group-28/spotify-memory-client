@@ -1,7 +1,7 @@
 class Lobby {
   constructor(data = {}) {
     this.GameParameters = data.GameParameters || {};
-    this.users = data.users || [];
+    this.playerList = data.playerList || [];
     this.state = data.state || {};
     this.host = data.host || null;
   }

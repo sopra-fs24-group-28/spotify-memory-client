@@ -1,7 +1,14 @@
 import Lobby from "models/Lobby"
+import { Change } from "./Change";
 
 class OverViewDTO {
-  constructor() {
+  gameParameter: Change;
+  playerList: Change;
+  gameState: Change;
+  hostId: Change;
+
+
+/*  constructor() {
     this.Lobbies = {};
   }
 
@@ -18,7 +25,7 @@ class OverViewDTO {
   removeGame(gameID) {
     // remove game with gameID
     delete this.Lobbies[gameID];
-  }
+  }*/
 }
 
 export default OverViewDTO;
