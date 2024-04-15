@@ -115,21 +115,6 @@ const CustomizeGameParameter = () => {
         //...
         navigate(`/lobby/${response.data.gameId}`, { state: { gameParameter: returnedGameParameters } }); //TODO this is mocked, remove once its ready
 
-        //TODO; ucomment the following once the backedn is ready
-        // try {
-        //   if (response.data.gameId) {
-        //     const response = await api.put(`/game/player/${gameId}`);
-        //     if (response.ok && response.data?.gameId && response.data.gameParameter) {
-        //       navigate(`/lobby/${response.data.gameId}`, { state: { gameParameter: response.data.gameParameter } });
-        //     } else {
-        //       alert("something went wrong while trying to set up a new lobby)
-        //     }
-        //   } else {
-        //     alert("no valid Game-id could be associated with the selected lobby. Please try again later. ");
-        //   }
-        // } catch (error) {
-        //   console.error("An error occurred:", error);
-        // }
       } else {
         alert("Something went wrong setting up the lobby.");
       }
