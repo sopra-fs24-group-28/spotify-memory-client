@@ -46,6 +46,7 @@ const LobbyOverview = () => {
       }
       updatedLobbies.push(lobby);
     }
+    console.log(updatedLobbies);
     setReceivedGameStates(updatedLobbies); // set received game state each time overview update dto is received
 };
 
@@ -60,6 +61,7 @@ const LobbyOverview = () => {
     const fetchData = async () => {
       // Perform asynchronous operation to fetch initial data
       const data = await wsHandler.fetchData();
+      console.log(data)
       setReceivedGameStates(data); // this displays the data
       console.log(data);
       wsHandler.connect()
