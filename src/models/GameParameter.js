@@ -9,7 +9,7 @@ class GameParameter {
     this.streakMultiplier = data.streakMultiplier;
     this.timePerTurn = data.timePerTurn;
     this.timePerTurnPowerUp = data.timePerTurnPowerUp;
-    this.playlistImageUrl = data.playlistImageUrl;
+    this.playlistImageUrl = data.playlistImageUrl; // todo: is this covered in this.playlist? 
     //Object.assign(this, data);
   }
 }

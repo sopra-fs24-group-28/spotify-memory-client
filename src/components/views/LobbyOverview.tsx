@@ -15,13 +15,42 @@ const LobbyOverview = () => {
   const restEndpoint = "/game";
   const wsEndpoint = "/topic/overview";
   const wsDestination = "/app/overview";
-  const receiverFunction = (data) => {
-    console.log(data); // TODO: update game state when ws receives updateDTO
-    //setReceivedGameStates(data); // set received game state each time overview update dto is received
-  };
+  const receiverFunction = (newData) => {
+    const updatedLobbies = [];
+    for (const key in newData) { 
+      // TODO: currently assuming that closed lobbies will not be in newData, doulbe check with backend implementation
+      const update = newData[key];
+      const lobby = receivedGameStates.find(lobby => lobby.lobbyId === key);
+      
+      if (lobby) {
+        if (update.gameParameters[0]) {
+          lobby.setGameParameters(update.gameParameters[1]);
+        }
+        if (update.userList[0]) {
+          lobby.setUserList(update.userList[1]);
+        }
+        if (update.gameState[0]) {
+          lobby.setGameState(update.gameState[1]);
+        }
+        if (update.hostId[0]) {
+          lobby.setHostId(update.hostId[1]);
+        }
+            
+      } else {
+        // creating new lobby if not already existing
+        const lobby = new Lobby(key, {});
+        lobby.setGameParameters(update.gameParameters[1]);
+        lobby.setUserList(update.userList[1]);
+        lobby.setGameState(update.gameState[1]);
+        lobby.setHostId(update.hostId[1]);
+      }
+      updatedLobbies.push(lobby);
+    }
+    setReceivedGameStates(updatedLobbies); // set received game state each time overview update dto is received
+};
+
   const wsHandler = new WSHandler(restEndpoint, wsEndpoint, wsDestination, receiverFunction);
   const [receivedGameStates, setReceivedGameStates] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     console.log("ws something changed");
@@ -31,11 +60,9 @@ const LobbyOverview = () => {
     const fetchData = async () => {
       // Perform asynchronous operation to fetch initial data
       const data = await wsHandler.fetchData();
+      setReceivedGameStates(data); // this displays the data
       console.log(data);
-      console.log("here");
-      setReceivedGameStates(data);
       wsHandler.connect()
-      setLoading(false);
     };
 
     fetchData();
