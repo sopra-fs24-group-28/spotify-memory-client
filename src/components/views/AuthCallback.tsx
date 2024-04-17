@@ -22,6 +22,7 @@ const AuthCallback = () => {
         localStorage.setItem("accessToken", getResponse.data?.accessToken);
         navigate("/lobbyoverview"); //TODO: make real once ready
       } catch (error) {
+        console.log(localStorage.getItem("token"));
         console.log(error);
         setResponseMessage(`${error.message ?? "There was as error, please try again"} ${error.response?.data?.message ?? ""}`);
       }

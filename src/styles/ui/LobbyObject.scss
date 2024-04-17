@@ -37,7 +37,7 @@
   grid-column: 2 / 3; // Starts at column 2, ends at column 3
   grid-row: 1; // Only in the first row
   align-self: center;
-  justify-self: center;
+  justify-self: left;
   color: $textColor;
 }
 
@@ -45,8 +45,10 @@
   grid-column: 2 / 3; // Starts at column 2, ends at column 3
   grid-row: 2; // Only in the second row
   display: flex;
-  align-self: center;
-  justify-self: center;
+  overflow: hidden;
+  align-self: top;
+  justify-self: left;
+  max-width: 200px;
 }
 
 .third-column-item {
@@ -61,18 +63,20 @@
 }
 
 .playlist-image {
-  width: 80px;
-  height: 80px;
+  width: 110px;
+  height: 110px;
   border-radius: 10px;
   object-fit: cover;
 }
 
 
 .playlist-name {
-  @include center;
   font-weight: bold;
   font-size: 1.5rem;
-  margin-right: 20px;
+  white-space: nowrap;
+  width: 125px;
+  overflow: hidden;
+  text-overflow: clip;
 }
 
 
