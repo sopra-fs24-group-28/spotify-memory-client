@@ -10,7 +10,7 @@ class WSHandler {
     this.wsDestination = wsDestination;
     this.receiverFunction = receiverFunction;
     this.client = new Client();
-    this.client.connectHeaders = { "login": `Bearer ${localStorage.getItem("token")}` };
+    this.client.connectHeaders = { "Authorization": `Bearer ${localStorage.getItem("token")}` };
   }
 
   async connect() {
