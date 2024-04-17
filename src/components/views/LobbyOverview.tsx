@@ -10,60 +10,70 @@ import Lobby from "models/Lobby";
 
 const LobbyOverview = () => {
   const navigate = useNavigate();
+  const [receivedGameStates, setReceivedGameStates] = useState([]);
+  let rawData = [];
   
   // creating stomp client
   const restEndpoint = "/game";
   const wsEndpoint = "/topic/overview";
   const wsDestination = "/app/overview";
-  const receiverFunction = (newData) => {
+  const receiverFunction = (newDataRaw) => {
+    const newData = JSON.parse(newDataRaw.body).lobbyOverviewChangesDTO.gameMap;
     const updatedLobbies = [];
     for (const key in newData) { 
-      // TODO: currently assuming that closed lobbies will not be in newData, doulbe check with backend implementation
       const update = newData[key];
-      const lobby = receivedGameStates.find(lobby => lobby.lobbyId === key);
+      const lobby = receivedGameStates.find(lobs => lobs.lobbyId === key);
+      console.log(key, typeof(key), update, receivedGameStates, lobby);
+
+      // remove lobbies which are closed
+      if (update.gameState && update.gameState.value === "FINISHED") {
+        continue; 
+      }
       
       if (lobby) {
-        if (update.gameParameters[0]) {
-          lobby.setGameParameters(update.gameParameters[1]);
+        // update lobby if changed
+        if (update.gameParameters) {
+          lobby.setGameParameters(update.gameParameters.value);
         }
-        if (update.userList[0]) {
-          lobby.setUserList(update.userList[1]);
+        if (update.userList) {
+          lobby.setUserList(update.playerList.value);
         }
-        if (update.gameState[0]) {
-          lobby.setGameState(update.gameState[1]);
+        if (update.gameState) {
+          lobby.setGameState(update.gameState.value);
         }
-        if (update.hostId[0]) {
-          lobby.setHostId(update.hostId[1]);
+        if (update.hostId) {
+          lobby.setHostId(update.hostId.value);
         }
+        updatedLobbies.push(lobby);
             
       } else {
         // creating new lobby if not already existing
         const lobby = new Lobby(key, {});
-        lobby.setGameParameters(update.gameParameters[1]);
-        lobby.setUserList(update.userList[1]);
-        lobby.setGameState(update.gameState[1]);
-        lobby.setHostId(update.hostId[1]);
+        lobby.setGameParameters(update.gameParameters.value);
+        lobby.setPlayerList(update.playerList.value);
+        lobby.setGameState(update.gameState.value);
+        lobby.setHostId(update.hostId.value);
+        updatedLobbies.push(lobby);
       }
-      updatedLobbies.push(lobby);
     }
-    console.log(updatedLobbies);
-    setReceivedGameStates(updatedLobbies); // set received game state each time overview update dto is received
+
+    setReceivedGameStates(updatedLobbies); 
 };
 
   const wsHandler = new WSHandler(restEndpoint, wsEndpoint, wsDestination, receiverFunction);
-  const [receivedGameStates, setReceivedGameStates] = useState([]);
+  
 
   useEffect(() => {
     console.log("ws something changed");
+    console.log(receivedGameStates);
   }, [receivedGameStates]);
 
   useEffect(() => {
     const fetchData = async () => {
       // Perform asynchronous operation to fetch initial data
       const data = await wsHandler.fetchData();
-      console.log(data)
       setReceivedGameStates(data); // this displays the data
-      console.log(data);
+      rawData = data;
       wsHandler.connect()
     };
 

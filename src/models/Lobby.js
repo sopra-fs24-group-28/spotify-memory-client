@@ -14,7 +14,7 @@ class Lobby {
     this.gameParameters = new GameParameter(gameParameters);
   }
 
-  setUserList(playerList) {
+  setPlayerList(playerList) {
     this.playerList = playerList.map(userData => new User(userData));
   }
 
