@@ -56,6 +56,7 @@ const LobbyOverview = () => {
           updatedLobbies.push(newLobby);
         }
       }
+
       return updatedLobbies; 
     });
   };
@@ -89,7 +90,6 @@ const LobbyOverview = () => {
   }, []);
 
   
-
   function createlobby() {
     navigate("/customizeGame");
   }

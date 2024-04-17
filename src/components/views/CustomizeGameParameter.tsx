@@ -129,7 +129,6 @@ const CustomizeGameParameter = () => {
     navigate("/lobbyOverview")
   }
 
-  
 
   return (<>
       <div className="BaseContainer">
