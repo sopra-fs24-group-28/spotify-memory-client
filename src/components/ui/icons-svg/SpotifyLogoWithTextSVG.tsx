@@ -2,10 +2,9 @@ import React from "react";
 import "../../../styles/_theme.scss";
 import PropTypes from "prop-types";
 
-
-
 const SpotifyLogoWithTextSVG = (props) => {
-  return (<svg width={483 * props.width} height={145 * props.width} viewBox="0 0 483 145" fill="#1DB954" xmlns="http://www.w3.org/2000/svg"
+  return (<svg width={483 * props.width} height={145 * props.width} viewBox="0 0 483 145" fill="#1DB954"
+               xmlns="http://www.w3.org/2000/svg"
   >
     <rect width="100%" height="100%" fill="url(#pattern0)" />
     <defs>

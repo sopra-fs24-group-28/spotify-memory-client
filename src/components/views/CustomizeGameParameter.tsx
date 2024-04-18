@@ -97,13 +97,13 @@ const CustomizeGameParameter = () => {
   async function sendLobbyCreationRequest() {
     try {
       const requestBody = JSON.stringify(gameParameters);
-      const response = await api.post("/game", requestBody);
+      const response = await api.post("/games", requestBody);
       if (response.status === 201) {
         const returnedGameParameters = new GameParameter(response.data.gameParameters);
         const lobbyId = response.data.gameId;
         const lobbyDto = new LobbyDTO({ GameParameters: returnedGameParameters });
         const lobby = new Lobby(lobbyId, lobbyDto);
-        navigate(`/lobby/${response.data.gameId}`, { state: { lobby: lobby } });
+        navigate(`/lobby/${response.data.gameId}`, {state: { lobby: lobby }});
       } else {
         alert("Something went wrong setting up the lobby.");
       }

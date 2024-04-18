@@ -13,17 +13,17 @@ const LobbyOverview = () => {
   const [receivedGameStates, setReceivedGameStates] = useState([]);
   
   // creating stomp client
-  const restEndpoint = "/game";
+  const restEndpoint = "/games"; //todo change to games
   const wsEndpoint = "/topic/overview";
   const wsDestination = "/app/overview";
   const receiverFunction = (newDataRaw) => {
-    const newData = JSON.parse(newDataRaw.body).lobbyOverviewChangesDTO.gameMap;
+    const newData = JSON.parse(newDataRaw.body).gameMap;
     setReceivedGameStates(prevStates => {
       const updatedLobbies = [];
       for (const key in newData) { 
         const update = newData[key];
         const lobby = prevStates.find(lobs => lobs.lobbyId === key);
-  
+        console.log(key, update, lobby)
         // remove lobbies which are closed
         if (update.gameState && update.gameState.value === "FINISHED") {
           continue; 
@@ -31,16 +31,16 @@ const LobbyOverview = () => {
         
         if (lobby) {
           // update lobby if changed
-          if (update.gameParameters) {
+          if (update.gameParameters.changed) {
             lobby.setGameParameters(update.gameParameters.value);
           }
-          if (update.playerList) {
+          if (update.playerList.changed) {
             lobby.setPlayerList(update.playerList.value);
           }
-          if (update.gameState) {
+          if (update.gameState.changed) {
             lobby.setGameState(update.gameState.value);
           }
-          if (update.hostId) {
+          if (update.hostId.changed) {
             lobby.setHostId(update.hostId.value);
           }
           updatedLobbies.push(lobby);

@@ -9,6 +9,7 @@ import LobbyOverview from "../../views/LobbyOverview";
 import CustomizeGameParameter from "../../views/CustomizeGameParameter";
 import Navbar from "../../ui/Navbar";
 import LobbyWaitingRoom from "../../views/LobbyWaitingRoom";
+import GameScreen from "../../views/GameScreen";
 
 
 /**
@@ -44,6 +45,8 @@ const AppRouter = () => {
         <Route path="/lobbyOverview" element={<LobbyOverview />} />
         <Route path="/customizeGame" element={<CustomizeGameParameter />} />
         <Route path="/lobby/:gameid" element={<LobbyWaitingRoom />} />
+        <Route path="/gametest" element={<GameScreen />} />
+        <Route path="/game/:gameid" element={<GameScreen />} />
 
 
         <Route path="/" element={
