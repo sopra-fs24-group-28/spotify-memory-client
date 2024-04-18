@@ -11,7 +11,6 @@ import Lobby from "models/Lobby";
 const LobbyOverview = () => {
   const navigate = useNavigate();
   const [receivedGameStates, setReceivedGameStates] = useState([]);
-  let rawData = [];
   
   // creating stomp client
   const restEndpoint = "/game";
@@ -75,7 +74,6 @@ const LobbyOverview = () => {
       // Perform asynchronous operation to fetch initial data
       const data = await wsHandler.fetchData();
       setReceivedGameStates(data); // this displays the data
-      rawData = data;
       wsHandler.connect()
     };
 
