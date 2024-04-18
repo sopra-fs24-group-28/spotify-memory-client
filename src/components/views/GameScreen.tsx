@@ -14,8 +14,6 @@ import { Simulate } from "react-dom/test-utils";
 import error = Simulate.error;
 
 
-
-
 const GameScreen = () => {
   const navigate = useNavigate();
   const [gameFinished, setGameFinished] = useState(false);
@@ -38,6 +36,7 @@ const GameScreen = () => {
 
     if (gameData.changed) {
       setGame(prev => {
+      
         return Game(gameData.value);
       });
     }
@@ -51,6 +50,7 @@ const GameScreen = () => {
       const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
       setGame(Game(gameStart));
+      
       return game;
 
     } catch (error) {
@@ -65,15 +65,12 @@ const GameScreen = () => {
       console.log(game);
       await ws.setReceiverFunction(receiverFunction);
     };
-    fetchDataAndConnect().catch(error => {alert('Something went wrong in the initialisation of the individual lobby. Please consult the admin')});
+    fetchDataAndConnect().catch(error => {alert("Something went wrong in the initialisation of the individual lobby. Please consult the admin")});
 
   }, []);
 
+  
   //componentspecifics
-
-
-
-
   useEffect(() => {
     if (matchedPairs.length === cards.length ) {
       setGameFinished(prev => !prev);

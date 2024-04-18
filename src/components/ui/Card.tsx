@@ -6,13 +6,13 @@ export default function Card (props) {
 
   let card: any;
   if (!props.isFlipped) {
-    card = <div className={`card${props.isFlipped ? ' flipped' : ''}${props.isGreyed ? ' greyed' : ''}`} onClick={props.flip}>
+    card = <div className={`card${props.isFlipped ? " flipped" : ""}${props.isGreyed ? " greyed" : ""}`} onClick={props.flip}>
       <div className="card-inner">
         <div className={"card-front"}>{props.content}</div>
       </div>
     </div>;
   } else {
-    card = <div className={`card${props.isFlipped ? ' flipped' : ''}${props.isGreyed ? ' greyed' : ''}`} onClick={props.flip}>
+    card = <div className={`card${props.isFlipped ? " flipped" : ""}${props.isGreyed ? " greyed" : ""}`} onClick={props.flip}>
       <div className="card-inner">
         {/*<div className={"card-front"}>{props.content}</div>*/}
 

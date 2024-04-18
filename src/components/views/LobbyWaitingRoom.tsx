@@ -18,9 +18,7 @@ const LobbyWaitingRoom = () => {
   const [game, setGame] = useState();
 
 
-
   //Websocket specific
-
   const receiverFunction = (newDataRaw) => {
     const parsedData = JSON.parse(newDataRaw.body).gameChangesDTO;
     const gameData = parsedData.game;
@@ -38,8 +36,8 @@ const LobbyWaitingRoom = () => {
       const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
       setGame(Game(gameStart));
+      
       return game;
-
     } catch (error) {
       console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
     }
@@ -53,7 +51,7 @@ const LobbyWaitingRoom = () => {
       const ws = wsHandler(`/games/${game.gameId}`, `/queue/game/${game.gameId}`, `app/game/${game.gameId}`, receiverFunction);
       await ws.connect();
     };
-    fetchDataAndConnect().catch(error => {alert('Something went wrong in the initialisation of the individual lobby. Please consult the admin')});
+    fetchDataAndConnect().catch(error => {alert("Something went wrong in the initialisation of the individual lobby. Please consult the admin")});
 
   }, []);
 
