@@ -10,32 +10,73 @@ import Lobby from "models/Lobby";
 
 const LobbyOverview = () => {
   const navigate = useNavigate();
+  const [receivedGameStates, setReceivedGameStates] = useState([]);
+  let rawData = [];
   
   // creating stomp client
   const restEndpoint = "/game";
   const wsEndpoint = "/topic/overview";
   const wsDestination = "/app/overview";
-  const receiverFunction = (data) => {
-    console.log(data); // TODO: update game state when ws receives updateDTO
-    //setReceivedGameStates(data); // set received game state each time overview update dto is received
+  const receiverFunction = (newDataRaw) => {
+    const newData = JSON.parse(newDataRaw.body).lobbyOverviewChangesDTO.gameMap;
+    setReceivedGameStates(prevStates => {
+      const updatedLobbies = [];
+      for (const key in newData) { 
+        const update = newData[key];
+        const lobby = prevStates.find(lobs => lobs.lobbyId === key);
+  
+        // remove lobbies which are closed
+        if (update.gameState && update.gameState.value === "FINISHED") {
+          continue; 
+        }
+        
+        if (lobby) {
+          // update lobby if changed
+          if (update.gameParameters) {
+            lobby.setGameParameters(update.gameParameters.value);
+          }
+          if (update.playerList) {
+            lobby.setPlayerList(update.playerList.value);
+          }
+          if (update.gameState) {
+            lobby.setGameState(update.gameState.value);
+          }
+          if (update.hostId) {
+            lobby.setHostId(update.hostId.value);
+          }
+          updatedLobbies.push(lobby);
+              
+        } else {
+          // creating new lobby if not already existing
+          const newLobby = new Lobby(key, {});
+          newLobby.setGameParameters(update.gameParameters.value);
+          newLobby.setPlayerList(update.playerList.value);
+          newLobby.setGameState(update.gameState.value);
+          newLobby.setHostId(update.hostId.value);
+          updatedLobbies.push(newLobby);
+        }
+      }
+
+      return updatedLobbies; 
+    });
   };
+  
+
   const wsHandler = new WSHandler(restEndpoint, wsEndpoint, wsDestination, receiverFunction);
-  const [receivedGameStates, setReceivedGameStates] = useState([]);
-  const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
-    console.log("ws something changed");
+    console.log("receivedGameState updated")
+    console.log(receivedGameStates);
   }, [receivedGameStates]);
 
   useEffect(() => {
     const fetchData = async () => {
       // Perform asynchronous operation to fetch initial data
       const data = await wsHandler.fetchData();
-      console.log(data);
-      console.log("here");
-      setReceivedGameStates(data);
+      setReceivedGameStates(data); // this displays the data
+      rawData = data;
       wsHandler.connect()
-      setLoading(false);
     };
 
     fetchData();
@@ -49,7 +90,6 @@ const LobbyOverview = () => {
   }, []);
 
   
-
   function createlobby() {
     navigate("/customizeGame");
   }

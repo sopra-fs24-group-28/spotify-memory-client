@@ -5,7 +5,6 @@ import ProfileCircle from "./ProfileCircle";
 import { Button } from "./Button";
 import PropTypes from "prop-types";
 import { api } from "helpers/api";
-import LobbyWaitingRoom from "../views/LobbyWaitingRoom";
 
 
 const LobbyObject = (props) => {
@@ -15,7 +14,6 @@ const LobbyObject = (props) => {
 */
   const [avatarImg, setAvatarImg] = useState("img");
   let lobby = props.lobby ? props.lobby :  null;
-
   useEffect(() => {
 
   }, []);
@@ -45,15 +43,17 @@ const LobbyObject = (props) => {
 return (
   <div className="playlist-join-card">
     <div className="playlist-cover first-column-item">
-{/*
-      <img src={playlistImg} alt="RapCaviar" className="playlist-image" />
-*/}
+
+      <img src={lobby.gameParameters.playlistImageUrl} alt="RapCaviar" className="playlist-image" />
+
     </div>
     <span className="playlist-name second-column-top-item">{lobby.gameParameters.playlist}</span>
     <div className="user-avatars second-column-bottom-item">
-      <ProfileCircle height={25} width={25} url={avatarImg} />
-      <ProfileCircle height={25} width={25} url={avatarImg} />
-      <ProfileCircle height={25} width={25} url={avatarImg} /><ProfileCircle height={25} width={25} url={avatarImg} />
+        {lobby.playerList.map((user) => (
+          <li key={user.userId}>
+            <ProfileCircle height={40} width={40} url={user.profileImageUrl}/>
+          </li>
+        ))}
     </div>
     <Button width="70%" height="50%" className="lobby-overview-button third-column-item" onClick={join}>Join</Button>
   </div>);

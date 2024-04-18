@@ -10,13 +10,15 @@ class WSHandler {
     this.wsDestination = wsDestination;
     this.receiverFunction = receiverFunction;
     this.client = new Client();
+    this.client.connectHeaders = { "Authorization": `Bearer ${localStorage.getItem("token")}` };
   }
 
   async connect() {
     this.client.brokerURL = getWSDomain();
     this.client.onConnect = (frame) => {
-      console.log("Connected");
+      console.log("Connected to Websocket ...");
       this.client.subscribe(this.wsEndpoint, this.receiverFunction);
+      console.log("... and Subscribed");
     };
     this.client.activate();
   }
@@ -28,7 +30,6 @@ class WSHandler {
     try {
       const response = await api.get(this.restEndpoint);
       const overviewData = response.data;
-      console.log(overviewData);
       const initialOverview = [];
 	  
       Object.entries(overviewData["games"]).forEach(([gameID, data]) => {
