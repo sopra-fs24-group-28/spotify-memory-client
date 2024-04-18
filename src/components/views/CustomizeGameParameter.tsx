@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import "styles/views/CustomizeGameParameter.scss";
 import { api, handleError } from "helpers/api";
 import GameParameter from "../../models/GameParameter";
-import Game from "../../models/Game.js";
 import { useNavigate } from "react-router-dom";
 import { getSpotifyPlaylist } from "../../helpers/spotifyrelated/getPlaylists";
+import Lobby from "../../models/Lobby"
+import LobbyDTO from "../../communication/websocket/dto/LobbyDTO"
 import { Button } from "components/ui/Button"
 import { updateFunctionDeclaration } from "typescript";
 
@@ -102,21 +103,16 @@ const CustomizeGameParameter = () => {
       const response = await api.post("/game", requestBody);
 
       if (response.status === 201) {
+
         //setting up the game
-        let game: Game;
-        let returnedGameParameters: GameParameter;
-
-        returnedGameParameters = new GameParameter(response.data.gameParameters);
+        const returnedGameParameters = new GameParameter(response.data.gameParameters);
         console.log(returnedGameParameters);
-        game = new Game(response.data.gameId);
-        game.gameParameter = returnedGameParameters;
-        game.host = localStorage.getItem("userId"); //TODO: redirect this task to backenend once they are ready
-        game.addPlayer(game.host); //TODO:  remove once backend is ready
-
-        //TODO: Initialise game Websocket
-        //...
-        navigate(`/lobby/${response.data.gameId}`, { state: { lobby: returnedGameParameters } }); //TODO this is mocked, remove once its ready
-
+        const lobbyId = response.data.gameId
+        const lobbyDto = new LobbyDTO({ GameParameters: returnedGameParameters });
+        const lobby = new Lobby(lobbyId, lobbyDto)
+        console.log("---------");
+        console.log(lobby);
+        navigate(`/lobby/${response.data.gameId}`, { state: { lobby: lobby } });
       } else {
         alert("Something went wrong setting up the lobby.");
       }

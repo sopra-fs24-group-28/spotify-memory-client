@@ -1,4 +1,4 @@
-class Lobby {
+class LobbyDTO {
   constructor(data = {}) {
     this.GameParameters = data.GameParameters || {};
     this.playerList = data.playerList || [];
@@ -7,4 +7,4 @@ class Lobby {
   }
 }
 
-export default Lobby;
+export default LobbyDTO;
