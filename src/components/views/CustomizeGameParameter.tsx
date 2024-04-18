@@ -4,10 +4,8 @@ import { api, handleError } from "helpers/api";
 import GameParameter from "../../models/GameParameter";
 import { useNavigate } from "react-router-dom";
 import { getSpotifyPlaylist } from "../../helpers/spotifyrelated/getPlaylists";
-import Lobby from "../../models/Lobby"
-import LobbyDTO from "../../communication/websocket/dto/LobbyDTO"
-import { Button } from "components/ui/Button"
-import { updateFunctionDeclaration } from "typescript";
+import Lobby from "../../models/Lobby";
+import LobbyDTO from "../../communication/websocket/dto/LobbyDTO";
 
 
 const CustomizeGameParameter = () => {
@@ -107,9 +105,10 @@ const CustomizeGameParameter = () => {
         //setting up the game
         const returnedGameParameters = new GameParameter(response.data.gameParameters);
         console.log(returnedGameParameters);
-        const lobbyId = response.data.gameId
+        const lobbyId = response.data.gameId;
         const lobbyDto = new LobbyDTO({ GameParameters: returnedGameParameters });
-        const lobby = new Lobby(lobbyId, lobbyDto)
+        console.log(lobbyDto);
+        const lobby = new Lobby(lobbyId, lobbyDto);
         console.log("---------");
         console.log(lobby);
         navigate(`/lobby/${response.data.gameId}`, { state: { lobby: lobby } });
@@ -122,10 +121,9 @@ const CustomizeGameParameter = () => {
   }
 
   function cancel() {
-    navigate("/lobbyOverview")
+    navigate("/lobbyOverview");
   }
 
-  
 
   return (<>
       <div className="BaseContainer">
@@ -249,7 +247,7 @@ const CustomizeGameParameter = () => {
                 className="customizebtn"
                 onClick={startGame}>Start Game
               </button>
-              <button className="customizebtn" style={{"margin": "10px"}} onClick={cancel}>Cancel</button>
+              <button className="customizebtn" style={{ "margin": "10px" }} onClick={cancel}>Cancel</button>
             </div>
           </form>
         </div>
