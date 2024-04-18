@@ -1,6 +1,6 @@
 const cardData = [
-  {id: 1, isFlipped: false, isGreyed: false, content: "Background", sameIdx: 1, url: ""},
-  {id: 2, isFlipped: false, isGreyed: false, content: "Background", sameIdx: 2, url: ""},
+  {id: 1, content: null},
+  {id: 2, i},
   {id: 3, isFlipped: false, isGreyed: false, content: "Background", sameIdx: 3, url: ""},
   {id: 4, isFlipped: false, isGreyed: false, content: "Background", sameIdx: 3, url: ""},
   {id: 5, isFlipped: false, isGreyed: false, content: "Background", sameIdx: 2, url: ""},

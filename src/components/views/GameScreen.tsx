@@ -5,8 +5,8 @@ import BaseContainer from "../ui/BaseContainer";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 import { Button } from "../ui/Button";
 import cardData from "../../models/SetofCardData.js";
-// @ts-ignore
 import Card from "../ui/Card";
+import wsHandler from "../../helpers/wsHandler.js"
 
 
 const Game = () => {
@@ -18,16 +18,18 @@ const Game = () => {
   const [currentlyFlipped, setCurrentlyFlipped] = useState([]);
   const [showMessage, SetShowMessage] = useState("");
   const [matchedPairs, setMatchedPairs] = useState([]);
+  const [activePlayerIndex, setActivePlayerIndex] = useState("")
+  const userid: string = localStorage.getItem("userid")
 
   useEffect(() => {
-    if (matchedPairs.length === cards.length) {
+    if (matchedPairs.length === cards.length ) {
       setGameFinished(prev => !prev);
     }
 
   }, [matchedPairs, cards.length]);
 
   useEffect(() => {
-    if (currentlyFlipped.length === 2) {
+    if (currentlyFlipped.length === 2 ) {
       const [firstCardId, secondCardId] = currentlyFlipped;
 
       setCards(prevCards => {
@@ -58,6 +60,10 @@ const Game = () => {
     }
   }, [currentlyFlipped]);
 
+  useEffect(() => {
+    //initialise spotify sdk
+  }, []);
+
   function displayMsg(msg, ms) {
     SetShowMessage(msg);
     setTimeout(() => {
@@ -69,12 +75,20 @@ const Game = () => {
     return cards.find(card => card.id === id);
   }
 
+  function playSong(){
+
+  }
+
 
   function flip(id: number) {
 
-    if (matchedPairs.includes(findCardById(cards, id).sameIdx)) {
+    if (matchedPairs.includes(findCardById(cards, id).sameIdx) || userid != activePlayerIndex ) {
       return;
     }
+
+    //api: call
+    wsHandler.send()
+
 
     setCards(prevCards => {
       const newCards = prevCards.map(card => {
@@ -105,6 +119,7 @@ const Game = () => {
 
 
   return (<BaseContainer>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <div className="BaseContainer">
       <div className="screen-gridhandler">
         <div className="BaseDivGame col6">

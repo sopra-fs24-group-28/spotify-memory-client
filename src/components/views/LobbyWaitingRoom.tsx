@@ -6,18 +6,40 @@ import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 import PropTypes from "prop-types";
 import { api, handleError } from "helpers/api";
 import SpotifyLogoWithTextSVG from "../ui/icons-svg/SpotifyLogoWithTextSVG";
+import wsHandler from "../../helpers/wsHandler.js"
+import Game from "./Game";
 
 
 const LobbyWaitingRoom = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [game, setGame] = useState()
 /*
   const lobbyId = location.state.lobby.lobbyId
 */
   const [lobbyParams, setLobbyParams] = useState(location.state.lobby);
 
+  async function fetchData() {
+    try {
+      const response = await api.get(`/game/${lobbyParams.gameId}`);
+      const gameStart = response.data;
+      setGame(Game(gameStart));
+      return game;
+
+    } catch (error) {
+      console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
+    }
+
+  }
+
 
   useEffect(() => {
+    const ws = wsHandler(`/game/${lobbyParams.gameId}` ,`/queue/game/${lobbyParams.gameId}`, `app/game/${lobbyParams.gameId}`, null)
+    ws.connect()
+
+
+
+
     //TODO Diyar spotify sdk might have to be initialised here i guess?
     // TODO: handle params from customizeGameParam
     console.log(lobbyParams);
