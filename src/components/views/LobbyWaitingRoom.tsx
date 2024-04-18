@@ -35,7 +35,7 @@ const LobbyWaitingRoom = () => {
   async function fetchData() {
     try {
       console.log(initialGameId);
-      const response = await api.get(`/game/${initialGameId}`);
+      const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
       setGame(Game(gameStart));
       return game;
