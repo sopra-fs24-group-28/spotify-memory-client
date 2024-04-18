@@ -19,11 +19,6 @@ const LobbyObject = (props) => {
   }, []);
 
   async function join() {
-    //TODO: delete later as its mocked now
-/*
-    navigate(`/lobby/${lobbyId}`, { state: { gameParameter: gameParameters } });
-*/
-
      try {
        if (lobby.lobbyId) {
          const response = await api.put(`/games/${lobby.lobbyId}/player`);
