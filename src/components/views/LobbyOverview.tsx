@@ -14,7 +14,7 @@ const LobbyOverview = () => {
   let rawData = [];
   
   // creating stomp client
-  const restEndpoint = "/game"; //todo change to games
+  const restEndpoint = "/games"; //todo change to games
   const wsEndpoint = "/topic/overview";
   const wsDestination = "/app/overview";
   const receiverFunction = (newDataRaw) => {
