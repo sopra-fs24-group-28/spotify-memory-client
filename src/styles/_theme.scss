@@ -68,6 +68,10 @@ $borderRadius: 0.75em;
 
 }
 
+ul, li {
+  list-style-type: none;
+}
+
 ::-webkit-scrollbar-thumb {
   background: $turquise;
   //border-right: 10px $lightviolet solid;

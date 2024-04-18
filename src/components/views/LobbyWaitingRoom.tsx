@@ -1,41 +1,81 @@
 import React, { useEffect, useState } from "react";
 import "styles/views/LobbyWaitingRoom.scss";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 import PropTypes from "prop-types";
 import { api, handleError } from "helpers/api";
 import SpotifyLogoWithTextSVG from "../ui/icons-svg/SpotifyLogoWithTextSVG";
+import wsHandler from "../../helpers/wsHandler.js";
+import Game from "./Game";
 
 
-const LobbyWaitingRoom = (props) => {
-  const navigate = useNavigate();
-  const gameId = props.gameId;
-  const [lobbyParams, setLobbyParams] = useState(props.lobbyParams ? props.lobbyParams : null);
+const LobbyWaitingRoom = () => {
+  const navigate:NavigateFunction = useNavigate();
+  const ws:wsHandler = null;
+  const location = useLocation();
+  const initialGameId = location.state.lobby.lobbyId;
+  const [game, setGame] = useState();
 
+
+
+  //Websocket specific
+
+  const receiverFunction = (newDataRaw) => {
+    const parsedData = JSON.parse(newDataRaw.body).gameChangesDTO;
+    const gameData = parsedData.game;
+
+    if (gameData.changed) {
+      setGame(prev => {
+        return Game(gameData.value);
+      });
+    }
+  };
+
+  async function fetchData() {
+    try {
+      console.log(initialGameId);
+      const response = await api.get(`/games/${initialGameId}`);
+      const gameStart = response.data;
+      setGame(Game(gameStart));
+      return game;
+
+    } catch (error) {
+      console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
+    }
+  }
 
   useEffect(() => {
-    //TODO Diyar spotify sdk might have to be initialised here i guess?
-
-    //mocking, to be removed once websocket is ready
-    setLobbyParams({
-      GameParameters: { playlist: { images: ["https://mosaic.scdn.co/640/ab67616d00001e021677f484125173d96fd1f4fdab67616d00001e021a3804c279594ebceecec4a2ab67616d00001e021b96e645016c4d431842aa93ab67616d00001e023a8b694ef93dbb4ca2c68fc2"] } },
-      players: [{ userId: 1, username: "Elias" }, { userId: 2, username: "Niklas" }],
-    });
-    console.log(lobbyParams);
+    const fetchDataAndConnect = async () => {
+      await fetchData();
+      console.log("fetchDataAndConnect called");
+      console.log(game);
+      const ws = wsHandler(`/games/${game.gameId}`, `/queue/game/${game.gameId}`, `app/game/${game.gameId}`, receiverFunction);
+      await ws.connect();
+    };
+    fetchDataAndConnect().catch(error => {alert('Something went wrong in the initialisation of the individual lobby. Please consult the admin')});
 
   }, []);
+
+  useEffect(() => {
+    console.log("game changed");
+    console.log(game);
+    if (game?.gameState === "ONPLAY"){
+      navigate(`game/${game.gameId}`, { state: {ws: ws, gameId: game.gameId } })
+    }
+  }, [game]);
+
+
+  //ComponentSpecific
 
   async function handleLeave() {
 
     // rest call that player delete request with
     try {
-      const response = await api.delete(`games/${gameId}/player`);
-      if (response.ok) {
-        //TODO: kill websocket connection
-
-        //
-        navigate("lobbyoverview"); //Todo: anpassen wenn klar wie
+      const response = await api.delete(`games/${initialGameId}/player`);
+      if (response.status === 204) {
+        await ws.disconnect()
+        navigate("/lobbyOverview"); //Todo: anpassen wenn klar wie
 
       } else {
         alert("There was a error when trying to leave the lobby. Please try again later");
@@ -50,16 +90,15 @@ const LobbyWaitingRoom = (props) => {
     //TODO: send ready state via websocket connection:
   }
 
-
   return (<div className="BaseContainer">
     <div className="BaseDivLobby">
       <div className="gridhandler">
         <div className="centerwrapper">
           <div
-            className={lobbyParams?.GameParameters?.playlist?.images?.[0] ? "imgContainer" : "spotifyPlaylistContainer"}>
-            {lobbyParams?.GameParameters?.playlist?.images?.[0] ? (
+            className={game?.gameParameters?.playlist?.images?.[0] ? "imgContainer" : "spotifyPlaylistContainer"}>
+            {game?.gameParameters?.playlist?.images?.[0] ? (
               <img
-                src={lobbyParams.GameParameters.playlist.images[0]}
+                src={game.gameParameters.playlist.images[0]}
                 alt="Spotify Playlist Image"
                 width="85%"
                 height="85%"
@@ -73,7 +112,7 @@ const LobbyWaitingRoom = (props) => {
         <div className="centerwrapper">
           <div className="playergrid">
             <div className="h3-title">These players are already waiting!!</div>
-            {lobbyParams && lobbyParams.players && lobbyParams.players.map((player, index) => (
+            {game && game.players && game.players.map((player, index) => (
               <UserStatWithIcon key={index} username={player.username} currentStanding="?"></UserStatWithIcon>
             ))}
           </div>
@@ -90,10 +129,6 @@ const LobbyWaitingRoom = (props) => {
   </div>);
 };
 
-LobbyWaitingRoom.propTypes = {
-  lobbyParams: PropTypes.object,
-  gameId: PropTypes.string,
-};
 
 export default LobbyWaitingRoom;
 

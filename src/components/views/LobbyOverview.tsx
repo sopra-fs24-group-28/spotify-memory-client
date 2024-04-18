@@ -1,93 +1,124 @@
 import React, { useEffect, useState } from "react";
+import { Spinner } from "../ui/Spinner";
 import "styles/views/LobbyOverview.scss";
-import { api, handleError } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import LobbyObject from "../ui/LobbyObject";
 import { Button } from "../ui/Button";
-import { Client } from "@stomp/stompjs";
-import OverviewDTO from "../../communication/websocket/dto/overviewDTO.js";
+import WSHandler from "helpers/wsHandler";
+import Lobby from "models/Lobby";
 
 
 const LobbyOverview = () => {
   const navigate = useNavigate();
   const [receivedGameStates, setReceivedGameStates] = useState([]);
-
-  async function fetchData() {
-    try {
-      const response = await api.get("/ws/overview");
-
-      if (response.status !== "101") {
-        alert("There was a Problem fetching the Gameoverview in its initial state. Please try again.");
+  
+  // creating stomp client
+  const restEndpoint = "/games"; //todo change to games
+  const wsEndpoint = "/topic/overview";
+  const wsDestination = "/app/overview";
+  const receiverFunction = (newDataRaw) => {
+    const newData = JSON.parse(newDataRaw.body).gameMap;
+    setReceivedGameStates(prevStates => {
+      const updatedLobbies = [];
+      for (const key in newData) { 
+        const update = newData[key];
+        const lobby = prevStates.find(lobs => lobs.lobbyId === key);
+        console.log(key, update, lobby)
+        // remove lobbies which are closed
+        if (update.gameState && update.gameState.value === "FINISHED") {
+          continue; 
+        }
+        
+        if (lobby) {
+          // update lobby if changed
+          if (update.gameParameters.changed) {
+            lobby.setGameParameters(update.gameParameters.value);
+          }
+          if (update.playerList.changed) {
+            lobby.setPlayerList(update.playerList.value);
+          }
+          if (update.gameState.changed) {
+            lobby.setGameState(update.gameState.value);
+          }
+          if (update.hostId.changed) {
+            lobby.setHostId(update.hostId.value);
+          }
+          updatedLobbies.push(lobby);
+              
+        } else {
+          // creating new lobby if not already existing
+          const newLobby = new Lobby(key, {});
+          newLobby.setGameParameters(update.gameParameters.value);
+          newLobby.setPlayerList(update.playerList.value);
+          newLobby.setGameState(update.gameState.value);
+          newLobby.setHostId(update.hostId.value);
+          updatedLobbies.push(newLobby);
+        }
       }
 
-      const overviewData = response.data;
+      return updatedLobbies; 
+    });
+  };
+  
 
-      const initialOverview = new OverviewDTO();
-
-      Object.entries(overviewData).forEach(([gameID, data]) => {
-        initialOverview.addOrUpdateGame(gameID, data);
-      });
-      console.log(initialOverview);
-
-    } catch (error) {
-      console.error(`Something went wrong while fetching the Gameoverview: \n${handleError(error)}`);
-      console.error("Details:", error);
-      alert("Something went wrong while fetching the Gameoverview! See the console for details.");
-    }
-
-  }
+  const wsHandler = new WSHandler(restEndpoint, wsEndpoint, wsDestination, receiverFunction);
+  
 
   useEffect(() => {
-    //get current overviewdto via rest call
+    console.log("receivedGameState updated")
+    console.log(receivedGameStates);
+  }, [receivedGameStates]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // Perform asynchronous operation to fetch initial data
+      const data = await wsHandler.fetchData();
+      setReceivedGameStates(data); // this displays the data
+      wsHandler.connect()
+    };
+
     fetchData();
+    
 
-    //get websocket conectionn
-    const stompClient = new Client({
-      brokerURL: "ws://localhost:8080/ws", onConnect: () => {
-        console.log("Connected");
-        stompClient.subscribe("/ws/overview", (greeting) => {
-          setReceivedGameStates(prev => [...prev, JSON.parse(greeting.body).content]);
-        });
-      },
-    });
-    try {
-      stompClient.activate();
-    } catch (error) {
-      alert("Something went wrong setting up the websocket. Try again later.");
-    }
-
-    //cleanup once we leave
+    // Clean-up function
     return () => {
-      stompClient.deactivate();
+      // Perform any necessary clean-up
+      wsHandler.disconnect();
     };
   }, []);
 
-
+  
   function createlobby() {
     navigate("/customizeGame");
   }
 
+  let content = <Spinner />;
+   
+  if (receivedGameStates.length > 0) {
+    content = (
+      <div className="gridhandler">
+      {receivedGameStates.map((lobby: Lobby) => (
+        <div key={lobby.id} className="grid-item">
+          <LobbyObject lobby={lobby}   />
+        </div>
+      ))}
+      </div>
+    )
+  } else if (receivedGameStates.length === 0) {
+    content = (
+      <div style={{"text-align": "center", "align-align": "middle", "line-height": "400px"}}>
+        Be the first to start a game!
+      </div>
+    )
+  }
 
   return (<div className="BaseContainer">
     <div className="BaseDivLobby">
-      <div className="gridhandler">
-        <Button width={"80%"} height={"30%"} onClick={createlobby}>Create new Lobby</Button>
-        {/*dummy for ws testing TODO: replace with adjusting the games accordingly*/}
-        <div>
-          Messages:
-          {receivedGameStates.map((msg, index) => (<div key={index}>{msg}</div>))}
+      <div>
+        <div className="newGameButton">
+          <Button width={"45%"} height={"30%"} onClick={createlobby}>Create new Lobby</Button>
         </div>
-        {/*dummy ends// TODO: replace with real objects*/}
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
-        <LobbyObject></LobbyObject>
+        {content}
       </div>
     </div>
   </div>);

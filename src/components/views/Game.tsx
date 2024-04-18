@@ -21,7 +21,7 @@ Player.propTypes = {
 };
 
 //added comment to make initial push
-const Game = () => {
+const Game = (gameStart: any) => {
   // use react-router-dom's hook to access navigation, more info: https://reactrouter.com/en/main/hooks/use-navigate 
   const navigate = useNavigate();
 
