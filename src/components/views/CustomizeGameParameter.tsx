@@ -68,7 +68,6 @@ const CustomizeGameParameter = () => {
     // Check each validation condition
     const invalidMessages = validations.filter(({ check }) => check()).map(({ errorMessage }) => errorMessage);
     const errorMessage = invalidMessages.join("\n").trim();
-
     if (errorMessage) {
       setErrorMessages(errorMessage);
 
@@ -99,18 +98,11 @@ const CustomizeGameParameter = () => {
     try {
       const requestBody = JSON.stringify(gameParameters);
       const response = await api.post("/game", requestBody);
-
       if (response.status === 201) {
-
-        //setting up the game
         const returnedGameParameters = new GameParameter(response.data.gameParameters);
-        console.log(returnedGameParameters);
         const lobbyId = response.data.gameId;
         const lobbyDto = new LobbyDTO({ GameParameters: returnedGameParameters });
-        console.log(lobbyDto);
         const lobby = new Lobby(lobbyId, lobbyDto);
-        console.log("---------");
-        console.log(lobby);
         navigate(`/lobby/${response.data.gameId}`, { state: { lobby: lobby } });
       } else {
         alert("Something went wrong setting up the lobby.");
