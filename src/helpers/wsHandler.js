@@ -53,7 +53,7 @@ class WSHandler {
   }
 
   async disconnect() {
-    this.client.connected ?? this.client.deactivate();
+    this.client.deactivate();
   }
 
   send(data) {
