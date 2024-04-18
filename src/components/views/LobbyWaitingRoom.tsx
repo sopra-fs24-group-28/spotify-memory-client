@@ -50,7 +50,7 @@ const LobbyWaitingRoom = () => {
       await fetchData();
       console.log("fetchDataAndConnect called");
       console.log(game);
-      const ws = wsHandler(`/game/${game.gameId}`, `/queue/game/${game.gameId}`, `app/game/${game.gameId}`, receiverFunction);
+      const ws = wsHandler(`/games/${game.gameId}`, `/queue/game/${game.gameId}`, `app/game/${game.gameId}`, receiverFunction);
       await ws.connect();
     };
     fetchDataAndConnect().catch(error => {alert('Something went wrong in the initialisation of the individual lobby. Please consult the admin')});

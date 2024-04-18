@@ -26,7 +26,7 @@ const LobbyObject = (props) => {
 
      try {
        if (lobby.lobbyId) {
-         const response = await api.put(`/game/${lobby.lobbyId}/player`);
+         const response = await api.put(`/games/${lobby.lobbyId}/player`);
          if (response.status === 200) {
            navigate(`/lobby/${lobby.lobbyId}`, { state: { lobby: lobby } });
          } else {
