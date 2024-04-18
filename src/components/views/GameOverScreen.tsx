@@ -3,26 +3,31 @@ import "styles/views/LobbyWaitingRoom.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
-import PropTypes from "prop-types";
 import { api, handleError } from "helpers/api";
 import SpotifyLogoWithTextSVG from "../ui/icons-svg/SpotifyLogoWithTextSVG";
 
 
-const LobbyWaitingRoom = () => {
+//TODO schauen wie Gamesocket informationen schickt und lobbyparams dadurch anpassen
+const GameOverScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [lobbyParams, setLobbyParams] = useState(location.state.lobby);
-
+  const [lobbyParams, setLobbyParams] = useState();
+  const [scoreboard, setScoreBoard] = useState();
 
   useEffect(() => {
-    //mocking, to be removed once websocket is ready
-/*    setLobbyParams({
-      GameParameters: { playlist: { images: ["https://mosaic.scdn.co/640/ab67616d00001e021677f484125173d96fd1f4fdab67616d00001e021a3804c279594ebceecec4a2ab67616d00001e021b96e645016c4d431842aa93ab67616d00001e023a8b694ef93dbb4ca2c68fc2"] } },
-      players: [{ userId: 1, username: "Elias" }, { userId: 2, username: "Niklas" }],
+    //mocking data remove later
+    setScoreBoard({
+      "henry123": 3,
+      "elias1999": 1,
+      "niklas2001": 5,
+      "henry1234": 3,
+      "elias19994": 9,
+      "niklas20014": 6,
     });
-    console.log(lobbyParams);*/
 
+    setLobbyParams({ playerList: [{ username: "henry123" }, { username: "elias1999" }, { username: "niklas2001" }, { username: "henry1234" }, { username: "elias19994" }, { username: "niklas20014" }] });
   }, []);
+
 
   async function handleLeave() {
 
@@ -30,11 +35,8 @@ const LobbyWaitingRoom = () => {
     try {
       const response = await api.delete(`game/${lobbyParams.lobbyId}/player`);
       if (response.status === 204) {
-        //TODO: kill websocket connection
 
-        //
         navigate("/lobbyOverview"); //Todo: anpassen wenn klar wie
-
       } else {
         alert("There was a error when trying to leave the lobby. Please try again later");
       }
@@ -51,6 +53,7 @@ const LobbyWaitingRoom = () => {
 
   return (<div className="BaseContainer">
     <div className="BaseDivLobby">
+      <h2 className="h2-title">GAME OVER! Congratulations</h2>
       <div className="gridhandler">
         <div className="centerwrapper">
           <div
@@ -70,17 +73,18 @@ const LobbyWaitingRoom = () => {
         </div>
         <div className="centerwrapper">
           <div className="playergrid">
-            <div className="h3-title">These players are already waiting!!</div>
-            {lobbyParams && lobbyParams.playerList && lobbyParams.playerList.map((player, index) => (
-              <UserStatWithIcon key={index} username={player.username} currentStanding="?"></UserStatWithIcon>
+            <div className="h3-title">ScoreBoard</div>
+            {lobbyParams && lobbyParams.playerList && lobbyParams.playerList.sort((a, b) => scoreboard[a.username] - scoreboard[b.username]).map((player, index) => (
+              <React.Fragment key={index}>
+                <UserStatWithIcon username={player.username} currentStanding={scoreboard[player.username]} />
+              </React.Fragment>
             ))}
           </div>
         </div>
-
         <div className="centerwrapper">
           <div className="buttonContainer">
             <Button width="45%" onClick={handleLeave}>Leave</Button>
-            <Button width="45%" onClick={handleLeave}>I am ready</Button>
+            <Button width="45%" onClick={handleLeave}>Restart</Button>
           </div>
         </div>
       </div>
@@ -88,5 +92,5 @@ const LobbyWaitingRoom = () => {
   </div>);
 };
 
-export default LobbyWaitingRoom;
+export default GameOverScreen;
 
