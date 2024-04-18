@@ -60,6 +60,9 @@ const LobbyWaitingRoom = () => {
   useEffect(() => {
     console.log("game changed");
     console.log(game);
+    if (game?.gameState === "ONPLAY"){
+      navigate(`game/${game.gameId}`, { state: {ws: ws, gameId: game.gameId } })
+    }
   }, [game]);
 
 

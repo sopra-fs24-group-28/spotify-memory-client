@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "styles/views/GameScreen.scss";
 import BaseContainer from "../ui/BaseContainer";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
@@ -8,11 +8,16 @@ import cardData from "../../models/SetofCardData.js";
 // @ts-ignore
 import Card from "../ui/Card";
 import wsHandler from "../../helpers/wsHandler.js"
+import { api, handleError } from "helpers/api";
+import Game from "./Game";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 
-const Game = () => {
+
+
+const GameScreen = () => {
   const navigate = useNavigate();
-
   const [gameFinished, setGameFinished] = useState(false);
   const [cards, setCards] = useState(cardData);
   const [currentlyFlipped, setCurrentlyFlipped] = useState([]);
@@ -20,6 +25,54 @@ const Game = () => {
   const [matchedPairs, setMatchedPairs] = useState([]);
   const [activePlayerIndex, setActivePlayerIndex] = useState("")
   const userid: string = localStorage.getItem("userid")
+  const location = useLocation()
+  const ws: wsHandler = location.state.ws
+  const [game, setGame] = useState();
+  const initialGameId:number = location.state.gameId
+
+
+  //websocket specific:
+  const receiverFunction = (newDataRaw) => {
+    const parsedData = JSON.parse(newDataRaw.body).gameChangesDTO;
+    const gameData = parsedData.game;
+
+    if (gameData.changed) {
+      setGame(prev => {
+        return Game(gameData.value);
+      });
+    }
+
+    //TODO Diyar: implement rest of the updating in the game.
+  };
+
+  async function fetchData() {
+    try {
+      console.log(initialGameId);
+      const response = await api.get(`/game/${initialGameId}`);
+      const gameStart = response.data;
+      setGame(Game(gameStart));
+      return game;
+
+    } catch (error) {
+      console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
+    }
+  }
+
+  useEffect(() => {
+    const fetchDataAndConnect = async () => {
+      await fetchData();
+      console.log("fetchDataAndConnect called");
+      console.log(game);
+      await ws.setReceiverFunction(receiverFunction);
+    };
+    fetchDataAndConnect().catch(error => {alert('Something went wrong in the initialisation of the individual lobby. Please consult the admin')});
+
+  }, []);
+
+  //componentspecifics
+
+
+
 
   useEffect(() => {
     if (matchedPairs.length === cards.length ) {
@@ -156,4 +209,4 @@ const Game = () => {
   </BaseContainer>);
 };
 
-export default Game;
+export default GameScreen;

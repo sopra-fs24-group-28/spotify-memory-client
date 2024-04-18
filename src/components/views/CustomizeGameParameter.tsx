@@ -103,7 +103,7 @@ const CustomizeGameParameter = () => {
         const lobbyId = response.data.gameId;
         const lobbyDto = new LobbyDTO({ GameParameters: returnedGameParameters });
         const lobby = new Lobby(lobbyId, lobbyDto);
-        navigate(`/lobby/${response.data.gameId}`, { state: { lobby: lobby } });
+        navigate(`/lobby/${response.data.gameId}`, {state: { lobby: lobby }});
       } else {
         alert("Something went wrong setting up the lobby.");
       }
