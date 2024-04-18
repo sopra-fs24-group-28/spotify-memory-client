@@ -4,25 +4,28 @@
 
 .BaseDivLobby {
   @extend .BaseDiv;
-  width: 1000px;
-  max-width: $DESKTOP_WIDTH;
   max-height: ($DESKTOP_WIDTH / 1) + 20;
-  min-height: 100px; // Adjust this value based on your needs
-  padding: 50px;
+  min-height: 70vh; // Adjust this value based on your needs
+  padding: 1vw;
 }
 
 .gridhandler {
   @include center;
   overflow-wrap: anywhere;
   display: grid;
-  grid-template-columns: repeat(2, 1fr); // Creates two columns of equal width
+  grid-template-columns: repeat(1, 1fr);
   grid-template-rows: auto;
   grid-row-gap: 20px;
-  grid-column-gap: 20px; // Keeps a constant gap between both rows and columns
+  grid-column-gap: 2vw;
   justify-content: flex-start;
   align-items: flex-start;
   padding-bottom: 10px;
   padding-top: 10px;
+
+  @media screen and (min-width: 1100px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
 }
 
 .centerwrapper {
@@ -35,11 +38,12 @@
   background: $accent;
   border: solid $textColor 2px;
   border-radius: $borderRadius;
-  width: 80%;
-  height: 300px;
-  padding: 20px;
+  width: 25vw;
+  height: 25vw;
+  padding: 1vw;
   box-shadow: $dropShadow;
   justify-content: center;
+  overflow: clip;
 }
 
 .imgContainer {
@@ -73,8 +77,8 @@
   background: $accent;
   border: solid $textColor 2px;
   border-radius: $borderRadius;
-  width: 85%;
-  padding: 20px;
+  width: 80%;
+  padding: 1vh;
   box-shadow: $dropShadow;
 
 }

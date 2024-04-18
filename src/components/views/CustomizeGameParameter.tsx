@@ -227,13 +227,13 @@ const CustomizeGameParameter = () => {
                 />
               </div>
             </div>
+            <div className={errorMessages ? "error-message-container" : "hidden"}>
+              <div className="error-messages">
+                {errorMessages && <p>{errorMessages}</p>}
+              </div>
+            </div>
             <div className="button-section">
               <hr />
-              <div className={errorMessages ? "error-message-container" : "hidden"}>
-                <div className="error-messages">
-                  {errorMessages && <p>{errorMessages}</p>}
-                </div>
-              </div>
               <button
                 type="submit"
                 className="customizebtn"

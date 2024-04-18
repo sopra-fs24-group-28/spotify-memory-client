@@ -5,32 +5,29 @@
 .BaseDivLobby {
   @extend .BaseDiv;
   //border: solid red;
-  width: 100px;
-  max-width: $DESKTOP_WIDTH;
   max-height: ($DESKTOP_WIDTH / 1) + 20;
   min-height: 100px; // Adjust this value based on your needs
   padding: 20px;
+  overflow-x: clip !important;
 }
 
 .gridhandler {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 10px; /* shorthand for grid-row-gap and grid-column-gap */
+  grid-template-columns: repeat(1, 1fr) ;
+  grid-gap: 10px;
   padding: 20px;
-  // overflow-wrap: anywhere;
-  // display: grid;
-  // grid-template-columns: repeat(2, 1fr); // Creates two columns of equal width
-  // grid-template-rows: auto;
-  // grid-row-gap: 20px;
-  // grid-column-gap: 20px; // Keeps a constant gap between both rows and columns
-  // justify-content: flex-start;
-  // align-items: flex-start;
-  // padding-bottom: 10px;
-  // padding-top: 10px;
+  grid-column-gap: 50px;
+  @media screen and (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (min-width: 1100px) {
+    grid-template-columns: repeat(3, 1fr);}
 }
 
 .newGameButton {
   padding: 20px;
+  width: 100vw;
+  align-self: center;
 }
 
 .grid-item {
