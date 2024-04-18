@@ -5,12 +5,12 @@ import BaseContainer from "../ui/BaseContainer";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 import { Button } from "../ui/Button";
 import cardData from "../../models/SetofCardData.js";
+// @ts-ignore
 import Card from "../ui/Card";
 import wsHandler from "../../helpers/wsHandler.js"
 
 
 const Game = () => {
-  // use react-router-dom's hook to access navigation, more info: https://reactrouter.com/en/main/hooks/use-navigate
   const navigate = useNavigate();
 
   const [gameFinished, setGameFinished] = useState(false);
@@ -77,16 +77,19 @@ const Game = () => {
 
   function playSong(){
 
+    //TODO Diyar, please implement
+
   }
 
 
   function flip(id: number) {
 
-    if (matchedPairs.includes(findCardById(cards, id).sameIdx) || userid != activePlayerIndex ) {
+    if (matchedPairs.includes(findCardById(cards, id).sameIdx) || userid !== activePlayerIndex ) {
       return;
     }
 
     //api: call
+    //TODO Diyar please implement logic what happends if player flips a card, what do we have to send and what do we have to update
     wsHandler.send()
 
 
@@ -114,7 +117,6 @@ const Game = () => {
     setCurrentlyFlipped([]);
     SetShowMessage("");
     setMatchedPairs([]);
-
   }
 
 
@@ -152,8 +154,6 @@ const Game = () => {
       </div>
     </div>
   </BaseContainer>);
-
-
 };
 
 export default Game;

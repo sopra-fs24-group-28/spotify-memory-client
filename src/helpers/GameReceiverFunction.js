@@ -28,10 +28,5 @@ const receiverFunction = (newDataRaw) => {
     console.log(cardsStates.value)
 
   }
-
-
-
-
-
 }
 
