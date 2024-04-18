@@ -15,7 +15,8 @@ class WSHandler {
 
 
   async connect() {
-    this.client.brokerURL = getWSDomain();
+    this.client.brokerURL = getWSDomain() + "/token=" + `${localStorage.getItem("token")}`;
+    console.log(this.client.brokerURL);
     this.client.onConnect = (frame) => {
       console.log("Connected to Websocket ...");
       this.client.subscribe(this.wsEndpoint, this.receiverFunction);
