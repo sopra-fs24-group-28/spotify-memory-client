@@ -13,7 +13,7 @@ const LobbyOverview = () => {
   const [receivedGameStates, setReceivedGameStates] = useState([]);
   
   // creating stomp client
-  const restEndpoint = "/games"; //todo change to games
+  const restEndpoint = "/game"; //todo change to games
   const wsEndpoint = "/topic/overview";
   const wsDestination = "/app/overview";
   const receiverFunction = (newDataRaw) => {
@@ -94,7 +94,7 @@ const LobbyOverview = () => {
 
   let content = <Spinner />;
    
-  if (receivedGameStates.length > 0) {
+  if (receivedGameStates?.length > 0) {
     content = (
       <div className="gridhandler">
       {receivedGameStates.map((lobby: Lobby) => (
@@ -104,9 +104,9 @@ const LobbyOverview = () => {
       ))}
       </div>
     )
-  } else if (receivedGameStates.length === 0) {
+  } else if (receivedGameStates?.length === 0) {
     content = (
-      <div style={{"text-align": "center", "align-align": "middle", "line-height": "400px"}}>
+      <div className="befirst">
         Be the first to start a game!
       </div>
     )
@@ -116,7 +116,7 @@ const LobbyOverview = () => {
     <div className="BaseDivLobby">
       <div>
         <div className="newGameButton">
-          <Button width={"45%"} height={"30%"} onClick={createlobby}>Create new Lobby</Button>
+          <Button width={"40%"} height={"30%"} className={"primary-button"} onClick={createlobby}>Create new Lobby</Button>
         </div>
         {content}
       </div>

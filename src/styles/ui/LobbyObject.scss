@@ -5,16 +5,13 @@
 .BaseDivLobby {
   @extend .BaseDiv;
   border: solid $textColor;
-  width: 1000px;
-  max-width: $DESKTOP_WIDTH;
   max-height: ($DESKTOP_WIDTH / 1) + 20;
   min-height: 100px; // Adjust this value based on your needs
-
 }
 
 .playlist-join-card {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); // Creates two columns of equal width
+  grid-template-columns: 1fr 2fr 1fr; // Creates two columns of equal width
   grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 5px;
   grid-row-gap: 20px;
@@ -31,6 +28,7 @@
   grid-row: 1 / span 2; // Spans two rows
   align-self: center;
   justify-self: center;
+
 }
 
 .second-column-top-item {
@@ -39,6 +37,10 @@
   align-self: center;
   justify-self: left;
   color: $textColor;
+  width: 100% !important;
+  text-overflow: ellipsis !important;
+
+
 }
 
 .second-column-bottom-item {
@@ -46,9 +48,10 @@
   grid-row: 2; // Only in the second row
   display: flex;
   overflow: hidden;
-  align-self: top;
+  align-self: baseline;
   justify-self: left;
-  max-width: 200px;
+  width: 100% !important;
+
 }
 
 .third-column-item {
@@ -56,6 +59,8 @@
   grid-row: 1 / span 2; // Spans two rows
   align-self: center;
   justify-self: center;
+  max-width: 100% !important;
+
 }
 
 .playlist-cover {
