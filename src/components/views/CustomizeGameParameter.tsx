@@ -97,7 +97,7 @@ const CustomizeGameParameter = () => {
   async function sendLobbyCreationRequest() {
     try {
       const requestBody = JSON.stringify(gameParameters);
-      const response = await api.post("/game", requestBody);
+      const response = await api.post("/games", requestBody);
       if (response.status === 201) {
         const returnedGameParameters = new GameParameter(response.data.gameParameters);
         const lobbyId = response.data.gameId;
