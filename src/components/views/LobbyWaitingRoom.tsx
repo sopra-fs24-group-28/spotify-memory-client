@@ -72,7 +72,7 @@ const LobbyWaitingRoom = () => {
 
     // rest call that player delete request with
     try {
-      const response = await api.delete(`game/${game.gameId}/player`);
+      const response = await api.delete(`games/${initialGameId}/player`);
       if (response.status === 204) {
         await ws.disconnect()
         navigate("/lobbyOverview"); //Todo: anpassen wenn klar wie
