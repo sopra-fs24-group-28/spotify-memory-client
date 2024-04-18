@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import "styles/views/CustomizeGameParameter.scss";
 import { api, handleError } from "helpers/api";
 import GameParameter from "../../models/GameParameter";
-import Game from "../../models/Game.js";
 import { useNavigate } from "react-router-dom";
 import { getSpotifyPlaylist } from "../../helpers/spotifyrelated/getPlaylists";
-import { Button } from "components/ui/Button"
-import { updateFunctionDeclaration } from "typescript";
+import Lobby from "../../models/Lobby";
+import LobbyDTO from "../../communication/websocket/dto/LobbyDTO";
 
 
 const CustomizeGameParameter = () => {
@@ -69,7 +68,6 @@ const CustomizeGameParameter = () => {
     // Check each validation condition
     const invalidMessages = validations.filter(({ check }) => check()).map(({ errorMessage }) => errorMessage);
     const errorMessage = invalidMessages.join("\n").trim();
-
     if (errorMessage) {
       setErrorMessages(errorMessage);
 
@@ -100,23 +98,12 @@ const CustomizeGameParameter = () => {
     try {
       const requestBody = JSON.stringify(gameParameters);
       const response = await api.post("/game", requestBody);
-
       if (response.status === 201) {
-        //setting up the game
-        let game: Game;
-        let returnedGameParameters: GameParameter;
-
-        returnedGameParameters = new GameParameter(response.data.gameParameters);
-        console.log(returnedGameParameters);
-        game = new Game(response.data.gameId);
-        game.gameParameter = returnedGameParameters;
-        game.host = localStorage.getItem("userId"); //TODO: redirect this task to backenend once they are ready
-        game.addPlayer(game.host); //TODO:  remove once backend is ready
-
-        //TODO: Initialise game Websocket
-        //...
-        navigate(`/lobby/${response.data.gameId}`, { state: { lobby: returnedGameParameters } }); //TODO this is mocked, remove once its ready
-
+        const returnedGameParameters = new GameParameter(response.data.gameParameters);
+        const lobbyId = response.data.gameId;
+        const lobbyDto = new LobbyDTO({ GameParameters: returnedGameParameters });
+        const lobby = new Lobby(lobbyId, lobbyDto);
+        navigate(`/lobby/${response.data.gameId}`, { state: { lobby: lobby } });
       } else {
         alert("Something went wrong setting up the lobby.");
       }
@@ -126,7 +113,7 @@ const CustomizeGameParameter = () => {
   }
 
   function cancel() {
-    navigate("/lobbyOverview")
+    navigate("/lobbyOverview");
   }
 
 
@@ -252,7 +239,7 @@ const CustomizeGameParameter = () => {
                 className="customizebtn"
                 onClick={startGame}>Start Game
               </button>
-              <button className="customizebtn" style={{"margin": "10px"}} onClick={cancel}>Cancel</button>
+              <button className="customizebtn" style={{ "margin": "10px" }} onClick={cancel}>Cancel</button>
             </div>
           </form>
         </div>
