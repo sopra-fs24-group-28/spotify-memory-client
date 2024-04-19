@@ -44,6 +44,9 @@
   box-shadow: $dropShadow;
   justify-content: center;
   overflow: clip;
+  min-width: 300px;
+  min-height: 300px
+
 }
 
 .imgContainer {
@@ -80,6 +83,7 @@
   width: 80%;
   padding: 1vh;
   box-shadow: $dropShadow;
+  min-width: 400px;
 
 }
 
