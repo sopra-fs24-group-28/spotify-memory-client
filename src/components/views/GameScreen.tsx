@@ -13,8 +13,6 @@ import Game from "./Game";
 import { Simulate } from "react-dom/test-utils";
 import error = Simulate.error;
 
-
-
 const GameScreen = () => {
   const navigate = useNavigate();
   const [gameFinished, setGameFinished] = useState(false);
