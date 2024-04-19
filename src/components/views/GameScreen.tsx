@@ -10,6 +10,10 @@ import Card from "../ui/Card";
 import wsHandler from "../../helpers/wsHandler.js";
 import { api, handleError } from "helpers/api";
 import Game from "./Game";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
+
+
 
 const GameScreen = () => {
   const navigate = useNavigate();
@@ -32,6 +36,7 @@ const GameScreen = () => {
 
     if (gameData.changed) {
       setGame(prev => {
+
         return Game(gameData.value);
       });
     }
@@ -66,18 +71,17 @@ const GameScreen = () => {
 
   }, []);
 
-
   //componentspecifics
 
   useEffect(() => {
-    if (matchedPairs.length === cards.length) {
+    if (matchedPairs.length === cards.length ) {
       setGameFinished(prev => !prev);
     }
 
   }, [matchedPairs, cards.length]);
 
   useEffect(() => {
-    if (currentlyFlipped.length === 2) {
+    if (currentlyFlipped.length === 2 ) {
       const [firstCardId, secondCardId] = currentlyFlipped;
 
       setCards(prevCards => {
@@ -123,7 +127,7 @@ const GameScreen = () => {
     return cards.find(card => card.id === id);
   }
 
-  function playSong() {
+  function playSong(){
 
     //TODO Diyar, please implement
 
@@ -132,13 +136,13 @@ const GameScreen = () => {
 
   function flip(id: number) {
 
-    if (matchedPairs.includes(findCardById(cards, id).sameIdx) || userid !== activePlayerIndex) {
+    if (matchedPairs.includes(findCardById(cards, id).sameIdx) || userid !== activePlayerIndex ) {
       return;
     }
 
     //api: call
     //TODO Diyar please implement logic what happends if player flips a card, what do we have to send and what do we have to update
-    wsHandler.send();
+    wsHandler.send()
 
 
     setCards(prevCards => {
