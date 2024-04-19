@@ -10,8 +10,9 @@ import wsHandler from "../../helpers/wsHandler.js";
 import Game from "./Game";
 
 
-const LobbyWaitingRoom = (props) => {
-  const navigate = useNavigate();
+const LobbyWaitingRoom = () => {
+  const navigate:NavigateFunction = useNavigate();
+  const ws:wsHandler = null;
   const location = useLocation();
   const initialGameId = location.state.lobby.lobbyId;
   const [game, setGame] = useState();
