@@ -7,14 +7,9 @@ import { Button } from "../ui/Button";
 import cardData from "../../models/SetofCardData.js";
 // @ts-ignore
 import Card from "../ui/Card";
-import wsHandler from "../../helpers/wsHandler.js"
+import wsHandler from "../../helpers/wsHandler.js";
 import { api, handleError } from "helpers/api";
 import Game from "./Game";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
-
-
-
 
 const GameScreen = () => {
   const navigate = useNavigate();
@@ -23,13 +18,12 @@ const GameScreen = () => {
   const [currentlyFlipped, setCurrentlyFlipped] = useState([]);
   const [showMessage, SetShowMessage] = useState("");
   const [matchedPairs, setMatchedPairs] = useState([]);
-  const [activePlayerIndex, setActivePlayerIndex] = useState("")
-  const userid: string = localStorage.getItem("userid")
-  const location = useLocation()
-  const ws: wsHandler = location.state.ws
+  const [activePlayerIndex, setActivePlayerIndex] = useState("");
+  const userid: string = localStorage.getItem("userid");
+  const location = useLocation();
+  const ws: wsHandler = location.state.ws;
   const [game, setGame] = useState();
-  const initialGameId:number = location.state.gameId
-
+  const initialGameId: number = location.state.gameId;
 
   //websocket specific:
   const receiverFunction = (newDataRaw) => {
@@ -51,6 +45,7 @@ const GameScreen = () => {
       const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
       setGame(Game(gameStart));
+
       return game;
 
     } catch (error) {
@@ -65,24 +60,24 @@ const GameScreen = () => {
       console.log(game);
       await ws.setReceiverFunction(receiverFunction);
     };
-    fetchDataAndConnect().catch(error => {alert('Something went wrong in the initialisation of the individual lobby. Please consult the admin')});
+    fetchDataAndConnect().catch(error => {
+      alert("Something went wrong in the initialisation of the individual lobby. Please consult the admin");
+    });
 
   }, []);
 
+
   //componentspecifics
 
-
-
-
   useEffect(() => {
-    if (matchedPairs.length === cards.length ) {
+    if (matchedPairs.length === cards.length) {
       setGameFinished(prev => !prev);
     }
 
   }, [matchedPairs, cards.length]);
 
   useEffect(() => {
-    if (currentlyFlipped.length === 2 ) {
+    if (currentlyFlipped.length === 2) {
       const [firstCardId, secondCardId] = currentlyFlipped;
 
       setCards(prevCards => {
@@ -128,7 +123,7 @@ const GameScreen = () => {
     return cards.find(card => card.id === id);
   }
 
-  function playSong(){
+  function playSong() {
 
     //TODO Diyar, please implement
 
@@ -137,13 +132,13 @@ const GameScreen = () => {
 
   function flip(id: number) {
 
-    if (matchedPairs.includes(findCardById(cards, id).sameIdx) || userid !== activePlayerIndex ) {
+    if (matchedPairs.includes(findCardById(cards, id).sameIdx) || userid !== activePlayerIndex) {
       return;
     }
 
     //api: call
     //TODO Diyar please implement logic what happends if player flips a card, what do we have to send and what do we have to update
-    wsHandler.send()
+    wsHandler.send();
 
 
     setCards(prevCards => {
