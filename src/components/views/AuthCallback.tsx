@@ -18,6 +18,7 @@ const AuthCallback = () => {
         const response = await api.post("/auth/token", requestBody);
         // assuming response already 200, otherwise would have been caught by handleError
         localStorage.setItem("token", response.data?.sessionToken);
+        localStorage.setItem("userid", response.data?.userid);
         const getResponse = await api.get("/auth/token");
         localStorage.setItem("accessToken", getResponse.data?.accessToken);
         navigate("/lobbyoverview"); //TODO: make real once ready

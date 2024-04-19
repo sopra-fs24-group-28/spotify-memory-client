@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "styles/ui/LobbyObject.scss";
 import { useNavigate } from "react-router-dom";
 import ProfileCircle from "./ProfileCircle";
@@ -9,56 +9,41 @@ import { api } from "helpers/api";
 
 const LobbyObject = (props) => {
   const navigate = useNavigate();
-/*
-  const [playlistImg, setPlaylistImg] = useState(props.gameParameter?.GameParameters?.playlist?.images?.[0]);
-*/
-  const [avatarImg, setAvatarImg] = useState("img");
-  let lobby = props.lobby ? props.lobby :  null;
-  useEffect(() => {
-
-  }, []);
+  let lobby = props.lobby ? props.lobby : null;
 
   async function join() {
-    //TODO: delete later as its mocked now
-/*
-    navigate(`/lobby/${lobbyId}`, { state: { gameParameter: gameParameters } });
-*/
-
-     try {
-       if (lobby.lobbyId) {
-         const response = await api.put(`/game/${lobby.lobbyId}/player`);
-         if (response.status === 200) {
-           navigate(`/lobby/${lobby.lobbyId}`, { state: { lobby: lobby } });
-         } else {
-           console.log("debug");
-         }
-       } else {
-         alert("no valid Game-id could be associated with the selected lobby. Please try again later. ");
-       }
-     } catch (error) {
-       console.error("An error occurred:", error);
+    try {
+      if (lobby.lobbyId) {
+        const response = await api.put(`/game/${lobby.lobbyId}/player`);
+        if (response.status === 200) {
+          navigate(`/lobby/${lobby.lobbyId}`, { state: { lobby: lobby } });
+        } else {
+          console.log("debug");
+        }
+      } else {
+        alert("no valid Game-id could be associated with the selected lobby. Please try again later. ");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
     }
   }
 
-return (
-  <div className="playlist-join-card">
-    <div className="playlist-cover first-column-item">
-
-      <img src={lobby.gameParameters.playlistImageUrl} alt="RapCaviar" className="playlist-image" />
-
-    </div>
-    <span className="playlist-name second-column-top-item">{lobby.gameParameters.playlist}</span>
-    <div className="user-avatars second-column-bottom-item">
+  return (
+    <div className="playlist-join-card">
+      <div className="playlist-cover first-column-item">
+        <img src={lobby.gameParameters.playlistImageUrl} alt="RapCaviar" className="playlist-image" />
+      </div>
+      <span className="playlist-name second-column-top-item">{lobby.gameParameters.playlist}</span>
+      <div className="user-avatars second-column-bottom-item">
         {lobby.playerList.map((user) => (
           <li key={user.userId}>
-            <ProfileCircle height={40} width={40} url={user.profileImageUrl}/>
+            <ProfileCircle height={40} width={40} url={user.profileImageUrl} />
           </li>
         ))}
-    </div>
-    <Button width="70%" height="50%" className="lobby-overview-button third-column-item" onClick={join}>Join</Button>
-  </div>);
-
-}
+      </div>
+      <Button width="70%" height="50%" className="lobby-overview-button third-column-item" onClick={join}>Join</Button>
+    </div>);
+};
 
 LobbyObject.propTypes = {
   lobby: PropTypes.object,

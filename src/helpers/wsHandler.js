@@ -13,14 +13,23 @@ class WSHandler {
     this.client.connectHeaders = { "Authorization": `Bearer ${localStorage.getItem("token")}` };
   }
 
+
   async connect() {
-    this.client.brokerURL = getWSDomain();
+    this.client.brokerURL = getWSDomain() + "?token=" + `${localStorage.getItem("token")}`;
+    console.log(this.client.brokerURL);
     this.client.onConnect = (frame) => {
       console.log("Connected to Websocket ...");
       this.client.subscribe(this.wsEndpoint, this.receiverFunction);
       console.log("... and Subscribed");
     };
     this.client.activate();
+  };
+
+  async setReceiverFunction(newReceiverFunction) {
+    this.receiverFunction = newReceiverFunction;
+    if (this.client.connected) {
+      this.client.subscribe(this.wsEndpoint, this.receiverFunction);
+    }
   }
 
   // TODO: fetchData should not be defined here but passed as a parameter
@@ -45,7 +54,7 @@ class WSHandler {
   }
 
   async disconnect() {
-    this.client.connected ?? this.client.deactivate();
+    this.client.deactivate();
   }
 
   send(data) {
@@ -54,6 +63,8 @@ class WSHandler {
       body: data
     });
   }
+
+
 }
 
 export default WSHandler;

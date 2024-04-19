@@ -1,18 +1,17 @@
 class Game {
-  constructor(gameID) {
-    this._gameID = gameID;
-    this._activePlayer = null; // Integer (userID)
-    this._activePlayerStreak = 0; // Integer
-    this._state = null; // An instance of GameState (assuming this is another class or enum)
-    this._host = null; // Integer (userID)
-    this._gameParameter = null; // An instance of GameParameters
-    this._history = []; // Array of Turns
-    this._scoreboard = new Map(); // Map of usernames to points
-    this._players = []; // Array of Users
-    this._quickTurn = new Map(); // Map of usernames to counter
-    this._quickTurnActive = false;
+  constructor(gameStart) {
+    this._gameId = gameStart.gameId;
+    this._activePlayer = gameStart.activePlayerid; //todo change name to sync with backend
+    this._activePlayerStreak =  gameStart.activePlayerid; //todo change name
+    this._state = gameStart.state;
+    this._host = gameStart.host;
+    this._gameParameter = gameStart.gameParameters;
+    this._history = gameStart.history;
+    this._scoreboard = gameStart.scoreboard;
+    this._players = gameStart.players;
+    this._quickTurn =  gameStart.activePlayerid;//todo change name
+    this._quickTurnActive =  gameStart.activePlayerid; //todo change name
   }
-
   get gameParameter() {
     return this._gameParameter;
   }
@@ -21,12 +20,12 @@ class Game {
     this._gameParameter = value;
   }
 
-  get gameID() {
-    return this._gameID;
+  get gameId() {
+    return this._gameId;
   }
 
-  set gameID(value) {
-    this._gameID = value;
+  set gameId(value) {
+    this._gameId = value;
   }
 
   get activePlayer() {
