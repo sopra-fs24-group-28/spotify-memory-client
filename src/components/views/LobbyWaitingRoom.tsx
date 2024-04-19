@@ -19,6 +19,7 @@ const LobbyWaitingRoom = () => {
 
 
   //Websocket specific
+
   const receiverFunction = (newDataRaw) => {
     const parsedData = JSON.parse(newDataRaw.body).gameChangesDTO;
     const gameData = parsedData.game;
@@ -36,8 +37,9 @@ const LobbyWaitingRoom = () => {
       const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
       setGame(Game(gameStart));
-      
+
       return game;
+
     } catch (error) {
       console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
     }

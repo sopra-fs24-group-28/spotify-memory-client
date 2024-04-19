@@ -14,8 +14,6 @@ export default function Card (props) {
   } else {
     card = <div className={`card${props.isFlipped ? " flipped" : ""}${props.isGreyed ? " greyed" : ""}`} onClick={props.flip}>
       <div className="card-inner">
-        {/*<div className={"card-front"}>{props.content}</div>*/}
-
         <div className="albumcover">
           <img src="" alt="albumcover" />
         </div>

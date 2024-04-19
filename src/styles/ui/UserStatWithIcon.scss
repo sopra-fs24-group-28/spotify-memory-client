@@ -5,12 +5,22 @@
   @extend .normalInput;
   @include center;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 4fr 1fr;
   background-color: $turquise;
-  width: 200px;
+  width: 50vw;
   border-radius: $borderRadius;
   max-height: 50px;
+  margin-bottom: 10px;
+  min-width: 200px;
+  @media screen and (min-width: 1100px) {
+    width: 22vw;
 
+  }
+
+}
+
+.centered-column {
+  @include center;
 }
 
 .button-label {
@@ -27,6 +37,10 @@
   color: $textColor;
   padding: 2px 6px;
   position: relative;
-  top: -20px;
-  right: -50px;
+  top: -60%;
+  right: -70%;
+  @media screen and (min-width: 1100px) {
+    top: -60%;
+    right: -70%;}
+
 }

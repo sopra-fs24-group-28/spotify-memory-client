@@ -4,7 +4,10 @@ import "../../styles/ui/UserStatWithIcon.scss";
 import ProfileCircle from "./ProfileCircle";
 
 export const UserStatWithIcon = (props) => (<span className="userbox">
-  <ProfileCircle width={"45%"} height={"80%"}></ProfileCircle>
+  <span className="centered-column">
+    <ProfileCircle width={"30px"} height={"30px"}></ProfileCircle>
+  </span>
+
   <span className="button-label">{props.username}</span>
   <span className="notification-bubble">{props.currentStanding}</span>
   </span>);
