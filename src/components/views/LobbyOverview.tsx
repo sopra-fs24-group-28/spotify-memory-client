@@ -77,6 +77,7 @@ const LobbyOverview = () => {
   useEffect(() => {
     const fetchData = async () => {
       // Perform asynchronous operation to fetch initial data
+      // TODO: remove fetchData from class into here
       const data = await wsHandler.fetchData();
       setReceivedGameStates(data); // this displays the data
       wsHandler.connect()
