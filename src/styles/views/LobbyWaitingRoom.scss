@@ -30,6 +30,7 @@
 
 .centerwrapper {
   @include center;
+  flex-direction: column; /* Stack items vertically */
 }
 
 .spotifyPlaylistContainer {
@@ -67,9 +68,11 @@
 .buttonContainer {
   @include center;
   width: 80%;
-  justify-content: space-between;
-
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack items vertically */
+  gap: 25px; /* Add appropriate spacing between buttons */
 }
+
 
 .playergrid {
   @extend .gridhandler;
