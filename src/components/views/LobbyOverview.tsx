@@ -22,7 +22,7 @@ const LobbyOverview = () => {
       const updatedLobbies = [];
       for (const key in newData) { 
         const update = newData[key];
-        const lobby = prevStates.find(lobs => lobs.lobbyId === key);
+        const lobby = prevStates.pop(lobs => lobs.lobbyId === key);
         console.log(key, update, lobby)
         // remove lobbies which are closed
         if (update.gameState && update.gameState.value === "FINISHED") {
@@ -54,6 +54,11 @@ const LobbyOverview = () => {
           newLobby.setHostId(update.hostId.value);
           updatedLobbies.push(newLobby);
         }
+      }
+
+      // reinsert all lobbies unaffected by change into state 
+      for (const lobbyKey in prevStates) {
+        updatedLobbies.push(prevStates[lobbyKey]);
       }
 
       return updatedLobbies; 
