@@ -3,17 +3,16 @@ import "styles/views/LobbyWaitingRoom.scss";
 import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
-import PropTypes from "prop-types";
 import { api, handleError } from "helpers/api";
 import SpotifyLogoWithTextSVG from "../ui/icons-svg/SpotifyLogoWithTextSVG";
 import WSHandler from "../../helpers/wsHandler.js";
-import Game from "models/Game";
 import Lobby from "models/Lobby";
 
 
-const LobbyWaitingRoom = (state) => {
+const LobbyWaitingRoom = () => {
   const navigate:NavigateFunction = useNavigate();
   const location = useLocation();
+  // TODO: handle situation where location.state.lobby is undefined
   const initialGameId = location.state.lobby.lobbyId;
   const [game, setGame] = useState();
   
@@ -38,10 +37,8 @@ const LobbyWaitingRoom = (state) => {
 
   async function fetchData() {
     try {
-      console.log(initialGameId);
       const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
-      console.log(gameStart);
       
       // instantiating a lobby object here instead of a game object
       // as the ws returns data appropriate for this class. But object is later cast into game when appropriate
@@ -57,10 +54,9 @@ const LobbyWaitingRoom = (state) => {
       const initGame = await fetchData();
       setGame(initGame);
       await ws.connect();
-
     };
-    fetchDataAndConnect();
     
+    fetchDataAndConnect();
   }, []);
   
   // useEffect(() => {
@@ -107,6 +103,8 @@ const LobbyWaitingRoom = (state) => {
           <div
             className={game?.gameParameters.playlist.playlistImageUrl ? "imgContainer" : "spotifyPlaylistContainer"}>
             {game?.gameParameters.playlist.playlistImageUrl? (
+              <div>
+              <span className="playlist-name second-column-top-item">{game?.gameParameters.playlist.playlistName}</span>
               <img
                 src={game?.gameParameters.playlist.playlistImageUrl}
                 alt="Spotify Playlist Image"
@@ -114,6 +112,7 @@ const LobbyWaitingRoom = (state) => {
                 height="100%"
                 className="img"
               />
+              </div>
             ) : (
               <SpotifyLogoWithTextSVG width="0.8" height="0.8" />
             )}

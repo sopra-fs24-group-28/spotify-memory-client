@@ -39,8 +39,9 @@
   background: $accent;
   border: solid $textColor 2px;
   border-radius: $borderRadius;
+  margin: 5px;
   width: 25vw;
-  height: 25vw;
+  height: 30vw;
   padding: 1vw;
   box-shadow: $dropShadow;
   justify-content: center;
@@ -71,6 +72,7 @@
   display: flex; /* Use flexbox */
   flex-direction: column; /* Stack items vertically */
   gap: 25px; /* Add appropriate spacing between buttons */
+
 }
 
 
