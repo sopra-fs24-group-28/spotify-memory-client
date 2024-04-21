@@ -104,7 +104,7 @@ const LobbyOverview = () => {
       ))}
       </div>
     )
-  } else if (receivedGameStates?.length === 0) {
+  } else {
     content = (
       <div className="befirst">
         Be the first to start a game!
