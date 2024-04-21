@@ -18,7 +18,7 @@ const SpotifyLogoWithTextSVG = (props) => {
 };
 
 SpotifyLogoWithTextSVG.propTypes = {
-  width: PropTypes.number, height: PropTypes.number,
+  width: PropTypes.string, height: PropTypes.string,
 };
 
 export default SpotifyLogoWithTextSVG;
