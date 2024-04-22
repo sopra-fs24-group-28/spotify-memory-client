@@ -24,117 +24,57 @@ class Game {
     this.activePlayerStreak =  gameStart.activePlayerid; //todo change name
     this.history = gameStart.history;
     this.scoreboard = gameStart.scoreboard;
-    this.activePlayer = gameStart; //todo change name to sync with backend
-    this.quickTurn =  gameStart.activePlayerid;//todo change name
-    this.quickTurnActive =  gameStart.activePlayerid; //todo change name
+    this.activePlayer = gameStart?.activePlayer; //todo change name to sync with backend
+    this.quickTurn =  gameStart?.activePlayerid;//todo change name
+    this.quickTurnActive =  gameStart?.activePlayerid; //todo change name
   }
-  // get gameParameter() {
-  //   return this._gameParameter;
-  // }
 
-  // set gameParameter(value) {
-  //   this._gameParameter = value;
-  // }
+  // Method to serialize the Game object to a plain object
+  public serialize = () => {
+    return {
+      gameId: this.gameId,
+      gameParameters: this.gameParameters, // Ensure GameParameter class also has a serialize method
+      playerList: this.playerList.map(player => player ? player : null), // Ensure User class has a serialize method
+      gameState: this.gameState,
+      hostId: this.hostId,
+      activePlayerStreak: this.activePlayerStreak,
+      history: this.history,
+      scoreboard: this.scoreboard,
+      activePlayer: this.activePlayer,
+      quickTurnActive: this.quickTurnActive,
+      quickTurn: this.quickTurn
+    };
+  }
 
-  // get gameId() {
-  //   return this._gameId;
-  // }
+  // Static method to deserialize the object back to a Game instance
+  static deserialize = (data: any) => {
+    console.log("deserializin", data);
+    const gameStart = {
+      gameParameters: new GameParameter(data.gameParameters), // Ensure GameParameter has a deserialize method
+      playerList: data.playerList.map(playerData => playerData ? new User(playerData) : null), // Ensure User has a deserialize method
+      gameState: data.gameState,
+      hostId: data.hostId,
+      activePlayerid: data.activePlayerStreak,
+      history: data.history,
+      scoreboard: data.scoreboard,
+      activePlayer: data.activePlayer,
+      quickTurn: data.quickTurn,
+      quickTurnActive: data.quickTurnActive
+    };
 
-  // set gameId(value) {
-  //   this._gameId = value;
-  // }
-
-  // get activePlayer() {
-  //   return this._activePlayer;
-  // }
-
-  // set activePlayer(value) {
-  //   this._activePlayer = value;
-  // }
-
-  // get activePlayerStreak() {
-  //   return this._activePlayerStreak;
-  // }
-
-  // set activePlayerStreak(value) {
-  //   this._activePlayerStreak = value;
-  // }
-
-  // get state() {
-  //   return this._state;
-  // }
-
-  // set state(value) {
-  //   this._state = value;
-  // }
-
-  // get host() {
-  //   return this._host;
-  // }
-
-  // set host(value) {
-  //   this._host = value;
-  // }
-
-  // get parameters() {
-  //   return this._parameters;
-  // }
-
-  // set parameters(value) {
-  //   this._parameters = value;
-  // }
-
-  // get history() {
-  //   return this._history;
-  // }
-
-  // set history(value) {
-  //   this._history = value;
-  // }
-
-  // get scoreboard() {
-  //   return this._scoreboard;
-  // }
-
-  // set scoreboard(value) {
-  //   this._scoreboard = value;
-  // }
-
-  // get playerList() {
-  //   return this.playerList;
-  // }
-
-  // set playerList(value) {
-  //   this.playerList = value;
-  // }
-
-  // get quickTurn() {
-  //   return this._quickTurn;
-  // }
-
-  // set quickTurn(value) {
-  //   this._quickTurn = value;
-  // }
-
-  // get quickTurnActive() {
-  //   return this._quickTurnActive;
-  // }
-
-  // set quickTurnActive(value) {
-  //   this._quickTurnActive = value;
-  // }
-
+    return new Game(data.gameId, gameStart);
+  }
 
   // Additional setters for each property should be defined here...
   public doUpdate = (key: string, value: any) => {
     if (key === "playerList") {
       this.playerList = value;
     }
+    else if (key === "gameState") {
+      this.gameState = value;
+    }
     else if(key === "gameParameters") {
       this.gameParameters = value;
-    }
-    else if(key === "gameState") {
-      this.gameState = value;
     }
     else if(key === "hostId") {
       this.hostId = value;
@@ -152,6 +92,7 @@ class Game {
       this.scoreboard = value;
     }
     else if(key === "activePlayer") {
+      console.log("updating active player", value)
       this.activePlayer = value;
     }
     else if(key === "quickTurn") {
@@ -160,8 +101,8 @@ class Game {
     else if(key === "quickTurnActive") {
       this.quickTurnActive = value;
     }
-  else {
-      console.error("NOT IMPLEMENTED");
+    else {
+      console.error("NOT IMPLEMENTED", key);
     }
 
     return this;
