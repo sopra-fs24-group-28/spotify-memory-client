@@ -33,6 +33,7 @@ const LobbyWaitingRoom = () => {
         if (changed) {
           newGame = newGame.doUpdate(key, value);
           console.log("doing",  {...prevGame});
+
           return {...newGame};
         }
       }
@@ -51,6 +52,7 @@ const LobbyWaitingRoom = () => {
       //console.log(gameStart);
       // instantiating a lobby object here instead of a game object
       // as the ws returns data appropriate for this class. But object is later cast into game when appropriate
+
       return new Game(initialGameId, gameStart);
 
     } catch (error) {
