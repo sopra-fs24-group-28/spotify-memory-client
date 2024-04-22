@@ -1,16 +1,20 @@
+import GameParameter from "./GameParameter";
+import User from "./User";
+
 class Game {
-  constructor(gameStart) {
-    this._gameId = gameStart.gameId;
-    this._activePlayer = gameStart.activePlayerid; //todo change name to sync with backend
-    this._activePlayerStreak =  gameStart.activePlayerid; //todo change name
-    this._state = gameStart.state;
-    this._host = gameStart.host;
-    this._gameParameters = gameStart.gameParameters;
-    this._history = gameStart.history;
-    this._scoreboard = gameStart.scoreboard;
-    this._players = gameStart.players;
-    this._quickTurn =  gameStart.activePlayerid;//todo change name
-    this._quickTurnActive =  gameStart.activePlayerid; //todo change name
+  constructor(gameId, gameStart) {    
+    this.gameId = gameId;
+    this.gameParameters = new GameParameter(gameStart.gameParameters);
+    this.playerList = gameStart?.playerList?.map(userData => userData ? new User(userData) : null) || [];
+    this.gameState = gameStart?.gameState;
+    this.hostId = gameStart?.hostId;
+
+    this.activePlayerStreak =  gameStart.activePlayerid; //todo change name
+    this.history = gameStart.history;
+    this.scoreboard = gameStart.scoreboard;
+    this.activePlayer = gameStart; //todo change name to sync with backend
+    this.quickTurn =  gameStart.activePlayerid;//todo change name
+    this.quickTurnActive =  gameStart.activePlayerid; //todo change name
   }
   get gameParameter() {
     return this._gameParameter;
@@ -110,6 +114,12 @@ class Game {
 
 
   // Additional setters for each property should be defined here...
+  updateGame(key, value) {
+    // DONT USE THIS
+    this[key] = value;
+
+    return this; 
+  }
 
   // Methods to manage players
   addPlayer(userID) {

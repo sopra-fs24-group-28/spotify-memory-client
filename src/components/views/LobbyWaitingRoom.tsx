@@ -6,7 +6,7 @@ import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 import { api, handleError } from "helpers/api";
 import SpotifyLogoWithTextSVG from "../ui/icons-svg/SpotifyLogoWithTextSVG";
 import WSHandler from "../../helpers/wsHandler.js";
-import Lobby from "models/Lobby";
+import Game from "models/Game";
 
 
 const LobbyWaitingRoom = () => {
@@ -14,21 +14,47 @@ const LobbyWaitingRoom = () => {
   const location = useLocation();
   // TODO: handle situation where location.state.lobby is undefined
   const initialGameId = location.state.lobby.lobbyId;
-  const [game, setGame] = useState();
+  const [game, setGame] = useState<Game>();
   
   
   //Websocket specific
 
   const receiverFunction = (newDataRaw) => {
-    console.log("WS received new data: ", newDataRaw);
-    // const parsedData = JSON.parse(newDataRaw.body).gameChangesDTO;
-    // const gameData = parsedData.game;
+    const data = JSON.parse(newDataRaw.body); 
+    // handling only gameChanges here, because other parts of game will not change in wainting room
+    const gameChanges = data.gameChangesDto; 
+    if (!gameChanges.changed) { return; }
+    else { 
+      setGame(prevGame => {
+        let newGame: Game = prevGame; 
+        for (const key in gameChanges.value) {
+          const changed = gameChanges.value[key].changed;
+          const value = gameChanges.value[key].value;
+          if (changed) {
+            newGame = newGame.updateGame(key, value)
+          }
+        }
+        console.log(newGame); 
+        
+        return newGame;
+      })
+    }
 
-    // if (gameData.changed) {
-    //   setGame(prev => {
-    //     return Game(gameData.value);
-    //   });
-    // }
+    // setGame(prevGame => {
+      
+    //   for (const key in gameChanges.value) { 
+    //     const changed = gameChanges[key].changed;
+    //     const value = gameChanges[key].value;
+    //     console.log(key, changed, value);
+    //     if (changed) {
+    //       console.log(key, value);
+    //       const newGame = prevGame.update(key, value)
+          
+    //       return newGame;
+    //     }
+    //   } 
+      
+    // })
   };
   const ws = new WSHandler(`/games/${initialGameId}`, 
                           `/queue/games/${initialGameId}`, 
@@ -39,10 +65,10 @@ const LobbyWaitingRoom = () => {
     try {
       const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
-      
+      console.log(gameStart);
       // instantiating a lobby object here instead of a game object
       // as the ws returns data appropriate for this class. But object is later cast into game when appropriate
-      return new Lobby(initialGameId, gameStart); 
+      return new Game(initialGameId, gameStart); 
 
     } catch (error) {
       console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
