@@ -26,18 +26,18 @@ const LobbyWaitingRoom = () => {
     if (!gameChanges.changed) { return; }
     else { 
       setGame(prevGame => {
-      let newGame: Game = {...prevGame}; 
-      newGame.echo("hello")
+      let newGame: Game = {...prevGame};
       for (const key in gameChanges.value) {
         const changed = gameChanges.value[key].changed;
         const value = gameChanges.value[key].value;
-        console.log(key, changed, value);
+        //console.log(key, changed, value);
         if (changed) {
-          // newGame = newGame.doUpdate(key, value);
+          newGame = newGame.doUpdate(key, value);
+          console.log("doing",  {...prevGame});
+          return {...newGame};
         }
       }
-      return newGame;
-      
+
     })
   }};
   const ws = new WSHandler(`/games/${initialGameId}`, 
@@ -49,10 +49,10 @@ const LobbyWaitingRoom = () => {
     try {
       const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
-      console.log(gameStart);
+      //console.log(gameStart);
       // instantiating a lobby object here instead of a game object
       // as the ws returns data appropriate for this class. But object is later cast into game when appropriate
-      return new Game(initialGameId, gameStart); 
+      return new Game(initialGameId, gameStart);
 
     } catch (error) {
       console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
@@ -62,18 +62,18 @@ const LobbyWaitingRoom = () => {
   useEffect(() => {
     const fetchDataAndConnect = async () => {
       const initGame = await fetchData();
-      console.log("initial game", initGame);
+      //console.log("initial game", initGame);
       setGame(initGame);
       await ws.connect();
     };
     
     fetchDataAndConnect();
-    console.log("here");
+    //console.log("here");
   }, []);
   
   useEffect(() => {
     console.log("game changed");
-    console.log(game);
+    //console.log(game);
     // if (game?.gameState === "ONPLAY"){
     //   navigate(`game/${game.gameId}`, { state: {ws: ws, gameId: game.gameId } })
     // }

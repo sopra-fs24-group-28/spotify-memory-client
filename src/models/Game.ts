@@ -1,11 +1,23 @@
 import GameParameter from "./GameParameter";
 import User from "./User";
+import { Change } from "../communication/websocket/dto/Change";
 
 class Game {
-  constructor(gameId, gameStart) {    
+  private gameId: any;
+  private gameParameters: any;
+  private playerList: any;
+  private gameState: Change | undefined;
+  private hostId: Change | undefined;
+  private activePlayerStreak: any;
+  private history: any;
+  private scoreboard: any;
+  private activePlayer: any;
+  private quickTurnActive: any;
+  private quickTurn: any;
+  constructor(gameId: any, gameStart) {
     this.gameId = gameId;
     this.gameParameters = new GameParameter(gameStart.gameParameters);
-    this.playerList = gameStart?.playerList?.map(userData => userData ? new User(userData) : null) || [];
+    this.playerList = gameStart.playerList?.map(userData => userData ? new User(userData) : null) || [];
     this.gameState = gameStart?.gameState;
     this.hostId = gameStart?.hostId;
 
@@ -114,9 +126,7 @@ class Game {
 
 
   // Additional setters for each property should be defined here...
-  doUpdate(key, value) {
-    console.log("doing update", key, value);
-    
+  public doUpdate = (key: string, value: any) => {
     if (key === "playerList") {
       this.playerList = value;
     } else {
@@ -126,14 +136,13 @@ class Game {
     return this;
   }
 
-  echo(string) {
-    console.log("echo", string);
+  setPlayers(players){
+    this.playerList = players?.map(userData => userData ? new User(userData) : null) || [];
   }
-
 
   // Methods to manage players
   addPlayer(userID) {
-    this._players.push(userID);
+    this.playerList.push(userID);
   }
 
   removePlayer(userID) {

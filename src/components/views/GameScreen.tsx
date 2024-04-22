@@ -35,7 +35,7 @@ const GameScreen = () => {
     if (gameData.changed) {
       setGame(prev => {
 
-        return Game(gameData.value);
+        //return Game(gameData.value);
       });
     }
 
@@ -47,7 +47,7 @@ const GameScreen = () => {
       console.log(initialGameId);
       const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
-      setGame(Game(gameStart));
+      //setGame(Game(gameStart));
 
       return game;
 
