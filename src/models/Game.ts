@@ -129,7 +129,38 @@ class Game {
   public doUpdate = (key: string, value: any) => {
     if (key === "playerList") {
       this.playerList = value;
-    } else {
+    }
+    else if(key === "gameParameters") {
+      this.gameParameters = value;
+    }
+    else if(key === "gameState") {
+      this.gameState = value;
+    }
+    else if(key === "hostId") {
+      this.hostId = value;
+    }
+    else if(key === "hostId") {
+      this.hostId = value;
+    }
+    else if(key === "activePlayerStreak") {
+      this.activePlayerStreak = value;
+    }
+    else if(key === "history") {
+      this.history = value;
+    }
+    else if(key === "scoreboard") {
+      this.scoreboard = value;
+    }
+    else if(key === "activePlayer") {
+      this.activePlayer = value;
+    }
+    else if(key === "quickTurn") {
+      this.quickTurn = value;
+    }
+    else if(key === "quickTurnActive") {
+      this.quickTurnActive = value;
+    }
+  else {
       console.error("NOT IMPLEMENTED");
     }
 

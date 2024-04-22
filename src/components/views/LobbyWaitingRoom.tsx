@@ -30,7 +30,6 @@ const LobbyWaitingRoom = () => {
       for (const key in gameChanges.value) {
         const changed = gameChanges.value[key].changed;
         const value = gameChanges.value[key].value;
-        //console.log(key, changed, value);
         if (changed) {
           newGame = newGame.doUpdate(key, value);
           console.log("doing",  {...prevGame});
