@@ -31,9 +31,9 @@ const LobbyObject = (props) => {
   return (
     <div className="playlist-join-card">
       <div className="playlist-cover first-column-item">
-        <img src={lobby.gameParameters.playlistImageUrl} alt="RapCaviar" className="playlist-image" />
+        <img src={lobby.gameParameters.playlist.playlistImageUrl} alt="RapCaviar" className="playlist-image" />
       </div>
-      <span className="playlist-name second-column-top-item">{lobby.gameParameters.playlist}</span>
+      <span className="playlist-name second-column-top-item">{lobby.gameParameters.playlist.playlistName}</span>
       <div className="user-avatars second-column-bottom-item">
         {lobby.playerList.map((user) => (
           <li key={user.userId}>

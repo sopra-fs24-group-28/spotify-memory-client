@@ -22,7 +22,7 @@ const LobbyOverview = () => {
       const updatedLobbies = [];
       for (const key in newData) { 
         const update = newData[key];
-        const lobby = prevStates.find(lobs => lobs.lobbyId === key);
+        const lobby = prevStates.pop(lobs => lobs.lobbyId === key);
         console.log(key, update, lobby)
         // remove lobbies which are closed
         if (update.gameState && update.gameState.value === "FINISHED") {
@@ -56,6 +56,11 @@ const LobbyOverview = () => {
         }
       }
 
+      // reinsert all lobbies unaffected by change into state 
+      for (const lobbyKey in prevStates) {
+        updatedLobbies.push(prevStates[lobbyKey]);
+      }
+
       return updatedLobbies; 
     });
   };
@@ -72,6 +77,7 @@ const LobbyOverview = () => {
   useEffect(() => {
     const fetchData = async () => {
       // Perform asynchronous operation to fetch initial data
+      // TODO: remove fetchData from class into here
       const data = await wsHandler.fetchData();
       setReceivedGameStates(data); // this displays the data
       wsHandler.connect()
@@ -104,7 +110,7 @@ const LobbyOverview = () => {
       ))}
       </div>
     )
-  } else if (receivedGameStates?.length === 0) {
+  } else {
     content = (
       <div className="befirst">
         Be the first to start a game!

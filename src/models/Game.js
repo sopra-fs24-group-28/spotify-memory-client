@@ -5,7 +5,7 @@ class Game {
     this._activePlayerStreak =  gameStart.activePlayerid; //todo change name
     this._state = gameStart.state;
     this._host = gameStart.host;
-    this._gameParameter = gameStart.gameParameters;
+    this._gameParameters = gameStart.gameParameters;
     this._history = gameStart.history;
     this._scoreboard = gameStart.scoreboard;
     this._players = gameStart.players;

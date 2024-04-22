@@ -4,12 +4,12 @@ class GameParameter {
     this.numOfSets = data.numOfSets;
     this.numOfCardsPerSet = data.numOfCardsPerSet;
     this.gameCategory = data.gameCategory;
-    this.playlist = data.playlist; // TODO: this shoudl either be a string of playlist name or an object containing it
+    this.playlist = data.playlist;
     this.streakStart = data.streakStart;
     this.streakMultiplier = data.streakMultiplier;
     this.timePerTurn = data.timePerTurn;
     this.timePerTurnPowerUp = data.timePerTurnPowerUp;
-    this.playlistImageUrl = "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" ; // TODO: placeholder, is this covered in this.playlist? 
+    // this.playlistImageUrl = "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" ; // TODO: placeholder, is this covered in this.playlist? 
     Object.assign(this, data);
   }
 }
