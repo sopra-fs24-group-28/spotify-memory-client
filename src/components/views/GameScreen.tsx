@@ -58,7 +58,7 @@ const GameScreen = () => {
 
   useEffect(() => {
     const fetchDataAndConnect = async () => {
-      await fetchData();
+      // await fetchData();
       console.log("fetchDataAndConnect called");
       console.log(game);
       await ws.setReceiverFunction(receiverFunction);

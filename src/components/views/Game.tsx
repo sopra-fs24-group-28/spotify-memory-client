@@ -20,6 +20,8 @@ Player.propTypes = {
   user: PropTypes.object,
 };
 
+// TODO: remove this component
+
 //added comment to make initial push
 const Game = (gameStart: any) => {
   // use react-router-dom's hook to access navigation, more info: https://reactrouter.com/en/main/hooks/use-navigate 
