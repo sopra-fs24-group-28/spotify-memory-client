@@ -16,110 +16,120 @@ class Game {
     this.quickTurn =  gameStart.activePlayerid;//todo change name
     this.quickTurnActive =  gameStart.activePlayerid; //todo change name
   }
-  get gameParameter() {
-    return this._gameParameter;
-  }
+  // get gameParameter() {
+  //   return this._gameParameter;
+  // }
 
-  set gameParameter(value) {
-    this._gameParameter = value;
-  }
+  // set gameParameter(value) {
+  //   this._gameParameter = value;
+  // }
 
-  get gameId() {
-    return this._gameId;
-  }
+  // get gameId() {
+  //   return this._gameId;
+  // }
 
-  set gameId(value) {
-    this._gameId = value;
-  }
+  // set gameId(value) {
+  //   this._gameId = value;
+  // }
 
-  get activePlayer() {
-    return this._activePlayer;
-  }
+  // get activePlayer() {
+  //   return this._activePlayer;
+  // }
 
-  set activePlayer(value) {
-    this._activePlayer = value;
-  }
+  // set activePlayer(value) {
+  //   this._activePlayer = value;
+  // }
 
-  get activePlayerStreak() {
-    return this._activePlayerStreak;
-  }
+  // get activePlayerStreak() {
+  //   return this._activePlayerStreak;
+  // }
 
-  set activePlayerStreak(value) {
-    this._activePlayerStreak = value;
-  }
+  // set activePlayerStreak(value) {
+  //   this._activePlayerStreak = value;
+  // }
 
-  get state() {
-    return this._state;
-  }
+  // get state() {
+  //   return this._state;
+  // }
 
-  set state(value) {
-    this._state = value;
-  }
+  // set state(value) {
+  //   this._state = value;
+  // }
 
-  get host() {
-    return this._host;
-  }
+  // get host() {
+  //   return this._host;
+  // }
 
-  set host(value) {
-    this._host = value;
-  }
+  // set host(value) {
+  //   this._host = value;
+  // }
 
-  get parameters() {
-    return this._parameters;
-  }
+  // get parameters() {
+  //   return this._parameters;
+  // }
 
-  set parameters(value) {
-    this._parameters = value;
-  }
+  // set parameters(value) {
+  //   this._parameters = value;
+  // }
 
-  get history() {
-    return this._history;
-  }
+  // get history() {
+  //   return this._history;
+  // }
 
-  set history(value) {
-    this._history = value;
-  }
+  // set history(value) {
+  //   this._history = value;
+  // }
 
-  get scoreboard() {
-    return this._scoreboard;
-  }
+  // get scoreboard() {
+  //   return this._scoreboard;
+  // }
 
-  set scoreboard(value) {
-    this._scoreboard = value;
-  }
+  // set scoreboard(value) {
+  //   this._scoreboard = value;
+  // }
 
-  get players() {
-    return this._players;
-  }
+  // get playerList() {
+  //   return this.playerList;
+  // }
 
-  set players(value) {
-    this._players = value;
-  }
+  // set playerList(value) {
+  //   this.playerList = value;
+  // }
 
-  get quickTurn() {
-    return this._quickTurn;
-  }
+  // get quickTurn() {
+  //   return this._quickTurn;
+  // }
 
-  set quickTurn(value) {
-    this._quickTurn = value;
-  }
+  // set quickTurn(value) {
+  //   this._quickTurn = value;
+  // }
 
-  get quickTurnActive() {
-    return this._quickTurnActive;
-  }
+  // get quickTurnActive() {
+  //   return this._quickTurnActive;
+  // }
 
-  set quickTurnActive(value) {
-    this._quickTurnActive = value;
-  }
+  // set quickTurnActive(value) {
+  //   this._quickTurnActive = value;
+  // }
 
 
   // Additional setters for each property should be defined here...
-  updateGame(key, value) {
-    // DONT USE THIS
-    this[key] = value;
+  doUpdate(key, value) {
+    console.log("doing update", key, value);
+    
+    if (key === "playerList") {
+      this.playerList = value;
+    } else {
+      console.error("NOT IMPLEMENTED");
+    }
 
-    return this; 
+    return this;
   }
+
+  echo(string) {
+    console.log("echo", string);
+  }
+
 
   // Methods to manage players
   addPlayer(userID) {

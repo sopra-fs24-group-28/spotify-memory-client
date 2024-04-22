@@ -26,36 +26,20 @@ const LobbyWaitingRoom = () => {
     if (!gameChanges.changed) { return; }
     else { 
       setGame(prevGame => {
-        let newGame: Game = prevGame; 
-        for (const key in gameChanges.value) {
-          const changed = gameChanges.value[key].changed;
-          const value = gameChanges.value[key].value;
-          if (changed) {
-            newGame = newGame.updateGame(key, value)
-          }
+      let newGame: Game = {...prevGame}; 
+      newGame.echo("hello")
+      for (const key in gameChanges.value) {
+        const changed = gameChanges.value[key].changed;
+        const value = gameChanges.value[key].value;
+        console.log(key, changed, value);
+        if (changed) {
+          // newGame = newGame.doUpdate(key, value);
         }
-        console.log(newGame); 
-        
-        return newGame;
-      })
-    }
-
-    // setGame(prevGame => {
+      }
+      return newGame;
       
-    //   for (const key in gameChanges.value) { 
-    //     const changed = gameChanges[key].changed;
-    //     const value = gameChanges[key].value;
-    //     console.log(key, changed, value);
-    //     if (changed) {
-    //       console.log(key, value);
-    //       const newGame = prevGame.update(key, value)
-          
-    //       return newGame;
-    //     }
-    //   } 
-      
-    // })
-  };
+    })
+  }};
   const ws = new WSHandler(`/games/${initialGameId}`, 
                           `/queue/games/${initialGameId}`, 
                           `app/games/${initialGameId}`, 
@@ -78,20 +62,22 @@ const LobbyWaitingRoom = () => {
   useEffect(() => {
     const fetchDataAndConnect = async () => {
       const initGame = await fetchData();
+      console.log("initial game", initGame);
       setGame(initGame);
       await ws.connect();
     };
     
     fetchDataAndConnect();
+    console.log("here");
   }, []);
   
-  // useEffect(() => {
-  //   console.log("game changed");
-  //   console.log(game);
-  //   if (game?.gameState === "ONPLAY"){
-  //     navigate(`game/${game.gameId}`, { state: {ws: ws, gameId: game.gameId } })
-  //   }
-  // }, [game]);
+  useEffect(() => {
+    console.log("game changed");
+    console.log(game);
+    // if (game?.gameState === "ONPLAY"){
+    //   navigate(`game/${game.gameId}`, { state: {ws: ws, gameId: game.gameId } })
+    // }
+  }, [game]);
 
 
   //ComponentSpecific

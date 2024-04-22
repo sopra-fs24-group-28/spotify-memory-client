@@ -9,7 +9,7 @@ import cardData from "../../models/SetofCardData.js";
 import Card from "../ui/Card";
 import wsHandler from "../../helpers/wsHandler.js";
 import { api, handleError } from "helpers/api";
-import Game from "./Game";
+import Game from "models/Game";
 import { Simulate } from "react-dom/test-utils";
 import error = Simulate.error;
 
