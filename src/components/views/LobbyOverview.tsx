@@ -10,59 +10,68 @@ import Lobby from "models/Lobby";
 
 const LobbyOverview = () => {
   const navigate = useNavigate();
-  const [receivedGameStates, setReceivedGameStates] = useState([]);
-  
+  const [receivedGameStates, setReceivedGameStates] = useState<Lobby[]>([]);
+
   // creating stomp client
   const restEndpoint = "/games"; //todo change to games
   const wsEndpoint = "/topic/overview";
   const wsDestination = "/app/overview";
   const receiverFunction = (newDataRaw) => {
-    const newData = JSON.parse(newDataRaw.body).gameMap;
-    setReceivedGameStates(prevStates => {
-      const updatedLobbies = [];
-      for (const key in newData) { 
-        const update = newData[key];
-        const lobby = prevStates.pop(lobs => lobs.lobbyId === key);
-        console.log(key, update, lobby)
-        // remove lobbies which are closed
-        if (update.gameState && update.gameState.value === "FINISHED") {
-          continue; 
-        }
-        
-        if (lobby) {
-          // update lobby if changed
-          if (update.gameParameters.changed) {
-            lobby.setGameParameters(update.gameParameters.value);
-          }
-          if (update.playerList.changed) {
-            lobby.setPlayerList(update.playerList.value);
-          }
-          if (update.gameState.changed) {
-            lobby.setGameState(update.gameState.value);
-          }
-          if (update.hostId.changed) {
-            lobby.setHostId(update.hostId.value);
-          }
+    const data = JSON.parse(newDataRaw.body).gameMap
+    const key = Object.keys(data)?.[0]
+    const update = data[key];
+    console.log(update);
+    const updatedLobbies = [];
+    let makeNewLobby = true;
+    setReceivedGameStates(prevState => {
+
+      for (const lobbyKey in prevState) {
+        const lobby = prevState[lobbyKey];
+        // case 0: append all unaffedcted lobbies to list
+        if (lobby.lobbyId !== key) {
           updatedLobbies.push(lobby);
-              
         } else {
-          // creating new lobby if not already existing
-          const newLobby = new Lobby(key, {});
-          newLobby.setGameParameters(update.gameParameters.value);
-          newLobby.setPlayerList(update.playerList.value);
-          newLobby.setGameState(update.gameState.value);
-          newLobby.setHostId(update.hostId.value);
-          updatedLobbies.push(newLobby);
+          // case 1: lobby closed
+          if (update.gameState?.changed && update.gameState?.value === "FINISHED") {
+            makeNewLobby = false;
+            continue;
+          } else {
+            makeNewLobby = false;
+
+            if (update.gameParameters.changed) {
+              lobby.setGameParameters(update.gameParameters.value);
+            }
+            if (update.playerList.changed) {
+              lobby.setPlayerList(update.playerList.value);
+            }
+            if (update.gameState.changed) {
+              lobby.setGameState(update.gameState.value);
+            }
+            if (update.hostId.changed) {
+              lobby.setHostId(update.hostId.value);
+            }
+            updatedLobbies.push(lobby)
+            continue;
+          }
         }
+
+      }
+      // case 3: new lobby created
+      if (makeNewLobby) {
+        const newLobby = new Lobby(key, {});
+        console.log("making a new lobby");
+        newLobby.setGameParameters(update.gameParameters.value);
+        newLobby.setPlayerList(update.playerList.value);
+        newLobby.setGameState(update.gameState.value);
+        newLobby.setHostId(update.hostId.value);
+        updatedLobbies.push(newLobby);
       }
 
-      // reinsert all lobbies unaffected by change into state 
-      for (const lobbyKey in prevStates) {
-        updatedLobbies.push(prevStates[lobbyKey]);
-      }
 
-      return updatedLobbies; 
-    });
+      return updatedLobbies;
+    })
+
+
   };
   
 
@@ -82,7 +91,7 @@ const LobbyOverview = () => {
       setReceivedGameStates(data); // this displays the data
       wsHandler.connect()
     };
-
+    console.log("REST ENDPOINT CALLED!!!!!!!!!!!!!!!!!!!!!!!!!");
     fetchData();
     
 
