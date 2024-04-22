@@ -9,7 +9,7 @@ import cardData from "../../models/SetofCardData.js";
 import Card from "../ui/Card";
 import wsHandler from "../../helpers/wsHandler.js";
 import { api, handleError } from "helpers/api";
-import Game from "./Game";
+import Game from "models/Game";
 import { Simulate } from "react-dom/test-utils";
 import error = Simulate.error;
 
@@ -35,7 +35,7 @@ const GameScreen = () => {
     if (gameData.changed) {
       setGame(prev => {
 
-        return Game(gameData.value);
+        //return Game(gameData.value);
       });
     }
 
@@ -47,7 +47,7 @@ const GameScreen = () => {
       console.log(initialGameId);
       const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
-      setGame(Game(gameStart));
+      //setGame(Game(gameStart));
 
       return game;
 
