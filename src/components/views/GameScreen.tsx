@@ -17,12 +17,10 @@ const GameScreen = () => {
     const initialState = location.state.cardsStates.cardStates;
     return Object.entries(initialState).map(([cardId, cardState]) => new CardObject(cardId, cardState));
   });
-  const [cardContent, setCardContent] = useState(location.state.cardContent);
   const [scoreBoard, setScoreBoard] = useState(location.state.scoreBoard);
 
   const receiverFunction = (newDataRaw) => {
-    const data = JSON.parse(newDataRaw.body);
-    // handling only gameChanges here, because other parts of game will not change in wainting room
+    const data = JSON.parse(newDataRaw.body);    
     const gameChanges = data.gameChangesDto;
     if (!gameChanges.changed) {
       return;
@@ -41,17 +39,39 @@ const GameScreen = () => {
         return { ...newGame };
       });
     }
-    // store all other ws updates to send on later
+    
+    // setting up new cards 
     if (data.cardsStates.changed) {
-      setCardsStates(data.cardsStates.value);
+      const newCards = [];
+      for (const cardId in data.cardsStates.value.cardStates) {
+        newCards.push(new CardObject(cardId, data.cardsStates.value.cardStates[cardId]));
+      }
+      setCardsStates(newCards);
     }
+    
     if (data.cardContent.changed) {
-      setCardContent(data.cardContent.value);
-    }
+      setCardsStates(prevCards => {
+        const cardToUpdate = data.cardContent.value.cardId;
+        const newCards = [];
+        for (const cardIdx in prevCards) {
+          const card: CardObject = prevCards[cardIdx];
+          console.log(data.cardContent.value)
+          console.log(card, card.cardId, cardToUpdate);
+          if (card.cardId === String(cardToUpdate)) {
+            console.log("match");
+            card.setContent( { ...data.cardContent.value })
+          }
+          newCards.push(card);
+        }
+        console.log("new cards + content", newCards);
+        
+        return newCards;
+    })}
+
     if (data.scoreBoard.changed) {
-      setScoreBoard(data.scoreBoard.value);
+      console.error("Scoreboard changed, but not implemented yet");
     }
-    console.log(data);
+    // console.log(data);
   };
   const ws = new WSHandler(`/games/${game.gameId}`,
     `/queue/games/${game.gameId}`,
@@ -60,9 +80,8 @@ const GameScreen = () => {
 
 
   useEffect(() => {
-    console.log(game);
-    console.log(cardsStates);
-    console.log(cardContent);
+    console.log("new game state", game);
+    console.log("new card state", cardsStates);
     console.log(scoreBoard);
 
     const connectToWs = async () => {
@@ -75,7 +94,11 @@ const GameScreen = () => {
 
   function flip(card) {
     console.log("flipped");
-    card.cardState = "FACEUP"
+    if (card.cardState === "FACEDOWN") {
+      card.cardState = "FACEUP"
+    } else {
+      console.log("cannot flip card that's already in play");
+    }
     ws.send(JSON.stringify({ "cardId" : Number(card.cardId)} ));
   }
 
