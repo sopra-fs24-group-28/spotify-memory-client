@@ -15,7 +15,8 @@ const GameScreen = () => {
   const [cardsStates, setCardsStates] = useState(() => {
     // Assuming location.state.cardsStates has a similar structure to the provided "cardsStates" value
     const initialState = location.state.cardsStates.cardStates;
-    return Object.entries(initialState).map(([cardId, cardState]) => new CardObject(cardId, cardState));
+    
+    return Object.entries(initialState).map(([cardId, cardState]) => new CardObject(cardId, cardState)); 
   });
   const [scoreBoard, setScoreBoard] = useState(location.state.scoreBoard);
 

@@ -15,5 +15,6 @@ class CardObject {
     this.songId = content.songId;
     this.imageUrl = content.imageUrl;
   }
+} 
 
-} export default CardObject
+export default CardObject
