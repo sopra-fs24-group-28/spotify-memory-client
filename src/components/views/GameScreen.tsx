@@ -95,11 +95,11 @@ const GameScreen = () => {
 
   function flip(card) {
     console.log("flipped");
-    if (card.cardState === "FACEDOWN") {
-      card.cardState = "FACEUP"
-    } else {
-      console.log("cannot flip card that's already in play");
-    }
+    // if (card.cardState === "FACEDOWN") {
+    //   card.cardState = "FACEUP"
+    // } else {
+    //   console.log("cannot flip card that's already in play");
+    // }
     ws.send(JSON.stringify({ "cardId" : Number(card.cardId)} ));
   }
 
@@ -318,7 +318,7 @@ const GameScreen = () => {
           <div className="BaseDivGame col6">
             <div className="basicCardContainer">
               {cardsStates.map((card, index) => (
-                <Card key={card.cardId} isFlipped={card.cardState} flip={() => flip(card)} />))}
+                <Card key={card.cardId} isFlipped={card.cardState} cardobj={card} flip={() => flip(card)} />))}
             </div>
           </div>
         </div>

@@ -141,9 +141,9 @@
 }
 
 
-.card.flipped {
+.card.card-back {
   transform: rotateY(180deg);
-  background-color: $backgroundgrey;
+  background-color: red;
   color: white;
 }
 
@@ -153,7 +153,7 @@
 }
 
 
-.card .card-back {
+.card .flipped {
   color: $textColor;
   transform: rotateY(180deg);
 }

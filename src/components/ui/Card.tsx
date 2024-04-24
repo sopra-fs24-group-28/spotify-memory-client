@@ -1,24 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import "styles/views/Game.scss";
 
 
 export default function Card (props) {
+  useEffect(() => {
+    console.log(props.cardobj);
+  }, []);
 
   let card: any;
-  if (!props.isFlipped) {
-    card = <div className={`card${props.isFlipped === "FACEDOWN" ? " flipped" : "greyed"}`} onClick={props.flip}>
+  if ((props.isFlipped === "FACEDOWN")) {
+    card = <div className={`card${props.isFlipped === "FACEUP" ? " flipped" : " card-back"}`} onClick={props.flip}>
       <div className="card-inner">
         <div className={"card-front"}>{props.content}</div>
       </div>
     </div>;
   } else {
-    card = <div className={`card${props.isFlipped === "FACEDOWN" ? " flipped" : "greyed"}`} onClick={props.flip}>
+    card = <div className={`card${props.isFlipped === "FACEUP" ? " flipped" : " card-back"}`} onClick={props.flip}>
       <div className="card-inner">
         <div className="albumcover">
           <img src="" alt="albumcover" />
         </div>
-        <div className="songtitle">Song XY</div>
+        <div className="songtitle">{props.cardobj.cardId}</div>
         <div className="artisttitle">DummyArtist</div>
       </div>
     </div>;
@@ -29,7 +32,7 @@ export default function Card (props) {
 }
 
 Card.propTypes = {
-  isFlipped: PropTypes.string, flip: PropTypes.func, content: PropTypes.string
+  isFlipped: PropTypes.string, flip: PropTypes.func, content: PropTypes.string, cardobj: PropTypes.object
 
 
 };
