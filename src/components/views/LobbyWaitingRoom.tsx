@@ -87,15 +87,13 @@ const LobbyWaitingRoom = () => {
     // console.log("game changed");
     // console.log(game);
     if (game?.gameState === "ONPLAY"){
-      ws.disconnect()
+      async () => { await ws.disconnect() } 
       navigate(`/game/${game.gameId}`, { state: {
           game : game.serialize(),
           cardsStates: cardsStates,
           cardContent: cardContent,
           scoreBoard : scoreBoard
-
-        } })
-
+      }})
     }
   }, [game]);
 
@@ -109,8 +107,7 @@ const LobbyWaitingRoom = () => {
       const response = await api.delete(`games/${initialGameId}/player`);
       if (response.status === 204) {
         await ws.disconnect()
-        navigate("/lobbyOverview"); //Todo: anpassen wenn klar wie
-
+        navigate("/lobbyOverview");
       } else {
         alert("There was a error when trying to leave the lobby. Please try again later");
       }

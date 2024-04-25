@@ -14,6 +14,13 @@ const track = {
   ],
 };
 
+declare global {
+  interface Window {
+    onSpotifyWebPlaybackSDKReady?: any;
+    Spotify?: any;
+  }
+}
+
 function WebPlayback(props) {
 
   const [is_paused, setPaused] = useState(false);
@@ -23,8 +30,7 @@ function WebPlayback(props) {
   const [volume, setVolume] = useState(0.5);
   const [deviceId, setDeviceId] = useState("");
 
-
-
+  
   const loadSpotifyPlayer = () => {
     const script = document.createElement("script");
     script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -72,6 +78,7 @@ function WebPlayback(props) {
 
   useEffect(() => {
     loadSpotifyPlayer();
+    
     return () => {
       if (player) {
         player.disconnect();
