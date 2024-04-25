@@ -14,6 +14,7 @@ const AuthCallback = () => {
   useEffect(() => {
     async function auth_user() {
       try {
+        console.log(code);
         const requestBody = JSON.stringify({ code });
         const response = await api.post("/auth/token", requestBody);
         // assuming response already 200, otherwise would have been caught by handleError

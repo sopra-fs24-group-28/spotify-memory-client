@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import "styles/views/Game.scss";
+import Player from "./Player";
 
 
 export default function Card (props) {

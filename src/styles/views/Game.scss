@@ -63,7 +63,7 @@
   grid-row: 1;
   align-self: center;
   justify-self: center;
-  width: (($DESKTOP_WIDTH/7) * 5) * 0.9
+  width: 80vh;
 
 }
 
@@ -188,4 +188,16 @@
 .artisttitle{
   @extend .songtitle;
   font-size: smaller;
+}
+
+.spotifyplayercontainer{
+  align-self: center;
+  justify-self: center;
+  justify-self: center;
+  padding: 1rem;
+  width: 95%;
+  border-radius: $borderRadius;
+  border: solid $textColor 1px;
+
+  background-color: $inputblue;
 }

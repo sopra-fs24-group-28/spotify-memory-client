@@ -6,6 +6,9 @@ import Card from "../ui/Card";
 import Game from "models/Game";
 import WSHandler from "../../helpers/wsHandler.js";
 import CardObject from "../../models/CardObject";
+import { Button } from "../ui/Button";
+import WebPlayback from "../ui/Player";
+import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 
 const GameScreen = () => {
 
@@ -15,13 +18,13 @@ const GameScreen = () => {
   const [cardsStates, setCardsStates] = useState(() => {
     // Assuming location.state.cardsStates has a similar structure to the provided "cardsStates" value
     const initialState = location.state.cardsStates.cardStates;
-    
-    return Object.entries(initialState).map(([cardId, cardState]) => new CardObject(cardId, cardState)); 
+
+    return Object.entries(initialState).map(([cardId, cardState]) => new CardObject(cardId, cardState));
   });
   const [scoreBoard, setScoreBoard] = useState(location.state.scoreBoard);
 
   const receiverFunction = (newDataRaw) => {
-    const data = JSON.parse(newDataRaw.body);    
+    const data = JSON.parse(newDataRaw.body);
     const gameChanges = data.gameChangesDto;
     if (!gameChanges.changed) {
       return;
@@ -40,7 +43,7 @@ const GameScreen = () => {
         return { ...newGame };
       });
     }
-    
+
     // setting up new cards 
     if (data.cardsStates.changed) {
       const newCards = [];
@@ -49,25 +52,26 @@ const GameScreen = () => {
       }
       setCardsStates(newCards);
     }
-    
+
     if (data.cardContent.changed) {
       setCardsStates(prevCards => {
         const cardToUpdate = data.cardContent.value.cardId;
         const newCards = [];
         for (const cardIdx in prevCards) {
           const card: CardObject = prevCards[cardIdx];
-          console.log(data.cardContent.value)
+          console.log(data.cardContent.value);
           console.log(card, card.cardId, cardToUpdate);
           if (card.cardId === String(cardToUpdate)) {
             console.log("match");
-            card.setContent( { ...data.cardContent.value })
+            card.setContent({ ...data.cardContent.value });
           }
           newCards.push(card);
         }
         console.log("new cards + content", newCards);
-        
+
         return newCards;
-    })}
+      });
+    }
 
     if (data.scoreBoard.changed) {
       console.error("Scoreboard changed, but not implemented yet");
@@ -100,13 +104,14 @@ const GameScreen = () => {
     // } else {
     //   console.log("cannot flip card that's already in play");
     // }
-    ws.send(JSON.stringify({ "cardId" : Number(card.cardId)} ));
+    ws.send(JSON.stringify({ "cardId": Number(card.cardId) }));
   }
 
-//   const [gameFinished, setGameFinished] = useState(false);
+
+  const [gameFinished, setGameFinished] = useState(false);
 //   const [cards, setCards] = useState(cardData);
 //   const [currentlyFlipped, setCurrentlyFlipped] = useState([]);
-//   const [showMessage, SetShowMessage] = useState("");
+  const [showMessage, SetShowMessage] = useState("");
 //   const [matchedPairs, setMatchedPairs] = useState([]);
 //   const [activePlayerIndex, setActivePlayerIndex] = useState("");
 //   const userid: string = localStorage.getItem("userid");
@@ -318,15 +323,40 @@ const GameScreen = () => {
           <div className="BaseDivGame col6">
             <div className="basicCardContainer">
               {cardsStates.map((card, index) => (
-                <Card key={card.cardId} isFlipped={card.cardState} cardobj={card} flip={() => flip(card)} />))}
+                <Card key={card.cardId} isFlipped={card.cardState} cardobj={card} flip={() => flip(card)} />
+              ))}
             </div>
           </div>
+          <div className="BaseDivGame col7">
+            <div className="gridhandler-stats">
+              <div className="spotifyplayercontainer">
+              <WebPlayback token={localStorage.getItem("accessToken")}></WebPlayback>
+              </div>
+              <div className="gameMessageposition">
+                {showMessage && !gameFinished && <div className="alert gameMessageContainer">
+                  <div className="gameMessage">{showMessage}</div>
+                </div>}
+              </div>
+              <div className="stats">
+                <h2 className="h2-title">Current Score</h2>
+                {/*<UserStatWithIcon className="test" username={"Henry"} currentStanding={"1"} />*/}
+                {/*<UserStatWithIcon username={"Elias"} currentStanding={"2"} />*/}
+                {/*<UserStatWithIcon username={"Niklas"} currentStanding={"3"} />*/}
+                {/*<UserStatWithIcon username={"Diyar"} currentStanding={"4"} />*/}
+              </div>
+              <div>
+                <Button width={"100%"}>Leave Game</Button>
+              </div>
+            </div>
+
+          </div>
         </div>
+        {/*<Button onClick={() => initialise()}>initialise</Button>*/}
       </div>
-    </div>
+      </div>
 
-  );
+      );
 
-};
+      };
 
-export default GameScreen;
+      export default GameScreen;
