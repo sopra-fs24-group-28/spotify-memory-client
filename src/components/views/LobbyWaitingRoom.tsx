@@ -177,7 +177,7 @@ const LobbyWaitingRoom = () => {
                 TODO: for how, I am ready is not shown, reinsert if implemented*/} 
             
             {/* todo: only show this if player is host  */}
-            {localStorage.getItem("userId") === String(game?.hostId) ? <Button width="65%" onClick={handleStart}>Start</Button> : <div></div>}
+            {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ? <Button width="65%" onClick={handleStart}>Start</Button> : <div></div>}
           </div>
           <div className="buttonContainer">
           </div>
