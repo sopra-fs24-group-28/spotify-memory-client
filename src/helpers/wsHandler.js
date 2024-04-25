@@ -58,10 +58,14 @@ class WSHandler {
   }
 
   send(data) {
-    this.client.publish({
-      destination: this.wsDestination,
-      body: data
-    });
+    if (this.client && this.client.connected) {
+      this.client.publish({
+        destination: this.wsDestination,
+        body: data
+      });
+    } else {
+      console.error("WebSocket connection is not established.");
+    }
   }
 
 
