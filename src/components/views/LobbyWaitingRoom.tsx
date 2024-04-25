@@ -89,12 +89,13 @@ const LobbyWaitingRoom = () => {
     if (game?.gameState === "ONPLAY"){
       async () => { await ws.disconnect() } 
       navigate(`/game/${game.gameId}`, { state: {
-          game : game.serialize(),
-          cardsStates: cardsStates,
-          cardContent: cardContent,
-          scoreBoard : scoreBoard
+        game : game.serialize(),
+        cardsStates: cardsStates,
+        cardContent: cardContent,
+        scoreBoard : scoreBoard
       }})
     } else if (game?.gameState === "FINISHED") {
+      async () => { await ws.disconnect() } 
       navigate("/lobbyOverview");
     }
   }, [game]);
