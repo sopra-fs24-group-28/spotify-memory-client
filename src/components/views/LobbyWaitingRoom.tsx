@@ -94,6 +94,8 @@ const LobbyWaitingRoom = () => {
           cardContent: cardContent,
           scoreBoard : scoreBoard
       }})
+    } else if (game?.gameState === "FINISHED") {
+      navigate("/lobbyOverview");
     }
   }, [game]);
 
