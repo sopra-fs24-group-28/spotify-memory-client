@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "styles/ui/Player.scss";
 import PropTypes from "prop-types";
+import { api } from "helpers/api";
+
 
 const track = {
   name: "",
@@ -14,12 +16,12 @@ const track = {
   ],
 };
 
-declare global {
-  interface Window {
-    onSpotifyWebPlaybackSDKReady?: any;
-    Spotify?: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     onSpotifyWebPlaybackSDKReady?: () => void;
+//     Spotify?: Spotify;
+//   }
+// }
 
 function WebPlayback(props) {
 
@@ -30,7 +32,7 @@ function WebPlayback(props) {
   const [volume, setVolume] = useState(0.5);
   const [deviceId, setDeviceId] = useState("");
 
-  
+
   const loadSpotifyPlayer = () => {
     const script = document.createElement("script");
     script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -50,13 +52,13 @@ function WebPlayback(props) {
       setPlayer(player);
 
       player.addListener("ready", ({ device_id }) => {
-        console.log("Ready with Device ID", device_id);
         setDeviceId(device_id); // Set deviceId state when ready
+
 
       });
 
       player.addListener("not_ready", ({ device_id }) => {
-        console.log("Device ID has gone offline", device_id);
+        // console.log("Device ID has gone offline", device_id);
         setDeviceId(null); // Set deviceId state when ready
 
       });
@@ -78,7 +80,7 @@ function WebPlayback(props) {
 
   useEffect(() => {
     loadSpotifyPlayer();
-    
+
     return () => {
       if (player) {
         player.disconnect();
@@ -87,9 +89,22 @@ function WebPlayback(props) {
   }, []);
 
   useEffect(() => {
-    console.log("Device ID changed:", deviceId);
-    localStorage.setItem("deviceId", deviceId)
-    //TODO: Make API call to
+    const fetchData = async () => {
+      localStorage.setItem("deviceId", deviceId);
+      props.onDeviceIdReceived(deviceId);
+
+      // Make API call
+      const requestBody = JSON.stringify({ "deviceid": deviceId });
+      try {
+        const response = await api.post("spotify/user/deviceid", requestBody);
+        // Handle response
+      } catch (error) {
+        // Handle error
+      }
+    };
+
+    fetchData(); // Call the async function immediately
+
   }, [deviceId]);
 
   const handleDecreaseVolume = () => {
@@ -173,4 +188,6 @@ export default WebPlayback;
 
 WebPlayback.propTypes = {
   token: PropTypes.string,
+  onDeviceIdReceived: PropTypes.func.isRequired, // Callback function prop
+
 };

@@ -10,6 +10,9 @@ import { Button } from "../ui/Button";
 import WebPlayback from "../ui/Player";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 import { Client } from "@stomp/stompjs";
+import { getWSDomain } from "helpers/getDomain";
+
+
 
 const GameScreen = () => {
   const navigate = useNavigate();
@@ -22,8 +25,16 @@ const GameScreen = () => {
   );
   const [scoreBoard, setScoreBoard] = useState(location.state.scoreBoard);
   const [stompClient, setStompClient] = useState(null);
+  const [gameFinished, setGameFinished] = useState(false);
+  const [showMessage, SetShowMessage] = useState("");
 
-  // Receiver function
+  const [deviceIdGame, setDeviceIdGame] = useState("");
+  const handleDeviceIdReceived = (deviceId) => {
+    setDeviceIdGame(deviceId);
+  };
+
+
+
   // Receiver function
   const receiverFunction = useCallback((newDataRaw) => {
     const data = JSON.parse(newDataRaw.body);
@@ -73,7 +84,7 @@ const GameScreen = () => {
   // WebSocket setup
   useEffect(() => {
     const client = new Client({
-      brokerURL: `ws://localhost:8080/ws?token=${localStorage.getItem("token")}`,
+      brokerURL: `${getWSDomain()}?token=${localStorage.getItem("token")}`,
       onConnect: () => {
         client.subscribe(`/queue/games/${game.gameId}`, receiverFunction);
       }
@@ -89,7 +100,8 @@ const GameScreen = () => {
 
   // Flip card function
   function flip(card) {
-    const data = JSON.stringify({ cardId: Number(card.cardId), deviceId: Number(card.cardId) });
+    const deviceId = localStorage.getItem("deviceId")
+    const data = JSON.stringify({ cardId: Number(card.cardId)});
     stompClient.publish({
       destination: `/app/games/${game.gameId}`,
       body: data
@@ -97,19 +109,45 @@ const GameScreen = () => {
   }
 
   return (
-    <div className="BaseContainer">
-      <div className="screen-gridhandler">
-        <div className="BaseDivGame col6">
-          <div className="basicCardContainer">
-            {cardsStates.map((card, index) => (
-              <Card key={card.cardId} isFlipped={card.cardState} cardobj={card} flip={() => flip(card)} />
-            ))}
+    <div>
+      <div>{game.gameParameters.activePlayer}</div>
+      <script src="https://sdk.scdn.co/spotify-player.js"></script>
+      <div className="BaseContainer">
+        <div className="screen-gridhandler">
+          <div className="BaseDivGame col6">
+            <div className="basicCardContainer">
+              {cardsStates.map((card, index) => (
+                <Card key={card.cardId} isFlipped={card.cardState} cardobj={card} flip={() => flip(card)} />
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="BaseDivGame col7">
+          <div className="BaseDivGame col7">
+            <div className="gridhandler-stats">
+              <div className="spotifyplayercontainer">
+                <WebPlayback token={localStorage.getItem("accessToken")} onDeviceIdReceived={handleDeviceIdReceived} />
+              </div>
+              <div className="gameMessageposition">
+                {showMessage && !gameFinished && <div className="alert gameMessageContainer">
+                  <div className="gameMessage">{showMessage}</div>
+                </div>}
+              </div>
+              <div className="stats">
+                <h2 className="h2-title">Current Score</h2>
+                {/*<UserStatWithIcon className="test" username={"Henry"} currentStanding={"1"} />*/}
+                {/*<UserStatWithIcon username={"Elias"} currentStanding={"2"} />*/}
+                {/*<UserStatWithIcon username={"Niklas"} currentStanding={"3"} />*/}
+                {/*<UserStatWithIcon username={"Diyar"} currentStanding={"4"} />*/}
+              </div>
+              <div>
+                <Button width={"100%"}>Leave Game</Button>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
+
   );
 };
 
