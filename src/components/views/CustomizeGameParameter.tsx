@@ -37,6 +37,12 @@ const CustomizeGameParameter = () => {
     fetchAvailablePlaylists();
   }, []);
 
+  useEffect(() => {
+    if (availablePlaylists.length > 0) {
+      setPlaylist(availablePlaylists[0].id);
+    }
+  }, [availablePlaylists]);
+
   function startGame(e) {
     e.preventDefault();
     // Validation conditions
