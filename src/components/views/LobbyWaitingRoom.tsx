@@ -19,24 +19,8 @@ const LobbyWaitingRoom = () => {
   const [cardContent, setCardContent] = useState();
   const [scoreBoard, setScoreBoard] = useState(location.state?.scoreBoard || undefined);
 
-  // used to mock scoreboard state when returning to lobby waitingroom after game is over
-  // useEffect(() => {
-  //   //mocking data remove later
-  //   setScoreBoard({
-  //     1: 4,
-  //     // "niklas2001": {"rank": 5},
-  //     // "henry1234": {"rank": 6},
-  //     // "elias19994": {"rank": 1},
-  //     // "niklas20014": {"rank": 2},
-  //
-  //   });
-  //   // console.log(game.playerList);
-  //   console.log(scoreBoard);
-  //
-  // }, []);
-
+  
   //Websocket specific
-
   const receiverFunction = (newDataRaw) => {
     const data = JSON.parse(newDataRaw.body);
     // handling only gameChanges here, because other parts of game will not change in wainting room
@@ -194,7 +178,7 @@ const LobbyWaitingRoom = () => {
 
                 {/* only show this if player is host and */}
                 {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ?
-                  <Button width="65%" onClick={handleStart}>Start</Button> : <div></div>}
+                  <Button width="65%" onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button> : <div></div>}
               </div>
 
           </div>
@@ -205,7 +189,7 @@ const LobbyWaitingRoom = () => {
                 <div>
                   <div className="h3-title">These players are already waiting!!</div>
                   {game && game.playerList && (
-                    <ul>
+                    <ul className="grid-item">
                       {game.playerList.map((user) => (
                         <li key={user.userId} className="grid-item">
                           <UserStatWithIcon user={user} currentStanding={0} />
@@ -221,8 +205,8 @@ const LobbyWaitingRoom = () => {
                 <div>
                   <div className="h3-title">Game Over!</div>
                   {game && game.playerList && (
-                    <ul>
-                      {game.playerList.sort((a, b) => scoreBoard[b.userId] - scoreBoard[a.userId]).map((user) => (
+                    <ul className="grid-item">
+                    {game.playerList.sort((a, b) => scoreBoard[a.userId] - scoreBoard[b.userId]).map((user) => (
                         <li key={user.userId} className="grid-item">
                           <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId]} />
                         </li>
@@ -232,10 +216,6 @@ const LobbyWaitingRoom = () => {
                 </div>
               )}
             </div>
-
-
-
-
           </div>
         </div>
       </div>
