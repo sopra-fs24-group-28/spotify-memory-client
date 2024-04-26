@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Game from "../../views/Game";
+// import Game from "../../views/Game";
 //import Overview from "../../views/Overview"; // double check if this is the correct view Component
 import PropTypes from "prop-types";
 
@@ -9,9 +9,9 @@ const GameRouter = () => {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <Routes>
 
-        <Route path="" element={<Game />} />
+        {/* <Route path="" element={<Game />} />
 
-        <Route path="dashboard" element={<Game />} />
+        <Route path="dashboard" element={<Game />} /> */}
 
         <Route path="*" element={<Navigate to="dashboard" replace />} />
 
