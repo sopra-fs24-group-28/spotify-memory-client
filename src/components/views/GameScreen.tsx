@@ -109,6 +109,12 @@ const GameScreen = () => {
     });
   }
 
+  // useEffect(() => {
+  //   if(game?.gameState === "FINISHED"){
+  //     navigate("")
+  //
+  // }, [gameFinished]);
+
   return (
     <div>
       <div>{game.gameParameters.activePlayer}</div>

@@ -22,7 +22,6 @@ export const UserStatWithIcon = (props) => {
 
 UserStatWithIcon.propTypes = {
     user: PropTypes.object,
-    username: PropTypes.string,
     currentStanding: PropTypes.number
 };
   

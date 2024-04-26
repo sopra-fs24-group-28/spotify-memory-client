@@ -16,12 +16,12 @@ const track = {
   ],
 };
 
-declare global {
-  interface Window {
-    onSpotifyWebPlaybackSDKReady?: () => void;
-    Spotify?: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     onSpotifyWebPlaybackSDKReady?: () => void;
+//     Spotify?: any;
+//   }
+// }
 
 function WebPlayback(props) {
 

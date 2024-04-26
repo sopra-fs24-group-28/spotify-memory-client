@@ -17,12 +17,12 @@ const GameOverScreen = () => {
   useEffect(() => {
     //mocking data remove later
     setScoreBoard({
-      "henry123": 3,
-      "elias1999": 1,
-      "niklas2001": 5,
-      "henry1234": 3,
-      "elias19994": 9,
-      "niklas20014": 6,
+      "henry123": {"rank": 3},
+      "elias1999": {"rank": 4},
+      "niklas2001": {"rank": 5},
+      "henry1234": {"rank": 6},
+      "elias19994": {"rank": 1},
+      "niklas20014": {"rank": 2},
     });
 
     setLobbyParams({ playerList: [{ username: "henry123" }, { username: "elias1999" }, { username: "niklas2001" }, { username: "henry1234" }, { username: "elias19994" }, { username: "niklas20014" }] });

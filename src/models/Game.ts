@@ -5,7 +5,7 @@ import { Change } from "../communication/websocket/dto/Change";
 class Game {
   private gameId: any;
   private gameParameters: any;
-  private playerList: any;
+  public playerList: any;
   private gameState: Change | undefined;
   private hostId: Change | undefined;
   private activePlayerStreak: any;
