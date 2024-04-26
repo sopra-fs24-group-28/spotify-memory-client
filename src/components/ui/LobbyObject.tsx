@@ -41,7 +41,11 @@ const LobbyObject = (props) => {
           </li>
         ))}
       </div>
+      { lobby.playerList.length >= lobby.gameParameters.playerLimit ? 
+      <Button width="70%" height="50%" style={{"background" : "#868686"}} className="lobby-overview-button third-column-item">Full</Button>
+      : 
       <Button width="70%" height="50%" className="lobby-overview-button third-column-item" onClick={join}>Join</Button>
+      }
     </div>);
 };
 
