@@ -107,7 +107,6 @@ const GameScreen = () => {
           </div>
         </div>
         <div className="BaseDivGame col7">
-          {/* Additional UI components */}
         </div>
       </div>
     </div>
