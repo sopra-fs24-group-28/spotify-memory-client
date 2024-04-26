@@ -9,6 +9,8 @@ import CardObject from "../../models/CardObject";
 import { Button } from "../ui/Button";
 import WebPlayback from "../ui/Player";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
+import { Client } from "@stomp/stompjs";
+
 
 const GameScreen = () => {
 
@@ -78,10 +80,19 @@ const GameScreen = () => {
     }
     // console.log(data);
   };
-  const ws = new WSHandler(`/games/${game.gameId}`,
+/*  const ws = new WSHandler(`/games/${game.gameId}`,
     `/queue/games/${game.gameId}`,
     `/app/games/${game.gameId}`,
-    receiverFunction);
+    receiverFunction);*/
+
+  const stompClient = new Client({
+    brokerURL: "ws://localhost:8080/ws" + "?token=" + `${localStorage.getItem("token")}`
+  })
+
+  stompClient.onConnect = (frame) => {
+    stompClient.subscribe(`/queue/games/${game.gameId}`, receiverFunction);
+  };
+  stompClient.activate();
 
 
   useEffect(() => {
@@ -89,22 +100,35 @@ const GameScreen = () => {
     console.log("new card state", cardsStates);
     console.log(scoreBoard);
 
-    const connectToWs = async () => {
+/*    const connectToWs = async () => {
       await ws.connect();
-    };
+    };*/
 
+/*
     connectToWs();
+*/
 
   }, []);
 
+  function  send(data) {
+      stompClient.publish({
+        destination: `/app/games/${game.gameId}`,
+        body: data
+      })
+  }
+
+
   function flip(card) {
-    console.log("flipped");
+    // console.log("flipped");
     // if (card.cardState === "FACEDOWN") {
     //   card.cardState = "FACEUP"
     // } else {
     //   console.log("cannot flip card that's already in play");
     // }
-    ws.send(JSON.stringify({ "cardId": Number(card.cardId) }));
+/*
+    ws.echo()
+*/
+    send(JSON.stringify({ "cardId": Number(card.cardId), "deviceId": Number(card.cardId) }));
   }
 
 
