@@ -22,6 +22,7 @@ const CustomizeGameParameter = () => {
   const [gameParameters, setGameParameters] = useState();
   const [errorMessages, setErrorMessages] = useState<string>("");
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   useEffect(() => {
     async function fetchAvailablePlaylists() {
@@ -130,6 +131,44 @@ const CustomizeGameParameter = () => {
             <h2 className="h2-title">Customize your Game!</h2>
           </div>
           <form className="input-section" onSubmit={startGame}>
+            <div className="grid" style={{}}>
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="gameCategory">Game Category:</label>
+                <select
+                  id="gameCategory"
+                  className="normalInput"
+                  value={gameCategory}
+                  onChange={e => setGameCategory(e.target.value)}
+                >
+                  <option value="STANDARDSONG">Normal</option>
+                  <option value="STANDARDALBUMCOVER">Album Cover</option>
+                </select>
+              </div>
+              <div className={"inputpair"}>
+                <label className="label" htmlFor="playlist">Playlist:</label>
+                <select
+                  id="playlist"
+                  className="normalInput"
+                  value={playlist}
+                  onChange={e => setPlaylist(e.target.value)}
+                >
+                  {availablePlaylists.map((playlist, index) => (
+                    <option key={index} value={playlist.id}>{playlist.name}</option>
+                  ))}
+                </select>
+              </div>
+              </div>
+              <button 
+                onClick={(e) => { 
+                  e.preventDefault(); // Prevent form submission
+                  setShowAdvanced((prev) => !prev); 
+                }}
+                className="customizebtn"
+                style={{"grid-template-columns" : "repeat(2, 1fr)"}}
+              >
+                Advanced
+              </button>
+            {showAdvanced ? 
             <div className="grid">
               <div className={"inputpair"}>
                 <label className="label" htmlFor="playerLimit">Player Limit:</label>
@@ -162,31 +201,6 @@ const CustomizeGameParameter = () => {
                   value={numOfCardsPerSet}
                   onChange={e => setNumOfCardsPerSet(e.target.value)}
                 />
-              </div>
-              <div className={"inputpair"}>
-                <label className="label" htmlFor="gameCategory">Game Category:</label>
-                <select
-                  id="gameCategory"
-                  className="normalInput"
-                  value={gameCategory}
-                  onChange={e => setGameCategory(e.target.value)}
-                >
-                  <option value="STANDARDSONG">Normal</option>
-                  <option value="STANDARDALBUMCOVER">Album Cover</option>
-                </select>
-              </div>
-              <div className={"inputpair"}>
-                <label className="label" htmlFor="playlist">Playlist:</label>
-                <select
-                  id="playlist"
-                  className="normalInput"
-                  value={playlist}
-                  onChange={e => setPlaylist(e.target.value)}
-                >
-                  {availablePlaylists.map((playlist, index) => (
-                    <option key={index} value={playlist.id}>{playlist.name}</option>
-                  ))}
-                </select>
               </div>
               <div className={"inputpair"}>
                 <label className="label" htmlFor="streakStart">Streak Start:</label>
@@ -232,7 +246,9 @@ const CustomizeGameParameter = () => {
                   onChange={e => setTmePerTurnPowerUp(e.target.value)}
                 />
               </div>
-            </div>
+            </div> : 
+            <div></div>
+            }
             <div className={errorMessages ? "error-message-container" : "hidden"}>
               <div className="error-messages">
                 {errorMessages && <p>{errorMessages}</p>}
