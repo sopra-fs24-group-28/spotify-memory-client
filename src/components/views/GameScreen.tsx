@@ -24,61 +24,51 @@ const GameScreen = () => {
   const [stompClient, setStompClient] = useState(null);
 
   // Receiver function
+  // Receiver function
   const receiverFunction = useCallback((newDataRaw) => {
     const data = JSON.parse(newDataRaw.body);
-    const gameChanges = data.gameChangesDto;
-    if (!gameChanges.changed) {
-      return;
-    } else {
+    const { gameChangesDto, cardsStates, cardContent, scoreBoard } = data;
+
+    if (gameChangesDto?.changed) {
       setGame(prevGame => {
-        let newGame: Game = { ...prevGame };
-        for (const key in gameChanges.value) {
-          const changed = gameChanges.value[key].changed;
-          const value = gameChanges.value[key].value;
-          // console.log(key, changed, value);
+        let newGame = { ...prevGame };
+        for (const key in gameChangesDto.value) {
+          const { changed, value } = gameChangesDto.value[key];
           if (changed) {
             newGame = newGame.doUpdate(key, value);
           }
         }
-
-        return { ...newGame };
+        return newGame;
       });
     }
 
-    // setting up new cards
-    if (data.cardsStates.changed) {
-      const newCards = [];
-      for (const cardId in data.cardsStates.value.cardStates) {
-        newCards.push(new CardObject(cardId, data.cardsStates.value.cardStates[cardId]));
-      }
-      setCardsStates(newCards);
-    }
-
-    if (data.cardContent.changed) {
-      setCardsStates(prevCards => {
-        const cardToUpdate = data.cardContent.value.cardId;
-        const newCards = [];
-        for (const cardIdx in prevCards) {
-          const card: CardObject = prevCards[cardIdx];
-          console.log(data.cardContent.value);
-          console.log(card, card.cardId, cardToUpdate);
-          if (card.cardId === String(cardToUpdate)) {
-            console.log("match");
-            card.setContent({ ...data.cardContent.value });
-          }
-          newCards.push(card);
-        }
-        console.log("new cards + content", newCards);
-
+    // Setting up new cards
+    if (cardsStates?.changed) {
+      setCardsStates(prevCardsStates => {
+        const newCards = Object.entries(cardsStates.value.cardStates).map(([cardId, cardState]) =>
+          new CardObject(cardId, cardState));
         return newCards;
       });
     }
 
-    if (data.scoreBoard.changed) {
+    // Updating card content
+    if (cardContent?.changed) {
+      setCardsStates(prevCards => {
+        return prevCards.map(card => {
+          if (card.cardId === String(cardContent.value.cardId)) {
+            const updatedCard = new CardObject(card.cardId, { ...card.cardState, ...cardContent.value });
+            return updatedCard;
+          }
+          return card;
+        });
+      });
+    }
+
+    if (scoreBoard?.changed) {
       console.error("Scoreboard changed, but not implemented yet");
     }
-    // console.log(data);
   }, []);
+
 
   // WebSocket setup
   useEffect(() => {
