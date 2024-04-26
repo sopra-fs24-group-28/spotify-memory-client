@@ -23,10 +23,10 @@ class WSHandler {
       console.log("... and Subscribed");
     };
 
-    this.client.onStompError = (frame) => {
-      console.error('Broker reported error: ' + frame.headers['message']);
-      console.error('Additional details: ' + frame.body);
-    };
+    // this.client.onStompError = (frame) => {
+    //   console.error('Broker reported error: ' + frame.headers['message']);
+    //   console.error('Additional details: ' + frame.body);
+    // };
 
     this.client.activate();
   };

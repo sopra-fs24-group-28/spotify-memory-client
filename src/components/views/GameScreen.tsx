@@ -12,8 +12,6 @@ import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 import { Client } from "@stomp/stompjs";
 import { getWSDomain } from "helpers/getDomain";
 
-
-
 const GameScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,8 +31,6 @@ const GameScreen = () => {
     setDeviceIdGame(deviceId);
   };
 
-
-
   // Receiver function
   const receiverFunction = useCallback((newDataRaw) => {
     const data = JSON.parse(newDataRaw.body);
@@ -49,6 +45,7 @@ const GameScreen = () => {
             newGame = newGame.doUpdate(key, value);
           }
         }
+
         return newGame;
       });
     }
@@ -58,6 +55,7 @@ const GameScreen = () => {
       setCardsStates(prevCardsStates => {
         const newCards = Object.entries(cardsStates.value.cardStates).map(([cardId, cardState]) =>
           new CardObject(cardId, cardState));
+
         return newCards;
       });
     }
@@ -65,11 +63,14 @@ const GameScreen = () => {
     // Updating card content
     if (cardContent?.changed) {
       setCardsStates(prevCards => {
+
         return prevCards.map(card => {
           if (card.cardId === String(cardContent.value.cardId)) {
             const updatedCard = new CardObject(card.cardId, { ...card.cardState, ...cardContent.value });
+
             return updatedCard;
           }
+
           return card;
         });
       });
