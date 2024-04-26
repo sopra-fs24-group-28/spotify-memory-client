@@ -46,7 +46,7 @@ const GameScreen = () => {
           }
         }
 
-        return newGame;
+        return { ...newGame };
       });
     }
 
