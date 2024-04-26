@@ -37,7 +37,6 @@ const LobbyWaitingRoom = () => {
         if (changed) {
 
           newGame = newGame.doUpdate(key, value);
-
         }
 
       }
