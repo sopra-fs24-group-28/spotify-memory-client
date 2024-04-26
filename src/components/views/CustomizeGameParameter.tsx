@@ -233,7 +233,6 @@ const CustomizeGameParameter = () => {
               </div>
             </div>
             <div className="button-section">
-              <hr />
               <button
                 type="submit"
                 className="customizebtn"

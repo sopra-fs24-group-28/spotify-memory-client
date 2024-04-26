@@ -15,12 +15,15 @@ const LobbyWaitingRoom = () => {
   // TODO: handle situation where location.state.lobby is undefined
   const initialGameId = location.state.lobby.lobbyId;
   const [game, setGame] = useState<Game>();
-  
+  const [cardsStates, setCardsStates] = useState();
+  const [cardContent, setCardContent] = useState();
+  const [scoreBoard, setScoreBoard] = useState();
+
   
   //Websocket specific
 
   const receiverFunction = (newDataRaw) => {
-    const data = JSON.parse(newDataRaw.body); 
+    const data = JSON.parse(newDataRaw.body);
     // handling only gameChanges here, because other parts of game will not change in wainting room
     const gameChanges = data.gameChangesDto; 
     if (!gameChanges.changed) { return; }
@@ -30,16 +33,23 @@ const LobbyWaitingRoom = () => {
       for (const key in gameChanges.value) {
         const changed = gameChanges.value[key].changed;
         const value = gameChanges.value[key].value;
+        // console.log(key, changed, value);
         if (changed) {
-          newGame = newGame.doUpdate(key, value);
-          console.log("doing",  {...prevGame});
 
-          return {...newGame};
+          newGame = newGame.doUpdate(key, value);
         }
+
       }
 
+      return {...newGame};
     })
-  }};
+  }
+    // store all other ws updates to send on later
+    if (data.cardsStates.changed) { setCardsStates(data.cardsStates.value); }
+    if (data.cardContent.changed) { setCardContent(data.cardContent.value); }
+    if (data.scoreBoard.changed) { setScoreBoard(data.scoreBoard.value); }
+    console.log(data);
+  };
   const ws = new WSHandler(`/games/${initialGameId}`, 
                           `/queue/games/${initialGameId}`, 
                           `app/games/${initialGameId}`, 
@@ -73,11 +83,20 @@ const LobbyWaitingRoom = () => {
   }, []);
   
   useEffect(() => {
-    console.log("game changed");
-    //console.log(game);
-    // if (game?.gameState === "ONPLAY"){
-    //   navigate(`game/${game.gameId}`, { state: {ws: ws, gameId: game.gameId } })
-    // }
+    // console.log("game changed");
+    // console.log(game);
+    if (game?.gameState === "ONPLAY"){
+      async () => { await ws.disconnect() } 
+      navigate(`/game/${game.gameId}`, { state: {
+        game : game.serialize(),
+        cardsStates: cardsStates,
+        cardContent: cardContent,
+        scoreBoard : scoreBoard
+      }})
+    } else if (game?.gameState === "FINISHED") {
+      async () => { await ws.disconnect() } 
+      navigate("/lobbyOverview");
+    }
   }, [game]);
 
 
@@ -90,8 +109,7 @@ const LobbyWaitingRoom = () => {
       const response = await api.delete(`games/${initialGameId}/player`);
       if (response.status === 204) {
         await ws.disconnect()
-        navigate("/lobbyOverview"); //Todo: anpassen wenn klar wie
-
+        navigate("/lobbyOverview");
       } else {
         alert("There was a error when trying to leave the lobby. Please try again later");
       }
@@ -105,8 +123,17 @@ const LobbyWaitingRoom = () => {
     //TODO: send ready state via websocket connection:
   }
 
-  function handleStart() {
-    // TODO: send start signal via websocket
+  async function handleStart() {
+    try {
+      const response = await api.post(`games/${initialGameId}/start`);
+      if (response.status === 200) {
+      } else {
+        alert("There was a error when trying start a game. Please contact admin.");
+      }
+
+    } catch (error) {
+      alert(`Something went wrong when starting a Game. Please try again. \n${handleError(error)}`);
+    }
   }
 
   return (<div className="BaseContainer">
@@ -149,7 +176,7 @@ const LobbyWaitingRoom = () => {
                 TODO: for how, I am ready is not shown, reinsert if implemented*/} 
             
             {/* todo: only show this if player is host  */}
-            <Button width="65%" onClick={handleStart}>Start</Button> 
+            {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ? <Button width="65%" onClick={handleStart}>Start</Button> : <div></div>}
           </div>
           <div className="buttonContainer">
           </div>

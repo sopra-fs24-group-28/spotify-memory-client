@@ -1,0 +1,76 @@
+@import "../theme";
+@import "../views/Login";
+@import "../ui/Button";
+@import "../views/GameScreen";
+
+.base{
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.albumcoverinplayer{
+  @include center;
+  transform: None;
+  justify-self: center;
+  align-self: center;
+  width: 200px;
+  height: 70%;
+  border-radius: $borderRadius;
+}
+
+.now-playingside{
+  @include center;
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+
+}
+
+.textinfo{
+  overflow-y: scroll;
+  border-radius: $borderRadius;
+  border: 2px solid $textColor;
+  margin: 1rem;
+  margin-top: 0rem;
+  width: 200px;
+  max-width: 200px;
+  height: 100px;
+}
+
+.now-playing-name{
+  font-weight: bold;
+  text-align: justify-all;
+  text-overflow: ellipsis;
+  margin: 0.5rem;
+}
+
+.now-playing-artist{
+  @extend .now-playing-name;
+  font-weight: normal;
+}
+
+
+
+.spotifyButtonplayer{
+  @extend .spotifyButton;
+  @include center();
+  align-self: center;
+  justify-self: center;
+  font-size: medium;
+  margin: 0.5rem;
+}
+
+.volumebuttons{
+  @include center;
+  width: 200px;
+  display: flex;
+  flex-direction: row;
+  border-radius: $borderRadius;
+  border: 2px solid $textColor;
+
+}
+
+::-webkit-scrollbar {
+  display: none;  /* Hides the scrollbar */
+}

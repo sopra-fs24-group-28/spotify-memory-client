@@ -22,6 +22,12 @@ class WSHandler {
       this.client.subscribe(this.wsEndpoint, this.receiverFunction);
       console.log("... and Subscribed");
     };
+
+    // this.client.onStompError = (frame) => {
+    //   console.error('Broker reported error: ' + frame.headers['message']);
+    //   console.error('Additional details: ' + frame.body);
+    // };
+
     this.client.activate();
   };
 
@@ -54,14 +60,29 @@ class WSHandler {
   }
 
   async disconnect() {
-    this.client.deactivate();
+    await this.client.deactivate();
   }
 
   send(data) {
-    this.client.publish({
-      destination: this.wsDestination,
-      body: data
-    });
+    console.log("IN SEND");
+    console.log(this.client);
+    if (!this.client.connected) {
+      this.connect().then(() =>
+        this.client.publish({
+        destination: this.wsDestination,
+        body: data
+      }));
+    } else {
+      this.client.publish({
+        destination: this.wsDestination,
+        body: data
+      })
+    }
+
+  }
+
+  echo() {
+    console.log(this.client);
   }
 
 
