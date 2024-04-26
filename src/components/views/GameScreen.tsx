@@ -109,11 +109,11 @@ const GameScreen = () => {
     });
   }
 
-  // useEffect(() => {
-  //   if(game?.gameState === "FINISHED"){
-  //     navigate("")
-  //
-  // }, [gameFinished]);
+  useEffect(() => {
+    if (game?.gameState === "FINISHED") {
+      navigate("/lobbyOverview")
+    }
+  }, [game]);
 
   return (
     <div>
