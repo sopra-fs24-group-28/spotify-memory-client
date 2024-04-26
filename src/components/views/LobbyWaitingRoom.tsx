@@ -85,6 +85,7 @@ const LobbyWaitingRoom = () => {
   useEffect(() => {
     // console.log("game changed");
     // console.log(game);
+    // TODO: this should show a message to a user
     if (game?.gameState === "ONPLAY"){
       async () => { await ws.disconnect() } 
       navigate(`/game/${game.gameId}`, { state: {
