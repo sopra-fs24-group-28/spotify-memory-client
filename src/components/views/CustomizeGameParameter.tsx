@@ -164,7 +164,6 @@ const CustomizeGameParameter = () => {
                   setShowAdvanced((prev) => !prev); 
                 }}
                 className="customizebtn"
-                style={{"grid-template-columns" : "repeat(2, 1fr)"}}
               >
                 Advanced
               </button>
