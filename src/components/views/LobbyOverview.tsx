@@ -109,16 +109,16 @@ const LobbyOverview = () => {
 
   let content = <Spinner />;
    
-  if (receivedGameStates?.length > 0) {
+  if (receivedGameStates.filter(lobby => lobby.gameState === "OPEN").length > 0) {
     content = (
       <div className="gridhandler">
-      {receivedGameStates.map((lobby: Lobby) => (
-        <div key={lobby.id} className="grid-item">
-          <LobbyObject lobby={lobby}   />
-        </div>
-      ))}
+        {receivedGameStates.filter(lobby => lobby.gameState === "OPEN").map(lobby => (
+          <div key={lobby.id} className="grid-item">
+            <LobbyObject lobby={lobby} />
+          </div>
+        ))}
       </div>
-    )
+    );    
   } else {
     content = (
       <div className="befirst">
