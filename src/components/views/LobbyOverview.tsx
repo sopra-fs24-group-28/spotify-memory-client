@@ -57,16 +57,14 @@ const LobbyOverview = () => {
 
       }
       // case 3: new lobby created
-      if (makeNewLobby) {
+      if (makeNewLobby && update.gameParameters.value && update.playerList.value && update.gameState.value && update.hostId.value) {
         const newLobby = new Lobby(key, {});
-        console.log("making a new lobby");
         newLobby.setGameParameters(update.gameParameters.value);
         newLobby.setPlayerList(update.playerList.value);
         newLobby.setGameState(update.gameState.value);
         newLobby.setHostId(update.hostId.value);
         updatedLobbies.push(newLobby);
       }
-
 
       return updatedLobbies;
     })
@@ -109,7 +107,7 @@ const LobbyOverview = () => {
 
   let content = <Spinner />;
    
-  if (receivedGameStates.filter(lobby => lobby.gameState === "OPEN").length > 0) {
+  if (receivedGameStates?.filter(lobby => lobby.gameState === "OPEN").length > 0) {
     content = (
       <div className="gridhandler">
         {receivedGameStates.filter(lobby => lobby.gameState === "OPEN").map(lobby => (
