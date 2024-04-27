@@ -11,7 +11,7 @@ class Game {
   private activePlayerStreak: any;
   private history: any;
   private scoreboard: any;
-  private activePlayer: any;
+  public activePlayer: any;
   private quickTurnActive: any;
   private quickTurn: any;
   constructor(gameId: any, gameStart) {

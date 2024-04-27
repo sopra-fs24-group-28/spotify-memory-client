@@ -20,7 +20,7 @@ const Navbar = () => {
 
 
   const handleLogout = () => {
-    console.log(isLoginPage);
+    console.log(isGamePage);
     logout(navigate);
   };
 

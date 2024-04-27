@@ -16,12 +16,12 @@ const track = {
   ],
 };
 
-declare global {
-  interface Window {
-    onSpotifyWebPlaybackSDKReady?: () => void;
-    Spotify?: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     onSpotifyWebPlaybackSDKReady?: () => void;
+//     Spotify?: any;
+//   }
+// }
 
 function WebPlayback(props) {
 
@@ -53,7 +53,6 @@ function WebPlayback(props) {
 
       player.addListener("ready", ({ device_id }) => {
         setDeviceId(device_id); // Set deviceId state when ready
-
 
       });
 
@@ -107,6 +106,10 @@ function WebPlayback(props) {
 
   }, [deviceId]);
 
+  useEffect(() => {
+    props.setPlayer(player); // Pass the player object to GameScreen
+  }, [player, props]);
+
   const handleDecreaseVolume = () => {
     if (player && volume > 0) {
       const newVolume = Math.max(0, volume - 0.1); // Decrease volume by 0.1
@@ -137,11 +140,13 @@ function WebPlayback(props) {
       <>
         <div className="container">
           <div className="main-wrapper">
-            <b> Instance is currently not not active. Transfer your playback using your Spotify app </b>
+            <b> Reconnect the Spotify Player! </b>
           </div>
+          <div className="centerwrapper">
           <button className="spotifyButtonplayer" onClick={handleReconnect}>
             {"reconnect"}
           </button>
+          </div>
         </div>
       </>);
   } else {
@@ -189,5 +194,5 @@ export default WebPlayback;
 WebPlayback.propTypes = {
   token: PropTypes.string,
   onDeviceIdReceived: PropTypes.func.isRequired, // Callback function prop
-
+  setPlayer: PropTypes.func
 };

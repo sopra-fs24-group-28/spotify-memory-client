@@ -1,6 +1,6 @@
 @import "../theme";
 
-.BaseDivGame{
+.BaseDivGame {
   display: flex;
   min-height: 100px;
   flex-direction: column;
@@ -16,12 +16,11 @@
   transition: opacity 0.5s ease, transform 0.5s ease;
   box-shadow: $dropShadow;
   flex-grow: 1;
-
 }
 
-.screen-gridhandler{
+.screen-gridhandler {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  //grid-template-columns: repeat(7, 1fr);
   grid-column-gap: 20px;
   justify-content: start;
   align-items: start;
@@ -30,10 +29,10 @@
 }
 
 
-.gridhandlercards{
+.gridhandlercards {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  //grid-template-columns: repeat(8, 1fr);
+  //grid-template-rows: repeat(4, 1fr);
   grid-row-gap: 5px;
   grid-column-gap: 5px;
   justify-content: start;
@@ -43,8 +42,8 @@
   height: 100%;
 }
 
-.gridhandler-stats{
-  overflow-y: auto;
+.gridhandler-stats {
+  overflow-y: scroll;
   display: grid;
   grid-template-rows: 2fr 5fr 1fr;
   grid-row-gap: 20px;
@@ -62,7 +61,10 @@
   grid-row: 1;
   align-self: center;
   justify-self: center;
-  width: (($DESKTOP_WIDTH/7) * 5) * 0.9
+  width: 60vw;
+  @media screen and (max-width: 1029px) {
+    width: 55vw;
+  }
 
 }
 
@@ -72,17 +74,20 @@
   align-self: center;
   justify-self: center;
   color: $textColor;
-  width: ($DESKTOP_WIDTH / 7) * 2
+  width: 30vw;
+  @media screen and (max-width: 1029px) {
+    width: 35vw;
+  }
 }
 
-.stats{
+.stats {
   @include center;
   flex-direction: column;
   align-self: baseline;
 
 }
 
-.h2-title{
+.h2-title {
   font-size: 30px;
   text-align: center;
   font-weight: bold;
@@ -91,47 +96,47 @@
   color: $textColor;
 }
 
-.test{
-  margin: 20px;
-  border: solid red;
-}
 
 //card set
 
-.gameMessageposition{
+.gameMessageposition {
   @include center;
 }
 
 .alert.gameMessageContainer {
   display: flex;
-  height: 100px;
-  width: 200px;
+  height: 15vh;
+  width: 100%;
   align-items: center;
   justify-content: center;
   border: 2px solid $textColor;
   border-radius: 15px;
   background-color: $inputblue;
   box-shadow: $dropShadow;
+  padding: 1rem;
 }
 
 .gameMessage {
   color: $textColor;
   font-size: 16px;
-  text-align: center;
 }
 
 
 .basicCardContainer {
+  width: 50hw;
   display: flex;
   flex-direction: row;
-  padding: 10%;
+  padding: 1%;
   justify-content: center;
   flex-wrap: wrap;
+  overflow: scroll;
 }
 
 .card {
-  width: 103px;
-  height: 148px;
+  width: 10vw;
+  min-width: 100px;
+  height: 10vw;
+  min-height: 100px;
   align-content: center;
   justify-content: center;
   margin: 2%;
@@ -159,7 +164,7 @@
   transform: rotateY(180deg);
 }
 
-.card-inner{
+.card-inner {
   @include center;
   height: 100%;
   width: 100%;
@@ -167,7 +172,7 @@
   overflow: hidden;
 }
 
-.albumcover{
+.albumcover {
   transform: rotateY(180deg);
   @include center;
   height: 50%;
@@ -178,7 +183,7 @@
   margin-bottom: 3px;
 }
 
-.songtitle{
+.songtitle {
   transform: rotateY(180deg);
   margin-top: 2px;
   width: 75%;
@@ -186,7 +191,20 @@
   text-align: left;
 }
 
-.artisttitle{
+.artisttitle {
   @extend .songtitle;
   font-size: smaller;
+}
+
+.spotifyplayercontainer {
+  align-self: center;
+  justify-self: center;
+  padding: 1rem;
+  width: 95%;
+  height: 95%;
+  border-radius: $borderRadius;
+  border: solid $textColor 2px;
+  background-color: $inputblue;
+  overflow: auto;
+
 }

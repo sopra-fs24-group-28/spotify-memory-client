@@ -27,9 +27,31 @@ const GameScreen = () => {
   const [showMessage, SetShowMessage] = useState("");
 
   const [deviceIdGame, setDeviceIdGame] = useState("");
+  const [player, setPlayer] = useState(null); // Add player state
+
+  const setPlayerCallback = useCallback((playerObj) => {
+    setPlayer(playerObj);
+  }, []);
+
+  const disconnectPlayer = () => {
+    if (player) {
+      console.log("disconnecting player from gamescreen");
+      player.disconnect();
+      console.log(player);
+    }
+  }
+
   const handleDeviceIdReceived = (deviceId) => {
     setDeviceIdGame(deviceId);
   };
+
+  const updatePlayerindiction = () => {
+    const currentPlayer = game.playerList.find(user => user.userId === game.activePlayer);
+    SetShowMessage(`It's currently ${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "your" : currentPlayer.username + "'s"} turn`);
+  }
+  useEffect(() => {
+    updatePlayerindiction()
+  }, [game.activePlayer]);
 
   // Receiver function
   const receiverFunction = useCallback((newDataRaw) => {
@@ -109,8 +131,11 @@ const GameScreen = () => {
     });
   }
 
+
+
   useEffect(() => {
     if (game?.gameState === "FINISHED") {
+      disconnectPlayer()
       navigate("/lobbyOverview")
     }
   }, [game]);
@@ -124,19 +149,20 @@ const GameScreen = () => {
           <div className="BaseDivGame col6">
             <div className="basicCardContainer">
               {cardsStates.map((card, index) => (
-                <Card key={card.cardId} isFlipped={card.cardState} cardobj={card} flip={() => flip(card)} />
+                <Card key={card.cardId} cardobj={card} flip={() => flip(card)} />
               ))}
             </div>
           </div>
           <div className="BaseDivGame col7">
             <div className="gridhandler-stats">
-              <div className="spotifyplayercontainer">
-                <WebPlayback token={localStorage.getItem("accessToken")} onDeviceIdReceived={handleDeviceIdReceived} />
-              </div>
+
               <div className="gameMessageposition">
                 {showMessage && !gameFinished && <div className="alert gameMessageContainer">
                   <div className="gameMessage">{showMessage}</div>
                 </div>}
+              </div>
+              <div className="spotifyplayercontainer">
+                <WebPlayback token={localStorage.getItem("accessToken")} onDeviceIdReceived={handleDeviceIdReceived} setPlayer={setPlayerCallback} />
               </div>
               <div className="stats">
                 <h2 className="h2-title">Current Score</h2>

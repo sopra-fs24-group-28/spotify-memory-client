@@ -26,12 +26,11 @@ const CustomizeGameParameter = () => {
 
   useEffect(() => {
     async function fetchAvailablePlaylists() {
-      try {
         const playlists = await getSpotifyPlaylist();
+        if (playlists === null){
+          setAvailablePlaylists(["Please try again"])
+        }else{
         setAvailablePlaylists(playlists);
-        console.log(availablePlaylists);
-      } catch (error) {
-        console.error("Error fetching playlists:", error);
       }
     }
 
