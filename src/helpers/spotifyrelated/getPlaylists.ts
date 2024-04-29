@@ -12,6 +12,7 @@ export async function getSpotifyPlaylist() {
       }
     } catch (error) {
       toastNotify(`Something went wrong getting the Spotify Playlists. Please check your connection and reload the page.\n${handleError(error)}`, 5000);
+
       return null
     }
   }
