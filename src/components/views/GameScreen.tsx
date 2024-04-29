@@ -32,6 +32,11 @@ const GameScreen = () => {
   const [player, setPlayer] = useState(null);
   const [yourTurn, setYourTurn] = useState(false);
 
+  useEffect(() => {
+    toastNotify("One Player left", 2000)
+    console.log(game.playerList);
+  }, [game.playerList]);
+
 
   const setPlayerCallback = useCallback((playerObj) => {
     setPlayer(playerObj);
@@ -134,7 +139,9 @@ const GameScreen = () => {
 
   // Flip card function
   function flip(card) {
-    const deviceId = localStorage.getItem("deviceId");
+    if(!yourTurn){
+      toastNotify("Its not your turn so you cannot flip a card.", 2000)
+    }
     const data = JSON.stringify({ cardId: Number(card.cardId) });
     stompClient.publish({
       destination: `/app/games/${game.gameId}`,
