@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { getSpotifyPlaylist } from "../../helpers/spotifyrelated/getPlaylists";
 import Lobby from "../../models/Lobby";
 import LobbyDTO from "../../communication/websocket/dto/LobbyDTO";
+import toastNotify from "../../helpers/Toast";
 
 
 const CustomizeGameParameter = () => {
@@ -98,6 +99,11 @@ const CustomizeGameParameter = () => {
       sendLobbyCreationRequest();
     }
   }, [gameParameters]);
+
+  useEffect(() => {
+    if(errorMessages){
+    toastNotify(errorMessages, 5000)}
+  }, [errorMessages]);
 
 
   async function sendLobbyCreationRequest() {
@@ -247,11 +253,6 @@ const CustomizeGameParameter = () => {
             </div> : 
             <div></div>
             }
-            <div className={errorMessages ? "error-message-container" : "hidden"}>
-              <div className="error-messages">
-                {errorMessages && <p>{errorMessages}</p>}
-              </div>
-            </div>
             <div className="button-section">
               <button
                 type="submit"

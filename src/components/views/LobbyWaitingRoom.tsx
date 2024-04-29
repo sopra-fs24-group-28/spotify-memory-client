@@ -7,6 +7,7 @@ import { api, handleError } from "helpers/api";
 import SpotifyLogoWithTextSVG from "../ui/icons-svg/SpotifyLogoWithTextSVG";
 import WSHandler from "../../helpers/wsHandler.js";
 import Game from "models/Game";
+import toastNotify from "../../helpers/Toast";
 
 
 const LobbyWaitingRoom = () => {
@@ -65,10 +66,8 @@ const LobbyWaitingRoom = () => {
     try {
       const response = await api.get(`/games/${initialGameId}`);
       const gameStart = response.data;
-      //console.log(gameStart);
       // instantiating a lobby object here instead of a game object
       // as the ws returns data appropriate for this class. But object is later cast into game when appropriate
-
       return new Game(initialGameId, gameStart);
 
     } catch (error) {
@@ -76,23 +75,23 @@ const LobbyWaitingRoom = () => {
     }
   }
 
+
   useEffect(() => {
     const fetchDataAndConnect = async () => {
       const initGame = await fetchData();
-      //console.log("initial game", initGame);
       setGame(initGame);
       await ws.connect();
     };
 
-    fetchDataAndConnect();
-    //console.log("here");
-  }, []);
+    fetchDataAndConnect()
+      .catch(error => {
+        toastNotify("There was an error fetching the data. Please try again.", 1000);
+      });  }, []);
 
   useEffect(() => {
-    // console.log("game changed");
-    // console.log(game);
     // TODO: this should show a message to a user
     if (game?.gameState === "ONPLAY") {
+      toastNotify("The game starts shortly. Your being redirected...", 500)
       async () => {
         await ws.disconnect();
       };
@@ -132,9 +131,7 @@ const LobbyWaitingRoom = () => {
     }
   }
 
-  function handleReady() {
-    //TODO: send ready state via websocket connection:
-  }
+
 
   async function handleStart() {
     try {

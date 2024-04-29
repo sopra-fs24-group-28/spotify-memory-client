@@ -104,23 +104,6 @@
   }
 }
 
-.error-message-container {
-  @include center;
-  margin: 0.5rem;
-  padding: 0.5rem;
-  border: 2px solid $textColor;
-  border-radius: $borderRadius;
-  background: $warning;
-  @media screen and (min-width: 768px) {
-    margin: 1rem;
-    padding: 1rem;
-  }
-}
-
-.error-messages {
-  @extend .label;
-  width: 100%;
-}
 
 .grid {
   @include center;

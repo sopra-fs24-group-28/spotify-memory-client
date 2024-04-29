@@ -16,12 +16,12 @@ const track = {
   ],
 };
 
-// declare global {
-//   interface Window {
-//     onSpotifyWebPlaybackSDKReady?: () => void;
-//     Spotify?: any;
-//   }
-// }
+declare global {
+  interface Window {
+    onSpotifyWebPlaybackSDKReady?: () => void;
+    Spotify?: any;
+  }
+}
 
 function WebPlayback(props) {
 
@@ -67,7 +67,7 @@ function WebPlayback(props) {
           return;
         }
         setTrack(state.track_window.current_track);
-        setPaused(state.paused);
+        // setPaused(state.paused);
         player.getCurrentState().then(state => {
           (!state) ? setActive(false) : setActive(true);
         });

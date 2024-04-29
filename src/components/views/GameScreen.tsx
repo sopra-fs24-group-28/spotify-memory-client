@@ -4,13 +4,15 @@ import "styles/views/GameScreen.scss";
 // @ts-ignore
 import Card from "../ui/Card";
 import Game from "models/Game";
-import WSHandler from "../../helpers/wsHandler.js";
 import CardObject from "../../models/CardObject";
 import { Button } from "../ui/Button";
 import WebPlayback from "../ui/Player";
-import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 import { Client } from "@stomp/stompjs";
 import { getWSDomain } from "helpers/getDomain";
+import toastNotify from "../../helpers/Toast";
+import { api } from "helpers/api";
+
+
 
 const GameScreen = () => {
   const navigate = useNavigate();
@@ -18,8 +20,8 @@ const GameScreen = () => {
   const [game, setGame] = useState(() => Game.deserialize(location.state.game));
   const [cardsStates, setCardsStates] = useState(() =>
     Object.entries(location.state.cardsStates.cardStates).map(([cardId, cardState]) =>
-      new CardObject(cardId, cardState)
-    )
+      new CardObject(cardId, cardState),
+    ),
   );
   const [scoreBoard, setScoreBoard] = useState(location.state.scoreBoard);
   const [stompClient, setStompClient] = useState(null);
@@ -27,7 +29,9 @@ const GameScreen = () => {
   const [showMessage, SetShowMessage] = useState("");
 
   const [deviceIdGame, setDeviceIdGame] = useState("");
-  const [player, setPlayer] = useState(null); // Add player state
+  const [player, setPlayer] = useState(null);
+  const [yourTurn, setYourTurn] = useState(false);
+
 
   const setPlayerCallback = useCallback((playerObj) => {
     setPlayer(playerObj);
@@ -39,7 +43,7 @@ const GameScreen = () => {
       player.disconnect();
       console.log(player);
     }
-  }
+  };
 
   const handleDeviceIdReceived = (deviceId) => {
     setDeviceIdGame(deviceId);
@@ -47,10 +51,17 @@ const GameScreen = () => {
 
   const updatePlayerindiction = () => {
     const currentPlayer = game.playerList.find(user => user.userId === game.activePlayer);
+    if (currentPlayer.userId === Number(localStorage.getItem("userId"))) {
+      setYourTurn(true);
+      toastNotify("Pay attention its your Turn", game?.gameParameters?.timePerTurn * 1000);
+    } else {
+      setYourTurn(false);
+    }
+
     SetShowMessage(`It's currently ${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "your" : currentPlayer.username + "'s"} turn`);
-  }
+  };
   useEffect(() => {
-    updatePlayerindiction()
+    updatePlayerindiction();
   }, [game.activePlayer]);
 
   // Receiver function
@@ -110,7 +121,7 @@ const GameScreen = () => {
       brokerURL: `${getWSDomain()}?token=${localStorage.getItem("token")}`,
       onConnect: () => {
         client.subscribe(`/queue/games/${game.gameId}`, receiverFunction);
-      }
+      },
     });
 
     client.activate();
@@ -123,22 +134,31 @@ const GameScreen = () => {
 
   // Flip card function
   function flip(card) {
-    const deviceId = localStorage.getItem("deviceId")
-    const data = JSON.stringify({ cardId: Number(card.cardId)});
+    const deviceId = localStorage.getItem("deviceId");
+    const data = JSON.stringify({ cardId: Number(card.cardId) });
     stompClient.publish({
       destination: `/app/games/${game.gameId}`,
-      body: data
+      body: data,
     });
   }
 
 
-
   useEffect(() => {
     if (game?.gameState === "FINISHED") {
-      disconnectPlayer()
-      navigate("/lobbyOverview")
+      disconnectPlayer();
+      navigate("/lobbyOverview");
     }
   }, [game]);
+
+  function handleLeaveGame() {
+    try {
+      api.delete(`/games/${game.gameId}/player`)
+      navigate("/lobbyoverview")
+    } catch (error) {
+      toastNotify("There was an error trying to leave the game. Please try again.", 1000);
+    }
+  }
+
 
   return (
     <div>
@@ -157,12 +177,14 @@ const GameScreen = () => {
             <div className="gridhandler-stats">
 
               <div className="gameMessageposition">
-                {showMessage && !gameFinished && <div className="alert gameMessageContainer">
-                  <div className="gameMessage">{showMessage}</div>
-                </div>}
+                {showMessage && !gameFinished &&
+                  <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>
+                    <div className="gameMessage">{showMessage}</div>
+                  </div>}
               </div>
               <div className="spotifyplayercontainer">
-                <WebPlayback token={localStorage.getItem("accessToken")} onDeviceIdReceived={handleDeviceIdReceived} setPlayer={setPlayerCallback} />
+                <WebPlayback token={localStorage.getItem("accessToken")} onDeviceIdReceived={handleDeviceIdReceived}
+                             setPlayer={setPlayerCallback} />
               </div>
               <div className="stats">
                 <h2 className="h2-title">Current Score</h2>
@@ -172,10 +194,9 @@ const GameScreen = () => {
                 {/*<UserStatWithIcon username={"Diyar"} currentStanding={"4"} />*/}
               </div>
               <div>
-                <Button width={"100%"}>Leave Game</Button>
+                <Button width={"100%"} onClick={handleLeaveGame}>Leave Game</Button>
               </div>
             </div>
-
           </div>
         </div>
       </div>
