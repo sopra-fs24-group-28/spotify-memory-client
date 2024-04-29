@@ -46,7 +46,6 @@ const AppRouter = () => {
         <Route path="/lobbyOverview" element={<LobbyOverview />} />
         <Route path="/customizeGame" element={<CustomizeGameParameter />} />
         <Route path="/lobby/:gameid" element={<LobbyWaitingRoom />} />
-        <Route path="/gameoverscreen" element={<GameOverScreen />} />
 
 
         <Route path="/gametest" element={<GameScreen />} />
