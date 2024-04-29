@@ -46,9 +46,6 @@ const Navbar = () => {
           <a href="/profilePage" className="iconItems">
             <PreferencesSVG width={50} height={50}></PreferencesSVG>
           </a>)}
-        {/*<div className="iconItems">*/}
-        {/*  <HomeSVG />*/}
-        {/*</div>*/}
       </div>
     </div>
   </nav>);
