@@ -9,19 +9,9 @@ import LobbyOverview from "../../views/LobbyOverview";
 import CustomizeGameParameter from "../../views/CustomizeGameParameter";
 import Navbar from "../../ui/Navbar";
 import LobbyWaitingRoom from "../../views/LobbyWaitingRoom";
-import GameOverScreen from "../../views/GameOverScreen";
 import GameScreen from "../../views/GameScreen";
 
 
-/**
- * Main router of your application.
- * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
- * and another Router that matches the route "/game".
- * The main difference between these two routes is the following:
- * /login renders another component without any sub-route
- * /game renders a Router that contains other sub-routes that render in turn other react components
- * Documentation about routing in React: https://reactrouter.com/en/main/start/tutorial
- */
 const AppRouter = () => {
   return (
     <BrowserRouter>
