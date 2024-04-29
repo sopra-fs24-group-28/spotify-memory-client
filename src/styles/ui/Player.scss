@@ -14,8 +14,8 @@
   transform: None;
   justify-self: center;
   align-self: center;
-  width: 200px;
-  height: 70%;
+  height: 40%;
+  width: 40%;
   border-radius: $borderRadius;
 }
 
@@ -27,16 +27,6 @@
 
 }
 
-.textinfo{
-  overflow-y: scroll;
-  border-radius: $borderRadius;
-  border: 2px solid $textColor;
-  margin: 1rem;
-  margin-top: 0rem;
-  width: 200px;
-  max-width: 200px;
-  height: 100px;
-}
 
 .now-playing-name{
   font-weight: bold;

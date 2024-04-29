@@ -1,29 +1,27 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import "styles/views/Game.scss";
-import Player from "./Player";
+import "styles/views/GameScreen.scss";
 
 
-export default function Card (props) {
-  useEffect(() => {
-    console.log(props.cardobj);
-  }, []);
+export default function Card(props) {
 
   let card: any;
-  if ((props.isFlipped === "FACEDOWN")) {
-    card = <div className={`card${props.isFlipped === "FACEUP" ? " flipped" : " card-back"}`} onClick={props.flip}>
+  if ((props.cardobj.cardState === "FACEDOWN")) {
+    card = <div className={`card${props.cardobj.cardState === "FACEUP" ? " flipped" : " card-back"}`} onClick={props.flip}>
       <div className="card-inner">
         <div className={"card-front"}>{props.content}</div>
       </div>
     </div>;
   } else {
-    card = <div className={`card${props.isFlipped === "FACEUP" ? " flipped" : " card-back"}`} onClick={props.flip}>
+    card = <div className={`card${props.cardobj.cardState === "FACEUP" ? " flipped" : " card-back"}`} onClick={props.flip}>
       <div className="card-inner">
-        <div className="albumcover">
-          <img src="" alt="albumcover" />
-        </div>
-        <div className="songtitle">{props.cardobj.cardId}</div>
-        <div className="artisttitle">DummyArtist</div>
+        {props?.cardobj?.content?.imageUrl !== null && props?.cardobj?.content?.imageUrl !== undefined &&
+          <div className="albumcover">
+            <img src={props.cardobj.content.imageUrl} alt="albumcover" />
+          </div>
+        }
+        <div className="songtitle">{props.cardobj.cardState === "EXCLUDED" ? "" : props.cardobj.cardId}</div>
+        {/*<div className="artisttitle">DummyArtist</div>*/}
       </div>
     </div>;
   }
@@ -33,7 +31,8 @@ export default function Card (props) {
 }
 
 Card.propTypes = {
-  isFlipped: PropTypes.string, flip: PropTypes.func, content: PropTypes.string, cardobj: PropTypes.object
+  flip: PropTypes.func, content: PropTypes.string,
+  cardobj: PropTypes.object,
 
 
 };

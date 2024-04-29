@@ -6,6 +6,7 @@ import LobbyObject from "../ui/LobbyObject";
 import { Button } from "../ui/Button";
 import WSHandler from "helpers/wsHandler";
 import Lobby from "models/Lobby";
+import toastNotify from "../../helpers/Toast";
 
 
 const LobbyOverview = () => {
@@ -74,17 +75,15 @@ const LobbyOverview = () => {
   
 
   const wsHandler = new WSHandler(restEndpoint, wsEndpoint, wsDestination, receiverFunction);
-  
+
 
   useEffect(() => {
-    console.log("receivedGameState updated")
-    console.log(receivedGameStates);
-  }, [receivedGameStates]);
+    toastNotify("Join an existing Lobby or create a new one", 5000)
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       // Perform asynchronous operation to fetch initial data
-      // TODO: remove fetchData from class into here
       const data = await wsHandler.fetchData();
       setReceivedGameStates(data); // this displays the data
       wsHandler.connect()
@@ -93,9 +92,7 @@ const LobbyOverview = () => {
     fetchData();
     
 
-    // Clean-up function
     return () => {
-      // Perform any necessary clean-up
       wsHandler.disconnect();
     };
   }, []);
