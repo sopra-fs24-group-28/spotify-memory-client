@@ -68,6 +68,7 @@ const LobbyWaitingRoom = () => {
       const gameStart = response.data;
       // instantiating a lobby object here instead of a game object
       // as the ws returns data appropriate for this class. But object is later cast into game when appropriate
+
       return new Game(initialGameId, gameStart);
 
     } catch (error) {
@@ -130,8 +131,6 @@ const LobbyWaitingRoom = () => {
       alert(`Something went wrong while trying to leave the lobby. \n${handleError(error)}`);
     }
   }
-
-
 
   async function handleStart() {
     try {

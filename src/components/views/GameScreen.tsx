@@ -13,7 +13,6 @@ import toastNotify from "../../helpers/Toast";
 import { api } from "helpers/api";
 
 
-
 const GameScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
