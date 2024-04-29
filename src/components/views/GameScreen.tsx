@@ -153,6 +153,7 @@ const GameScreen = () => {
   useEffect(() => {
     if (game?.gameState === "FINISHED") {
       disconnectPlayer();
+      stompClient.deactivate()
       navigate("/lobbyOverview");
     }
   }, [game]);
