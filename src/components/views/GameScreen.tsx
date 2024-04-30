@@ -103,8 +103,9 @@ const GameScreen = () => {
 
         return prevCards.map(card => {
           if (card.cardId === String(cardContent.value.cardId)) {
-            const updatedCard = new CardObject(card.cardId, { ...card.cardState, ...cardContent.value });
-
+            const updatedCard = new CardObject(card.cardId,  card.cardState );
+            updatedCard.setContent(cardContent.value)
+            console.log(updatedCard);
             return updatedCard;
           }
 
