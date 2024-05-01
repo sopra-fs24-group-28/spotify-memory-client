@@ -153,7 +153,7 @@ const GameScreen = () => {
     if (game?.gameState === "FINISHED") {
       disconnectPlayer();
       stompClient.deactivate()
-      navigate("/lobbyOverview");
+      navigate(`/lobby/${game.gameId}`, { state: { lobby: {lobbyId : game.gameId}, scoreBoard : scoreBoard } });
     }
   }, [game]);
 
