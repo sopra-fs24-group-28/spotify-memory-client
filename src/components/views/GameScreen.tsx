@@ -140,13 +140,13 @@ const GameScreen = () => {
   function flip(card) {
     if(!yourTurn){
       toastNotify("Its not your turn so you cannot flip a card.", 2000)
-    }
+    } else {
     const data = JSON.stringify({ cardId: Number(card.cardId) });
     stompClient.publish({
       destination: `/app/games/${game.gameId}`,
       body: data,
     });
-  }
+  }}
 
 
   useEffect(() => {
