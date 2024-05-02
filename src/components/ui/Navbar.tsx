@@ -21,7 +21,7 @@ const Navbar = () => {
   const isLobbyPage = location.pathname.toLowerCase().includes("lobby")
 
   const handleLogout = () => {
-    logout(navigate).then( () =>{toastNotify("successfully logged out", 500)})
+    logout(navigate).then( () =>{toastNotify("successfully logged out", 500, "normal")})
   };
 
   return (<nav className="navbar">

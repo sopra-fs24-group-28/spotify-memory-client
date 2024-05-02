@@ -52,7 +52,7 @@ const LobbyOverview = () => {
               lobby.setHostId(update.hostId.value);
             }
             updatedLobbies.push(lobby)
-            continue;
+
           }
         }
 
@@ -78,7 +78,7 @@ const LobbyOverview = () => {
 
 
   useEffect(() => {
-    toastNotify("Join an existing Lobby or create a new one", 5000)
+    toastNotify("Join an existing Lobby or create a new one", 5000, "normal")
   }, []);
 
   useEffect(() => {

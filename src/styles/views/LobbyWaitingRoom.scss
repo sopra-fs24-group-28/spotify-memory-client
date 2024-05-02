@@ -7,6 +7,7 @@
   max-height: ($DESKTOP_WIDTH / 1) + 20;
   min-height: 70vh; // Adjust this value based on your needs
   padding: 1vw;
+  border: none;
 }
 
 .gridhandler {
@@ -44,10 +45,9 @@
   height: 30vw;
   padding: 1vw;
   box-shadow: $dropShadow;
-  justify-content: center;
   overflow: clip;
   min-width: 300px;
-  min-height: 300px
+  min-height: 350px
 
 }
 
@@ -58,12 +58,16 @@
   box-shadow: None;
   padding: 0;
   align-items: baseline;
+  @include center;
 }
 
 .img {
   box-shadow: $dropShadow;
-  border: solid $textColor 2px;
+  border: solid 2px transparent;
   border-radius: $borderRadius;
+  &:hover {
+    border: 2px solid $textColor;
+  }
 }
 
 .buttonContainer {
@@ -72,6 +76,7 @@
   display: flex; /* Use flexbox */
   flex-direction: column; /* Stack items vertically */
   gap: 25px; /* Add appropriate spacing between buttons */
+  margin: 20px;
 
 }
 
@@ -83,7 +88,7 @@
   grid-template-columns: repeat(1, 1fr);
   grid-row-gap: 15px;
   background: $accent;
-  border: solid $textColor 2px;
+  border: solid 2px transparent;
   border-radius: $borderRadius;
   width: 80%;
   padding: 1vh;
@@ -98,4 +103,10 @@
   font-size: large;
   font-weight: bold;
   color: $textColor;
+}
+.playlist-name{
+  @extend .h2-title;
+  justify-content: center;
+  margin: 5px;
+  overflow: clip;
 }

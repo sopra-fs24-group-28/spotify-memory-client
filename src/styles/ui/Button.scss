@@ -4,7 +4,7 @@
   @include center;
   &:hover {
     transform: translateY(-4px);
-    border: 2px solid $inputblue;
+    border: 2px solid $textColor;
   }
   &:disabled {
     cursor: default;
@@ -23,7 +23,7 @@
   transition: all 0.3s ease;
   background: $turquise;
   color: $textColor;
-  border: 2px solid $textColor;
+  border: 2px solid transparent;
   box-shadow: $dropShadow;
   font-weight: 700;
   font-size: large;
