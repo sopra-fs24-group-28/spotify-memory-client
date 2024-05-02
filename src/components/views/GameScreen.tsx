@@ -141,20 +141,20 @@ const GameScreen = () => {
   function flip(card) {
     if(!yourTurn){
       toastNotify("Its not your turn so you cannot flip a card.", 2000)
-    }
+    } else {
     const data = JSON.stringify({ cardId: Number(card.cardId) });
     stompClient.publish({
       destination: `/app/games/${game.gameId}`,
       body: data,
     });
-  }
+  }}
 
 
   useEffect(() => {
     if (game?.gameState === "FINISHED") {
       disconnectPlayer();
       stompClient.deactivate()
-      navigate("/lobbyOverview");
+      navigate(`/lobby/${game.gameId}`, { state: { lobby: {lobbyId : game.gameId}, scoreBoard : scoreBoard } });
     }
   }, [game]);
 
