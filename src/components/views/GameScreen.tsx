@@ -32,7 +32,7 @@ const GameScreen = () => {
   const [yourTurn, setYourTurn] = useState(false);
 
   useEffect(() => {
-    toastNotify("One Player left", 2000)
+    toastNotify("One Player left", 2000, "warning")
     console.log(game.playerList);
   }, [game.playerList]);
 
@@ -57,9 +57,11 @@ const GameScreen = () => {
     const currentPlayer = game.playerList.find(user => user.userId === game.activePlayer);
     if (currentPlayer.userId === Number(localStorage.getItem("userId"))) {
       setYourTurn(true);
-      toastNotify("Pay attention its your Turn", game?.gameParameters?.timePerTurn * 1000);
+      toastNotify("Pay attention its your Turn", game?.gameParameters?.timePerTurn * 1000, "warning");
     } else {
       setYourTurn(false);
+      toastNotify(`It's currently ${currentPlayer.username + "'s"} turn`, game?.gameParameters?.timePerTurn * 1000, "normal");
+
     }
 
     SetShowMessage(`It's currently ${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "your" : currentPlayer.username + "'s"} turn`);
@@ -141,7 +143,7 @@ const GameScreen = () => {
   // Flip card function
   function flip(card) {
     if(!yourTurn){
-      toastNotify("Its not your turn so you cannot flip a card.", 2000)
+      toastNotify("Its not your turn so you cannot flip a card.", 2000, "normal")
     } else {
     const data = JSON.stringify({ cardId: Number(card.cardId) });
     stompClient.publish({
@@ -164,7 +166,7 @@ const GameScreen = () => {
       api.delete(`/games/${game.gameId}/player`)
       navigate("/lobbyoverview")
     } catch (error) {
-      toastNotify("There was an error trying to leave the game. Please try again.", 1000);
+      toastNotify("There was an error trying to leave the game. Please try again.", 1000, "warning");
     }
   }
 
@@ -185,16 +187,16 @@ const GameScreen = () => {
           <div className="BaseDivGame col7">
             <div className="gridhandler-stats">
 
-              <div className="gameMessageposition">
-                {showMessage && !gameFinished &&
-                  <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>
-                    <div className="gameMessage">{showMessage}</div>
-                  </div>}
-              </div>
-              <div className="spotifyplayercontainer">
+              {/*<div className="gameMessageposition">*/}
+              {/*  {showMessage && !gameFinished &&*/}
+              {/*    <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>*/}
+              {/*      <div className="gameMessage">{showMessage}</div>*/}
+              {/*    </div>}*/}
+              {/*</div>*/}
+              {game?.gameParameters?.gameCategory === "STANDARDSONG" && <div className="spotifyplayercontainer">
                 <WebPlayback token={localStorage.getItem("accessToken")} onDeviceIdReceived={handleDeviceIdReceived}
                              setPlayer={setPlayerCallback} />
-              </div>
+              </div>}
               <div className="stats">
                 <h2 className="h2-title">Current Score</h2>
                 {/*<UserStatWithIcon className="test" username={"Henry"} currentStanding={"1"} />*/}

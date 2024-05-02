@@ -5,7 +5,7 @@
 .BaseDivLobby {
   @extend .BaseDiv;
   //border: solid red;
-  max-height: ($DESKTOP_WIDTH / 1) + 20;
+  max-height: 80vh;
   min-height: 100px; // Adjust this value based on your needs
   padding: 20px;
   overflow-x: clip !important;
@@ -25,12 +25,18 @@
 }
 
 .newGameButton {
+  @include center;
   padding: 20px;
-  width: 100vw;
+  width: 100%;
   align-self: center;
 }
 
 .grid-item {
   overflow-wrap: anywhere;
   //padding: 10px;
+}
+
+.befirst{;
+  @extend .h2-title;
+  margin: 20vh;
 }

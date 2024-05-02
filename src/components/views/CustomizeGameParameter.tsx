@@ -102,7 +102,7 @@ const CustomizeGameParameter = () => {
 
   useEffect(() => {
     if(errorMessages){
-    toastNotify(errorMessages, 5000)}
+    toastNotify(errorMessages, 5000,"warning")}
   }, [errorMessages]);
 
 
@@ -136,8 +136,8 @@ const CustomizeGameParameter = () => {
             <h2 className="h2-title">Customize your Game!</h2>
           </div>
           <form className="input-section" onSubmit={startGame}>
-            <div className="grid" style={{}}>
-              <div className={"inputpair"}>
+            <div className="gridtop">
+              <div className="inputpair">
                 <label className="label" htmlFor="gameCategory">Game Category:</label>
                 <select
                   id="gameCategory"
@@ -250,7 +250,7 @@ const CustomizeGameParameter = () => {
                   onChange={e => setTmePerTurnPowerUp(e.target.value)}
                 />
               </div>
-            </div> : 
+            </div> :
             <div></div>
             }
             <div className="button-section">

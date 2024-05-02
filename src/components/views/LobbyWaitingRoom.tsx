@@ -86,13 +86,13 @@ const LobbyWaitingRoom = () => {
 
     fetchDataAndConnect()
       .catch(error => {
-        toastNotify("There was an error fetching the data. Please try again.", 1000);
+        toastNotify("There was an error fetching the data. Please try again.", 1000, "warning");
       });  }, []);
 
   useEffect(() => {
     // TODO: this should show a message to a user
     if (game?.gameState === "ONPLAY") {
-      toastNotify("The game starts shortly. Your being redirected...", 500)
+      toastNotify("The game starts shortly. Your being redirected...", 500, "normal")
       async () => {
         await ws.disconnect();
       };
@@ -154,28 +154,28 @@ const LobbyWaitingRoom = () => {
               className={game?.gameParameters.playlist.playlistImageUrl ? "imgContainer" : "spotifyPlaylistContainer"}>
               {game?.gameParameters.playlist.playlistImageUrl ? (
                 <div>
-                <span
-                  className="playlist-name second-column-top-item">{game?.gameParameters.playlist.playlistName}</span>
+                  {/*<span*/}
+                  {/*  className="playlist-name second-column-top-item">{game?.gameParameters.playlist.playlistName}</span>*/}
                   <img
                     src={game?.gameParameters.playlist.playlistImageUrl}
                     alt="Spotify Playlist Image"
                     width="100%"
                     height="100%"
-                    className="img"
+                    className="second-column-top-item img"
                   />
+                  <span className="playlist-name">{game?.gameParameters.playlist.playlistName}</span>
                 </div>
               ) : (
                 <SpotifyLogoWithTextSVG width="0.8" height="0.8" />
               )}
             </div>
+            <div className="buttonContainer">
+              <Button width="65%" onClick={handleLeave}>Leave</Button>
 
-              <div className="buttonContainer">
-                <Button width="65%" onClick={handleLeave}>Leave</Button>
-
-                {/* only show this if player is host and */}
-                {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ?
-                  <Button width="65%" onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button> : <div></div>}
-              </div>
+              {/* only show this if player is host and */}
+              {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ?
+                <Button width="65%" onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button> : <div></div>}
+            </div>
 
           </div>
           <div className="centerwrapper">

@@ -11,7 +11,7 @@
   font-weight: 300;
   padding: 10px;
   border-radius: 0.75em;
-  border: solid $textColor 2px;
+  border: solid transparent 2px;
   background-color: $lightviolet;
   transition: opacity 0.5s ease, transform 0.5s ease;
   box-shadow: $dropShadow;
@@ -31,8 +31,6 @@
 
 .gridhandlercards {
   display: grid;
-  //grid-template-columns: repeat(8, 1fr);
-  //grid-template-rows: repeat(4, 1fr);
   grid-row-gap: 5px;
   grid-column-gap: 5px;
   justify-content: start;
@@ -146,6 +144,7 @@
   align-content: center;
   justify-content: center;
   margin: 2%;
+  opacity: 0.7;
   background: #0E525E;
   border: solid 1px $textColor;
   border-radius: $borderRadius;
@@ -155,18 +154,23 @@
 
 .card.flipped {
   transform: rotateY(180deg);
-  background-color: $backgroundgrey;
+  background-color: $inputblue;
   color: white;
+  border: solid 1px $textColor;
+
 }
 
-.card.greyed {
-  background-color: $inputblue;
-  color: $textColor
+.card.excluded {
+  background-color: grey;
+  opacity: 0.5;
+  border: none;
 }
 
 
 .card .card-back {
+  background-color: #0E525E;
   color: $textColor;
+  opacity: 0.5;
   transform: rotateY(180deg);
 }
 
@@ -181,8 +185,8 @@
 .albumcover {
   transform: rotateY(180deg);
   @include center;
-  height: 95%;
-  width: 95%;
+  height: 100%;
+  width: 100%;
   background-color: #494554;
   border-radius: $borderRadius;
   border: solid $textColor 1px;

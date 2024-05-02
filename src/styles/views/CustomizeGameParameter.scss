@@ -4,20 +4,20 @@
 
 .BaseContainer {
   @extend .login, .container;
-  border: solid $textColor;
   padding: 2rem;
   @media screen and (min-width: 768px) {
-    padding: 1rem;}
+    padding: 1rem;
   }
+}
 
 .BaseDiv {
   @extend .login, .form;
-  height: 75vh;
+  min-height: 40vh;
+  height: 80vh;
   width: 90vw;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: solid $textColor;
   overflow: auto;
   margin: 0 auto;
   padding: 2rem;
@@ -45,7 +45,7 @@
   max-height: 50%;
   display: flex;
   background: $inputblue;
-  border: 2px solid $textColor;
+  border: 2px solid transparent;
   box-shadow: $dropShadow;
   border-radius: $borderRadius;
   margin-top: 0.5rem;
@@ -55,18 +55,12 @@
   font-size: $inputfontsize;
 
   &:hover {
-    //transform: translateY(-1px);
-    border: 2px solid $warning;
+    border: 2px solid $textColor;
   }
+
   cursor: pointer;
 }
 
-.hr {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  color: $textColor;
-  width: 100%;
-}
 
 .customizebtn {
   @include center;
@@ -74,7 +68,8 @@
   height: 40px;
   width: 200px;
   text-size-adjust: auto;
-  font-size: $inputfontsize
+  font-size: $inputfontsize;
+  margin: 5px;
 }
 
 .buttongroup {
@@ -87,10 +82,10 @@
   color: $textColor;
   font-weight: bold;
   align-self: flex-start;
-  width: 280px;
+  width: auto;
   font-size: $inputfontsize;
   @media screen and (min-width: 768px) {
-    width: auto;
+    width: 280px;
   }
 }
 
@@ -99,6 +94,8 @@
   display: flex;
   flex-direction: column;
   margin: 1rem;
+  max-width: 280px;
+
   @media screen and (min-width: 768px) {
     margin: 1.5rem;
   }
@@ -109,7 +106,7 @@
   @include center;
   overflow-wrap: anywhere;
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Set initial grid columns to 2 */
+  grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;
   grid-row-gap: 5px;
   grid-column-gap: 10px; /* Keeps a constant gap between both rows and columns */
@@ -117,18 +114,23 @@
   align-items: flex-start;
   padding-bottom: 10px;
   padding-top: 10px;
+  @media screen and (min-width: 1500px) {
+    grid-template-columns: repeat(4, 1fr);
+
+  }
+}
+
+.gridtop {
+  @extend .grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  @media screen and (min-width: 1500px) {
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+
 
 }
 
 
-// @media screen and (min-width: 768px) {
-//   .grid {
-//     grid-template-columns: repeat(3, 1fr); /* Adjust columns for larger screens */
-//   }
-// }
-// @media screen and (min-width: 1100px) {
-//   .grid {
-//     grid-template-columns: repeat(4, 1fr); /* Adjust columns for even larger screens */
-//   }
-// }
 

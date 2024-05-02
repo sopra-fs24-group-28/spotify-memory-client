@@ -9,7 +9,12 @@
   height: 80px;
   padding: 10px 20px;
   align-items: center;
-  border: 2px solid $textColor;
+  border: 2px solid transparent;
+  border-radius: $borderRadius;
+  &:hover {
+    border: 2px solid $textColor;
+
+  }
 
 }
 
