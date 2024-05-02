@@ -106,6 +106,7 @@ const GameScreen = () => {
             const updatedCard = new CardObject(card.cardId,  card.cardState );
             updatedCard.setContent(cardContent.value)
             console.log(updatedCard);
+
             return updatedCard;
           }
 
