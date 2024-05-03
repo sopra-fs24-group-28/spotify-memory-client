@@ -166,18 +166,6 @@ const CustomizeGameParameter = () => {
                   ))}
                 </select>
               </div>
-              </div>
-              <button 
-                onClick={(e) => { 
-                  e.preventDefault(); // Prevent form submission
-                  setShowAdvanced((prev) => !prev); 
-                }}
-                className="customizebtn"
-              >
-                Advanced
-              </button>
-            {showAdvanced ? 
-            <div className="grid">
               <div className={"inputpair"}>
                 <label className="label" htmlFor="playerLimit">Player Limit:</label>
                 <input
@@ -199,6 +187,18 @@ const CustomizeGameParameter = () => {
                   onChange={e => setNumOfSets(e.target.value)}
                 />
               </div>
+              </div>
+              <button 
+                onClick={(e) => { 
+                  e.preventDefault(); // Prevent form submission
+                  setShowAdvanced((prev) => !prev); 
+                }}
+                className="customizebtn"
+              >
+                Advanced
+              </button>
+            {showAdvanced ? 
+            <div className="grid">
               <div className={"inputpair"}>
                 <label className="label" htmlFor="numOfCardsPerSet">Cards per Set:</label>
                 <input
