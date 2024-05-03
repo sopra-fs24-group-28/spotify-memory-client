@@ -182,10 +182,14 @@ const GameScreen = () => {
 
 
   useEffect(() => {
-    if (game?.gameState === "FINISHED") {
+    if (game?.gameState === "OPEN") {
       disconnectPlayer();
       stompClient.deactivate()
       navigate(`/lobby/${game.gameId}`, { state: { lobby: {lobbyId : game.gameId}, scoreBoard : scoreBoard } });
+    } else if (game?.gameState === "FINISHED") {
+      disconnectPlayer();
+      stompClient.deactivate()
+      navigate(`/lobbyoverview`);
     }
   }, [game]);
 
