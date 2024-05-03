@@ -30,9 +30,10 @@ const GameScreen = () => {
   const [deviceIdGame, setDeviceIdGame] = useState("");
   const [player, setPlayer] = useState(null);
 
-  const [yourTurn, setYourTurn] = useState(false);
-  const [timeoutId, setTimeoutId] = useState(null);
-  const [countdown, setCountdown] = useState(0); // Timer state
+  const [yourTurn, setYourTurn] = useState(false); // boolean
+  const [intervals, setIntervals] = useState(null); // timer object id used to reset etc. 
+  const [countdown, setCountdown] = useState(0); // Timer state displayed
+  const [excludedCount, setExcludedCount] = useState(0);
 
 
   const setPlayerCallback = useCallback((playerObj) => {
@@ -67,47 +68,44 @@ const GameScreen = () => {
     setDeviceIdGame(deviceId);
   };
 
-  const resetTimeout = () => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      setTimeoutId(null);
-    }
-  };
-
   useEffect(() => {
-    if (yourTurn && countdown > 0) {
-      const timerId = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
-      return () => clearTimeout(timerId);
-    } else if (!yourTurn) {
-      setCountdown(0); // Reset countdown when it's not your turn
-    }
-  }, [yourTurn, countdown]);
+    if (countdown === 0 && yourTurn) {
+      api.put(`/games/${game.gameId}/inactive`);
+    }    
+  }, [countdown]); 
+  
+  useEffect(() => {
+    
+    // clear existing interval
+    setIntervals(prevIntervals => {
+      clearInterval(prevIntervals);
+      return null;
+    });
 
-  const updatePlayerIndication = () => {
+    // set active player bool and message
     const currentPlayer = game.playerList.find(user => user.userId === game.activePlayer);
     setYourTurn(currentPlayer.userId === Number(localStorage.getItem("userId")));
     setShowMessage(`${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "Your" : currentPlayer.username + "'s"} Turn`);
+   
+    // set new timer and interval
+    setCountdown(game.gameParameters.timePerTurn);
+    const temp = setInterval(() => {
+      setCountdown((prevCountdown) => { return prevCountdown - 1 });
+    }, 1000)
+    setIntervals(temp);
 
-    if (currentPlayer.userId === Number(localStorage.getItem("userId"))) {
-      setCountdown(game.gameParameters.timePerTurn); // Initialize countdown
-      const newTimeoutId = setTimeout(() => {
-        console.log("INACTIVE AFTER TIMEOUT");
-        if (!yourTurn) {
-          api.put(`/games/${game.gameId}/inactive`);
-        }
-      }, game.gameParameters.timePerTurn * 1000);
-      setTimeoutId(newTimeoutId);
-    }
-  };
-
-  useEffect(() => {
-    updatePlayerIndication();
   }, [game.activePlayer]);
 
-
-
+  // used to find if a match was found to reset the turn timer
+  useEffect(() => {
+    const nExcluded = cardsStates.filter(c => c.cardState === "EXCLUDED").length;
+    setExcludedCount(prevExcl => {
+      if (nExcluded > prevExcl) {
+        setCountdown(game.gameParameters.timePerTurn);
+      }
+      return nExcluded 
+    })    
+  }, [cardsStates])
 
 
   // Receiver function
@@ -122,11 +120,6 @@ const GameScreen = () => {
           const { changed, value } = gameChangesDto.value[key];
           if (changed) {
             newGame = newGame.doUpdate(key, value);
-          } if (changed && key === "activePlayer" && value === Number(localStorage.getItem("userId")) ) {
-            console.log("Its YOUR TURN");
-            if (yourTurn) {
-              resetTimeout();
-            }
           }
         }
 
