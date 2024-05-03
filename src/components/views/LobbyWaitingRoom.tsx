@@ -13,14 +13,17 @@ import toastNotify from "../../helpers/Toast";
 const LobbyWaitingRoom = () => {
   const navigate: NavigateFunction = useNavigate();
   const location = useLocation();
-  // TODO: handle situation where location.state.lobby is undefined
-  const initialGameId = location.state.lobby.lobbyId;
+  const initialGameId = location.state?.lobby?.lobbyId; 
   const [game, setGame] = useState<Game>();
   const [cardsStates, setCardsStates] = useState();
   const [cardContent, setCardContent] = useState();
   const [scoreBoard, setScoreBoard] = useState(location.state?.scoreBoard || undefined);
 
-  
+  // navigate back to lobby overview if player did not join lobby through join button
+  useEffect(() => {
+    if (!initialGameId) { navigate("/lobbyoverview") };
+  }, [initialGameId]);
+      
   //Websocket specific
   const receiverFunction = (newDataRaw) => {
     const data = JSON.parse(newDataRaw.body);
@@ -64,13 +67,14 @@ const LobbyWaitingRoom = () => {
 
   async function fetchData() {
     try {
-      const response = await api.get(`/games/${initialGameId}`);
-      const gameStart = response.data;
-      // instantiating a lobby object here instead of a game object
-      // as the ws returns data appropriate for this class. But object is later cast into game when appropriate
+      if (initialGameId) {
+        const response = await api.get(`/games/${initialGameId}`);
+        const gameStart = response.data;
+        // instantiating a lobby object here instead of a game object
+        // as the ws returns data appropriate for this class. But object is later cast into game when appropriate
 
-      return new Game(initialGameId, gameStart);
-
+        return new Game(initialGameId, gameStart);
+      }
     } catch (error) {
       console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
     }
