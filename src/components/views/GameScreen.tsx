@@ -69,7 +69,7 @@ const GameScreen = () => {
   };
 
   useEffect(() => {
-    if (countdown === 0 && yourTurn) {
+    if (countdown === 0 && yourTurn && (cardsStates.filter(c => c.cardState === "FACEUP").length) < 2) {
       api.put(`/games/${game.gameId}/inactive`);
     }    
   }, [countdown]); 
