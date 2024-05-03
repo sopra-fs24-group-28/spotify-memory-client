@@ -26,9 +26,15 @@ const Navbar = () => {
 
   return (<nav className="navbar">
     <div className="navbar-container">
-      <a href={(isLoginPage || isGamePage) ? "None" : "/"} className="navbar-brand">
+      {(isLoginPage || isGamePage) ?
+      <a href="/" className="navbar-brand">
         Spotymemory
       </a>
+      :
+      <p className="navbar-brand">
+        Spotymemory
+      </p>
+}
 
       <div className="navbar-icons">
         {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
