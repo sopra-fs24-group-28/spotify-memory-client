@@ -25,21 +25,35 @@ const GameScreen = () => {
   const [scoreBoard, setScoreBoard] = useState(location.state.scoreBoard);
   const [stompClient, setStompClient] = useState(null);
   const [gameFinished, setGameFinished] = useState(false);
-  const [showMessage, SetShowMessage] = useState("");
+  const [showMessage, setShowMessage] = useState("");
 
   const [deviceIdGame, setDeviceIdGame] = useState("");
   const [player, setPlayer] = useState(null);
-  const [yourTurn, setYourTurn] = useState(false);
 
-  useEffect(() => {
-    toastNotify("One Player left", 2000, "warning")
-    console.log(game.playerList);
-  }, [game.playerList]);
+  const [yourTurn, setYourTurn] = useState(false);
+  const [timeoutId, setTimeoutId] = useState(null);
+  const [countdown, setCountdown] = useState(0); // Timer state
 
 
   const setPlayerCallback = useCallback((playerObj) => {
     setPlayer(playerObj);
   }, []);
+
+  const sendExitRequest = useCallback(() => {
+   handleLeaveGame();
+  }, [game.gameId]);
+
+  useEffect(() => {
+    const handleTabClose = (event) => {
+      event.preventDefault();
+      sendExitRequest();
+    };
+
+    window.addEventListener("beforeunload", handleTabClose);
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClose);
+    };
+  }, [sendExitRequest]);
 
   const disconnectPlayer = () => {
     if (player) {
@@ -53,22 +67,48 @@ const GameScreen = () => {
     setDeviceIdGame(deviceId);
   };
 
-  const updatePlayerindiction = () => {
-    const currentPlayer = game.playerList.find(user => user.userId === game.activePlayer);
-    if (currentPlayer.userId === Number(localStorage.getItem("userId"))) {
-      setYourTurn(true);
-      toastNotify("Pay attention its your Turn", game?.gameParameters?.timePerTurn * 1000, "warning");
-    } else {
-      setYourTurn(false);
-      toastNotify(`It's currently ${currentPlayer.username + "'s"} turn`, game?.gameParameters?.timePerTurn * 1000, "normal");
-
+  const resetTimeout = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
     }
-
-    SetShowMessage(`It's currently ${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "your" : currentPlayer.username + "'s"} turn`);
   };
+
   useEffect(() => {
-    updatePlayerindiction();
+    if (yourTurn && countdown > 0) {
+      const timerId = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timerId);
+    } else if (!yourTurn) {
+      setCountdown(0); // Reset countdown when it's not your turn
+    }
+  }, [yourTurn, countdown]);
+
+  const updatePlayerIndication = () => {
+    const currentPlayer = game.playerList.find(user => user.userId === game.activePlayer);
+    setYourTurn(currentPlayer.userId === Number(localStorage.getItem("userId")));
+    setShowMessage(`${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "Your" : currentPlayer.username + "'s"} Turn`);
+
+    if (currentPlayer.userId === Number(localStorage.getItem("userId"))) {
+      setCountdown(game.gameParameters.timePerTurn); // Initialize countdown
+      const newTimeoutId = setTimeout(() => {
+        console.log("INACTIVE AFTER TIMEOUT");
+        if (!yourTurn) {
+          api.put(`/games/${game.gameId}/inactive`);
+        }
+      }, game.gameParameters.timePerTurn * 1000);
+      setTimeoutId(newTimeoutId);
+    }
+  };
+
+  useEffect(() => {
+    updatePlayerIndication();
   }, [game.activePlayer]);
+
+
+
+
 
   // Receiver function
   const receiverFunction = useCallback((newDataRaw) => {
@@ -82,6 +122,11 @@ const GameScreen = () => {
           const { changed, value } = gameChangesDto.value[key];
           if (changed) {
             newGame = newGame.doUpdate(key, value);
+          } if (changed && key === "activePlayer" && value === Number(localStorage.getItem("userId")) ) {
+            console.log("Its YOUR TURN");
+            if (yourTurn) {
+              resetTimeout();
+            }
           }
         }
 
@@ -177,6 +222,7 @@ const GameScreen = () => {
       <script src="https://sdk.scdn.co/spotify-player.js"></script>
       <div className="BaseContainer">
         <div className="screen-gridhandler">
+
           <div className="BaseDivGame col6">
             <div className="basicCardContainer">
               {cardsStates.map((card, index) => (
@@ -198,6 +244,9 @@ const GameScreen = () => {
                              setPlayer={setPlayerCallback} />
               </div>}
               <div className="stats">
+                <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>
+                  <div className="gameMessage">{showMessage} - {countdown} sec</div>
+                </div>
                 <h2 className="h2-title">Current Score</h2>
                 {/*<UserStatWithIcon className="test" username={"Henry"} currentStanding={"1"} />*/}
                 {/*<UserStatWithIcon username={"Elias"} currentStanding={"2"} />*/}
