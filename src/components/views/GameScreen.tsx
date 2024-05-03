@@ -31,7 +31,6 @@ const GameScreen = () => {
   const [player, setPlayer] = useState(null);
 
   const [yourTurn, setYourTurn] = useState(false);
-  const [timeoutId, setTimeoutId] = useState(null);
   const [countdown, setCountdown] = useState(0); // Timer state
 
 
@@ -67,47 +66,31 @@ const GameScreen = () => {
     setDeviceIdGame(deviceId);
   };
 
-  const resetTimeout = () => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      setTimeoutId(null);
-    }
-  };
-
-  useEffect(() => {
-    if (yourTurn && countdown > 0) {
-      const timerId = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
-      return () => clearTimeout(timerId);
-    } else if (!yourTurn) {
-      setCountdown(0); // Reset countdown when it's not your turn
-    }
-  }, [yourTurn, countdown]);
 
   const updatePlayerIndication = () => {
     const currentPlayer = game.playerList.find(user => user.userId === game.activePlayer);
     setYourTurn(currentPlayer.userId === Number(localStorage.getItem("userId")));
     setShowMessage(`${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "Your" : currentPlayer.username + "'s"} Turn`);
-
-    if (currentPlayer.userId === Number(localStorage.getItem("userId"))) {
-      setCountdown(game.gameParameters.timePerTurn); // Initialize countdown
-      const newTimeoutId = setTimeout(() => {
-        console.log("INACTIVE AFTER TIMEOUT");
-        if (!yourTurn) {
-          api.put(`/games/${game.gameId}/inactive`);
-        }
-      }, game.gameParameters.timePerTurn * 1000);
-      setTimeoutId(newTimeoutId);
-    }
+    setCountdown(game.gameParameters.timePerTurn);
   };
 
   useEffect(() => {
     updatePlayerIndication();
   }, [game.activePlayer]);
 
+  const handleInactive = useCallback(() => {
+      api.put(`games/${game.gameId}/inactive`);
+  });
 
-
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (countdown > 0) {
+      timeoutId = setTimeout(() => setCountdown(countdown - 1), 1000);
+    } else if (yourTurn) {
+      handleInactive();
+    }
+    return () => clearTimeout(timeoutId);
+  }, [countdown]);
 
 
   // Receiver function
@@ -121,12 +104,10 @@ const GameScreen = () => {
         for (const key in gameChangesDto.value) {
           const { changed, value } = gameChangesDto.value[key];
           if (changed) {
-            newGame = newGame.doUpdate(key, value);
-          } if (changed && key === "activePlayer" && value === Number(localStorage.getItem("userId")) ) {
-            console.log("Its YOUR TURN");
-            if (yourTurn) {
-              resetTimeout();
+            if (key === "activePlayer" && value === game.activePlayer) {
+              updatePlayerIndication();
             }
+            newGame = newGame.doUpdate(key, value);
           }
         }
 
