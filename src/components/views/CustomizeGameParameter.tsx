@@ -24,6 +24,7 @@ const CustomizeGameParameter = () => {
   const [errorMessages, setErrorMessages] = useState<string>("");
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [startDisabled, setStartDisabled] = useState(false);
 
   useEffect(() => {
     async function fetchAvailablePlaylists() {
@@ -45,6 +46,7 @@ const CustomizeGameParameter = () => {
   }, [availablePlaylists]);
 
   function startGame(e) {
+    setStartDisabled(true);
     e.preventDefault();
     // Validation conditions
     const validations: {
@@ -121,6 +123,8 @@ const CustomizeGameParameter = () => {
       }
     } catch (error) {
       alert(`Something went wrong setting up the lobby. \n${handleError(error)}`);
+    } finally {
+      setStartDisabled(false);
     }
   }
 
@@ -257,7 +261,9 @@ const CustomizeGameParameter = () => {
               <button
                 type="submit"
                 className="customizebtn"
-                onClick={startGame}>Start Game
+                onClick={startGame}
+                disabled={startDisabled}>
+                  Start Game
               </button>
               <button className="customizebtn" style={{ "margin": "10px" }} onClick={cancel}>Cancel</button>
             </div>
