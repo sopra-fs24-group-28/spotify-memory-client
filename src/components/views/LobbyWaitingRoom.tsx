@@ -68,7 +68,7 @@ const LobbyWaitingRoom = () => {
 
   async function fetchData() {
     try {
-      if (initialGameId) {
+      if (!(initialGameId === undefined)) {
         const response = await api.get(`/games/${initialGameId}`);
         const gameStart = response.data;
         // instantiating a lobby object here instead of a game object
