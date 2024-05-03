@@ -9,7 +9,6 @@ class GameParameter {
     this.streakMultiplier = data.streakMultiplier;
     this.timePerTurn = data.timePerTurn;
     this.timePerTurnPowerUp = data.timePerTurnPowerUp;
-    // this.playlistImageUrl = "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" ; // TODO: placeholder, is this covered in this.playlist? 
     Object.assign(this, data);
   }
 }
