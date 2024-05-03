@@ -11,8 +11,8 @@ import toastNotify from "../../helpers/Toast";
 
 const CustomizeGameParameter = () => {
   const navigate = useNavigate();
-  const [playerLimit, setPlayerLimit] = useState(4);
-  const [numOfSets, setNumOfSets] = useState(1);
+  const [playerLimit, setPlayerLimit] = useState(6);
+  const [numOfSets, setNumOfSets] = useState(5);
   const [numOfCardsPerSet, setNumOfCardsPerSet] = useState(2);
   const [gameCategory, setGameCategory] = useState("STANDARDALBUMCOVER");
   const [playlist, setPlaylist] = useState();
