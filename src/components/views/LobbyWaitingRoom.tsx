@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "styles/views/LobbyWaitingRoom.scss";
 import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
@@ -80,6 +80,21 @@ const LobbyWaitingRoom = () => {
       console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
     }
   }
+
+  const sendExitRequest = useCallback(() => {
+    handleLeave().then();
+  }, []);
+
+  useEffect(() => {
+    const handleTabClose = (event) => {
+      sendExitRequest();
+    };
+
+    window.addEventListener("beforeunload", handleTabClose);
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClose);
+    };
+  }, [sendExitRequest]);
 
 
   useEffect(() => {

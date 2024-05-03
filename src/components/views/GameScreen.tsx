@@ -25,21 +25,34 @@ const GameScreen = () => {
   const [scoreBoard, setScoreBoard] = useState(location.state.scoreBoard);
   const [stompClient, setStompClient] = useState(null);
   const [gameFinished, setGameFinished] = useState(false);
-  const [showMessage, SetShowMessage] = useState("");
+  const [showMessage, setShowMessage] = useState("");
 
   const [deviceIdGame, setDeviceIdGame] = useState("");
   const [player, setPlayer] = useState(null);
-  const [yourTurn, setYourTurn] = useState(false);
 
-  useEffect(() => {
-    toastNotify("One Player left", 2000, "warning")
-    console.log(game.playerList);
-  }, [game.playerList]);
+  const [yourTurn, setYourTurn] = useState(false);
+  const [countdown, setCountdown] = useState(0); // Timer state
 
 
   const setPlayerCallback = useCallback((playerObj) => {
     setPlayer(playerObj);
   }, []);
+
+  const sendExitRequest = useCallback(() => {
+   handleLeaveGame();
+  }, [game.gameId]);
+
+  useEffect(() => {
+    const handleTabClose = (event) => {
+      event.preventDefault();
+      sendExitRequest();
+    };
+
+    window.addEventListener("beforeunload", handleTabClose);
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClose);
+    };
+  }, [sendExitRequest]);
 
   const disconnectPlayer = () => {
     if (player) {
@@ -53,22 +66,32 @@ const GameScreen = () => {
     setDeviceIdGame(deviceId);
   };
 
-  const updatePlayerindiction = () => {
+
+  const updatePlayerIndication = () => {
     const currentPlayer = game.playerList.find(user => user.userId === game.activePlayer);
-    if (currentPlayer.userId === Number(localStorage.getItem("userId"))) {
-      setYourTurn(true);
-      toastNotify("Pay attention its your Turn", game?.gameParameters?.timePerTurn * 1000, "warning");
-    } else {
-      setYourTurn(false);
-      toastNotify(`It's currently ${currentPlayer.username + "'s"} turn`, game?.gameParameters?.timePerTurn * 1000, "normal");
-
-    }
-
-    SetShowMessage(`It's currently ${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "your" : currentPlayer.username + "'s"} turn`);
+    setYourTurn(currentPlayer.userId === Number(localStorage.getItem("userId")));
+    setShowMessage(`${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "Your" : currentPlayer.username + "'s"} Turn`);
+    setCountdown(game.gameParameters.timePerTurn);
   };
+
   useEffect(() => {
-    updatePlayerindiction();
+    updatePlayerIndication();
   }, [game.activePlayer]);
+
+  const handleInactive = useCallback(() => {
+      api.put(`games/${game.gameId}/inactive`);
+  });
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (countdown > 0) {
+      timeoutId = setTimeout(() => setCountdown(countdown - 1), 1000);
+    } else if (yourTurn) {
+      handleInactive();
+    }
+    return () => clearTimeout(timeoutId);
+  }, [countdown]);
+
 
   // Receiver function
   const receiverFunction = useCallback((newDataRaw) => {
@@ -81,6 +104,9 @@ const GameScreen = () => {
         for (const key in gameChangesDto.value) {
           const { changed, value } = gameChangesDto.value[key];
           if (changed) {
+            if (key === "activePlayer" && value === game.activePlayer) {
+              updatePlayerIndication();
+            }
             newGame = newGame.doUpdate(key, value);
           }
         }
@@ -177,6 +203,7 @@ const GameScreen = () => {
       <script src="https://sdk.scdn.co/spotify-player.js"></script>
       <div className="BaseContainer">
         <div className="screen-gridhandler">
+
           <div className="BaseDivGame col6">
             <div className="basicCardContainer">
               {cardsStates.map((card, index) => (
@@ -198,6 +225,9 @@ const GameScreen = () => {
                              setPlayer={setPlayerCallback} />
               </div>}
               <div className="stats">
+                <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>
+                  <div className="gameMessage">{showMessage} - {countdown} sec</div>
+                </div>
                 <h2 className="h2-title">Current Score</h2>
                 {/*<UserStatWithIcon className="test" username={"Henry"} currentStanding={"1"} />*/}
                 {/*<UserStatWithIcon username={"Elias"} currentStanding={"2"} />*/}
