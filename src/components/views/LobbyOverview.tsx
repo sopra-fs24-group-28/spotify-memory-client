@@ -126,7 +126,7 @@ const LobbyOverview = () => {
     <div className="BaseDivLobby">
       <div>
         <div className="newGameButton">
-          <Button width={"40%"} height={"30%"} className={"primary-button"} style={{"max-width" : "250px", "min-width" : "250px"}} onClick={createlobby}>Create new Lobby</Button>
+          <Button width={"40%"} height={"30%"} className={"create-lobby"} onClick={createlobby}>Create new Lobby</Button>
         </div>
         {content}
       </div>

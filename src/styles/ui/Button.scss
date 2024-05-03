@@ -38,6 +38,20 @@
   min-width: 100px;
   max-width: 100px;
   background: $turquise;
+  
+}
+
+.cstm-button {
+  @extend .primary-button;
+  background: $turquise;
+
+}
+
+.create-lobby {
+  @extend .primary-button;
+  min-width: 250px;
+  max-width: 250px;
+  
 }
 
 .lobby-overview-button {
