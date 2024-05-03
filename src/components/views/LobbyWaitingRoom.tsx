@@ -21,7 +21,8 @@ const LobbyWaitingRoom = () => {
 
   // navigate back to lobby overview if player did not join lobby through join button
   useEffect(() => {
-    if (!initialGameId) { navigate("/lobbyoverview") };
+    console.log(initialGameId);
+    if (initialGameId === undefined) { navigate("/lobbyoverview") };
   }, [initialGameId]);
       
   //Websocket specific
