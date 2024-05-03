@@ -31,8 +31,12 @@
   justify-self: center;
 }
 
+
+
 .join-button {
   @extend .primary-button;
+  min-width: 100px;
+  max-width: 100px;
   background: $turquise;
 }
 
