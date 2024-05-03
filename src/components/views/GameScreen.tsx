@@ -49,6 +49,7 @@ const GameScreen = () => {
     };
 
     window.addEventListener("beforeunload", handleTabClose);
+    
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
@@ -89,6 +90,7 @@ const GameScreen = () => {
     } else if (yourTurn) {
       handleInactive();
     }
+    
     return () => clearTimeout(timeoutId);
   }, [countdown]);
 

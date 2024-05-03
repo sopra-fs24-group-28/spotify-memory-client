@@ -91,6 +91,7 @@ const LobbyWaitingRoom = () => {
     };
 
     window.addEventListener("beforeunload", handleTabClose);
+    
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
