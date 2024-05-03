@@ -51,6 +51,7 @@ const GameScreen = () => {
     };
 
     window.addEventListener("beforeunload", handleTabClose);
+
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
@@ -79,6 +80,7 @@ const GameScreen = () => {
     // clear existing interval
     setIntervals(prevIntervals => {
       clearInterval(prevIntervals);
+
       return null;
     });
 
@@ -90,7 +92,7 @@ const GameScreen = () => {
     // set new timer and interval
     setCountdown(game.gameParameters.timePerTurn);
     const temp = setInterval(() => {
-      setCountdown((prevCountdown) => { return prevCountdown - 1 });
+      setCountdown((prevCountdown) => { prevCountdown - 1 });
     }, 1000)
     setIntervals(temp);
 
@@ -103,6 +105,7 @@ const GameScreen = () => {
       if (nExcluded > prevExcl) {
         setCountdown(game.gameParameters.timePerTurn);
       }
+      
       return nExcluded 
     })    
   }, [cardsStates])

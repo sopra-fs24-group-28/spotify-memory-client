@@ -30,6 +30,7 @@ const LobbyWaitingRoom = () => {
     // handling only gameChanges here, because other parts of game will not change in wainting room
     const gameChanges = data.gameChangesDto;
     if (!gameChanges.changed) {
+
       return;
     } else {
       setGame(prevGame => {
@@ -90,6 +91,7 @@ const LobbyWaitingRoom = () => {
     };
 
     window.addEventListener("beforeunload", handleTabClose);
+    
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
