@@ -6,7 +6,7 @@
   @include center;
   display: grid;
   grid-template-columns: 1fr 4fr 1fr;
-  background-color: $turquise;
+  background-color: rgb(0, 111, 166);
   width: 50vw;
   border-radius: $borderRadius;
   min-height: 50px;
@@ -17,6 +17,13 @@
     width: 22vw;
 
   }
+
+}
+
+.userbox-me {
+  @extend .userbox;
+  background-color: $turquise;
+  // color: black;
 
 }
 

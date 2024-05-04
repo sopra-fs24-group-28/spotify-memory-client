@@ -7,7 +7,7 @@ export const UserStatWithIcon = (props) => {
   const user = props.user;
   
   return (
-  <span className="userbox">
+  <span className={(Number(localStorage.getItem("userId")) === user.userId) ? "userbox-me" : "userbox"}>
   <span className="centered-column">
     <ProfileCircle width={"40px"} height={"40px"} url={user.profileImageUrl}></ProfileCircle>
   </span>
