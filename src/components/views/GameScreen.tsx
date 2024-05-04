@@ -11,6 +11,7 @@ import { Client } from "@stomp/stompjs";
 import { getWSDomain } from "helpers/getDomain";
 import toastNotify from "../../helpers/Toast";
 import { api } from "helpers/api";
+import { UserStatWithIcon } from "../ui/UserStatWithIcon"
 
 
 const GameScreen = () => {
@@ -22,7 +23,7 @@ const GameScreen = () => {
       new CardObject(cardId, cardState),
     ),
   );
-  const [scoreBoard, setScoreBoard] = useState(location.state.scoreBoard);
+  const [scoreBoard, setScoreBoard] = useState();
   const [stompClient, setStompClient] = useState(null);
   const [gameFinished, setGameFinished] = useState(false);
   const [showMessage, setShowMessage] = useState("");
@@ -145,11 +146,15 @@ const GameScreen = () => {
       });
     }
 
-    if (scoreBoard?.changed) {
-      console.error("Scoreboard changed, but not implemented yet");
+    if (scoreBoard?.changed) {      
+      setScoreBoard(scoreBoard.value.scoreboard);
     }
   }, []);
 
+  useEffect(() => {
+    console.log("HTIS IS THE SCOREBOARD");
+    console.log(scoreBoard)
+  }, [scoreBoard]);
 
   // WebSocket setup
   useEffect(() => {
@@ -234,11 +239,24 @@ const GameScreen = () => {
                 <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>
                   <div className="gameMessage">{showMessage} - {countdown} sec</div>
                 </div>
-                <h2 className="h2-title">Current Score</h2>
-                {/*<UserStatWithIcon className="test" username={"Henry"} currentStanding={"1"} />*/}
-                {/*<UserStatWithIcon username={"Elias"} currentStanding={"2"} />*/}
-                {/*<UserStatWithIcon username={"Niklas"} currentStanding={"3"} />*/}
-                {/*<UserStatWithIcon username={"Diyar"} currentStanding={"4"} />*/}
+                {/* <h2 className="h2-title">Current Score</h2> */}
+                {scoreBoard ?
+                <ul className="grid-item">
+                    {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (
+                        <li key={user.userId} className="grid-item">
+                          <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
+                        </li>
+                      ))}
+                </ul>
+                :
+                <ul className="grid-item">
+                  {game.playerList.map((user) => (
+                        <li key={user.userId} className="grid-item">
+                          <UserStatWithIcon user={user}  currentStanding={1} />
+                        </li>
+                  ))}
+                </ul>
+                }
               </div>
               <div>
                 <Button width={"100%"} onClick={handleLeaveGame}>Leave Game</Button>

@@ -57,7 +57,7 @@ const LobbyWaitingRoom = () => {
       setCardContent(data.cardContent.value);
     }
     if (data.scoreBoard.changed) {
-      setScoreBoard(data.scoreBoard.value);
+      setScoreBoard(data.scoreBoard.value.scoraboard);
     }
     console.log(data);
   };
