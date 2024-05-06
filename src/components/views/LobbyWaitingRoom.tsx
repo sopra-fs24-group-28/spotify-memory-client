@@ -13,7 +13,7 @@ import toastNotify from "../../helpers/Toast";
 const LobbyWaitingRoom = () => {
   const navigate: NavigateFunction = useNavigate();
   const location = useLocation();
-  const initialGameId = location.state?.lobby?.lobbyId; 
+  const initialGameId = location.state?.lobby?.lobbyId;
   const [game, setGame] = useState<Game>();
   const [cardsStates, setCardsStates] = useState();
   const [cardContent, setCardContent] = useState();
@@ -22,9 +22,12 @@ const LobbyWaitingRoom = () => {
   // navigate back to lobby overview if player did not join lobby through join button
   useEffect(() => {
     console.log(initialGameId);
-    if (initialGameId === undefined) { navigate("/lobbyoverview") };
+    if (initialGameId === undefined) {
+      navigate("/lobbyoverview");
+    }
+
   }, [initialGameId]);
-      
+
   //Websocket specific
   const receiverFunction = (newDataRaw) => {
     const data = JSON.parse(newDataRaw.body);
@@ -91,7 +94,7 @@ const LobbyWaitingRoom = () => {
     };
 
     window.addEventListener("beforeunload", handleTabClose);
-    
+
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
@@ -108,12 +111,13 @@ const LobbyWaitingRoom = () => {
     fetchDataAndConnect()
       .catch(error => {
         toastNotify("There was an error fetching the data. Please try again.", 1000, "warning");
-      });  }, []);
+      });
+  }, []);
 
   useEffect(() => {
     // TODO: this should show a message to a user
     if (game?.gameState === "ONPLAY") {
-      toastNotify("The game starts shortly. Your being redirected...", 500, "normal")
+      toastNotify("The game starts shortly. Your being redirected...", 500, "normal");
       async () => {
         await ws.disconnect();
       };
@@ -174,14 +178,12 @@ const LobbyWaitingRoom = () => {
             <div
               className={game?.gameParameters.playlist.playlistImageUrl ? "imgContainer" : "spotifyPlaylistContainer"}>
               {game?.gameParameters.playlist.playlistImageUrl ? (
-                <div>
+                <div className="imgandtext">
                   {/*<span*/}
                   {/*  className="playlist-name second-column-top-item">{game?.gameParameters.playlist.playlistName}</span>*/}
                   <img
                     src={game?.gameParameters.playlist.playlistImageUrl}
                     alt="Spotify Playlist Image"
-                    width="100%"
-                    height="100%"
                     className="second-column-top-item img"
                   />
                   <span className="playlist-name">{game?.gameParameters.playlist.playlistName}</span>
@@ -192,11 +194,17 @@ const LobbyWaitingRoom = () => {
             </div>
             <div className="buttonContainer">
               <Button width="65%" onClick={handleLeave}>Leave</Button>
-
-              {/* only show this if player is host and */}
-              {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ?
-                <Button width="65%" onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button> : <div></div>}
+              {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ? (
+                <Button width="65%" onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button>
+              ) : (
+                localStorage.getItem("userId") === String(game?.hostId) ? (
+                  <Button width="65%" disabled={true}>Start (Still Waiting..)</Button>
+                ) : (
+                  <div></div>
+                )
+              )}
             </div>
+
 
           </div>
           <div className="centerwrapper">
@@ -216,14 +224,12 @@ const LobbyWaitingRoom = () => {
                   )}
                 </div>
               )}
-
-              {/* Display players with scoreboard when scoreBoard is available */}
               {scoreBoard && (
                 <div>
                   <div className="h3-title">Game Over!</div>
                   {game && game.playerList && (
                     <ul className="grid-item">
-                    {game.playerList.sort((a, b) => scoreBoard[a.userId] - scoreBoard[b.userId]).map((user) => (
+                      {game.playerList.sort((a, b) => scoreBoard[a.userId] - scoreBoard[b.userId]).map((user) => (
                         <li key={user.userId} className="grid-item">
                           <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId]} />
                         </li>

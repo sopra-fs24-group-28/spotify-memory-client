@@ -7,15 +7,12 @@
   display: grid;
   grid-template-columns: 1fr 4fr 1fr;
   background-color: rgb(0, 111, 166);
-  width: 50vw;
+  width: 100%;
   border-radius: $borderRadius;
-  min-height: 50px;
-  max-height: 60px;
-  margin-bottom: 10px;
-  min-width: 300px;
-  @media screen and (min-width: 1100px) {
-    width: 22vw;
-
+  height: 30%;
+  margin-bottom: 20px;
+  @media scrseen and (min-width: 1100px) {
+    width: 20%;
   }
 
 }

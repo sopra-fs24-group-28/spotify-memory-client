@@ -27,7 +27,7 @@ const Navbar = () => {
   return (<nav className="navbar">
     <div className="navbar-container">
       {(isLoginPage || isGamePage) ?
-      <a href="/" className="navbar-brand">
+      <a className="navbar-brand">
         Spotymemory
       </a>
       :
@@ -38,18 +38,18 @@ const Navbar = () => {
 
       <div className="navbar-icons">
         {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
-          <a href="/lobbyoverview" className="iconItems">
+          <a href="/lobbyoverview" className="iconItems" title="Return to the Lobby Overview">
             <GameIconSVG></GameIconSVG>
           </a>)}
         {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
-          <a onClick={handleLogout} className="iconItems">
+          <a onClick={handleLogout} className="iconItems" title="Log out!">
             <LogoutSVG />
           </a>)}
-        <a href="/" className="iconItems">
-          <MuteSVG />
-        </a>
+        {/*<a href="/" className="iconItems">*/}
+        {/*  <MuteSVG />*/}
+        {/*</a>*/}
         {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
-          <a href="/profilePage" className="iconItems">
+          <a href="/profilePage" className="iconItems" title="Open your Preferences">
             <PreferencesSVG width={50} height={50}></PreferencesSVG>
           </a>)}
       </div>

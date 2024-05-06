@@ -57,7 +57,7 @@
   border: 0;
   box-shadow: None;
   padding: 0;
-  align-items: baseline;
+  align-items: baseline !important;
   @include center;
 }
 
@@ -68,6 +68,10 @@
   &:hover {
     border: 2px solid $textColor;
   }
+}
+
+.imgandtext{
+  width: 100%;
 }
 
 .buttonContainer {
@@ -110,3 +114,5 @@
   margin: 5px;
   overflow: clip;
 }
+
+

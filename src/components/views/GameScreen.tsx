@@ -81,7 +81,7 @@ const GameScreen = () => {
   }, [game.activePlayer]);
 
   const handleInactive = useCallback(() => {
-      api.put(`games/${game.gameId}/inactive`);
+      // api.put(`games/${game.gameId}/inactive`);
   });
 
   useEffect(() => {
@@ -235,7 +235,7 @@ const GameScreen = () => {
                 <WebPlayback token={localStorage.getItem("accessToken")} onDeviceIdReceived={handleDeviceIdReceived}
                              setPlayer={setPlayerCallback} />
               </div>}
-              <div className="stats">
+              <div className="juhu">
                 <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>
                   <div className="gameMessage">{showMessage} - {countdown} sec</div>
                 </div>
@@ -244,17 +244,21 @@ const GameScreen = () => {
                 <ul className="grid-item">
                     {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (
                         <li key={user.userId} className="grid-item">
-                          <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
+                          <div className="usr">
+                            <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
+                          </div>
                         </li>
                       ))}
                 </ul>
                 :
                 <ul className="grid-item">
                   {game.playerList.map((user) => (
-                        <li key={user.userId} className="grid-item">
-                          <UserStatWithIcon user={user}  currentStanding={1} />
-                        </li>
-                  ))}
+                    <li key={user.userId} className="grid-item">
+                      <div className="usr">
+                        <UserStatWithIcon user={user}  currentStanding={1} />
+                      </div>
+                    </li>
+                    ))}
                 </ul>
                 }
               </div>

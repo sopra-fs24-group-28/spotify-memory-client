@@ -32,7 +32,7 @@ const Login = () => {
         <div className="logoContainer">
           <SpotifyLogoWithTextSVG width={1} height={1}></SpotifyLogoWithTextSVG>
         </div>
-        <div className="login button-container">
+        <div className="button-container">
           <Button
             className="spotifyButton"
             onClick={() => doLogin()}

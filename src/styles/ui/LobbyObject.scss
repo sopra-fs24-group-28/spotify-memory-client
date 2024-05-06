@@ -37,7 +37,8 @@
   align-self: center;
   justify-self: left;
   color: $textColor;
-  width: 100% !important;
+  width: 100%;
+  max-width: 250px;
   text-overflow: ellipsis !important;
 
 
@@ -50,7 +51,7 @@
   overflow: hidden;
   align-self: baseline;
   justify-self: left;
-  width: 100% !important;
+  max-width: 100% !important;
 
 }
 
@@ -79,7 +80,7 @@
   font-weight: bold;
   font-size: 1.5rem;
   white-space: nowrap;
-  width: 125px;
+  //width: 125px;
   overflow: hidden;
   text-overflow: clip;
 }

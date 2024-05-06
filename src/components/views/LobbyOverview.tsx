@@ -88,7 +88,6 @@ const LobbyOverview = () => {
       setReceivedGameStates(data); // this displays the data
       wsHandler.connect()
     };
-    console.log("REST ENDPOINT CALLED!!!!!!!!!!!!!!!!!!!!!!!!!");
     fetchData();
     
 

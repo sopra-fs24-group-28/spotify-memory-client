@@ -82,6 +82,7 @@
   @include center;
   flex-direction: column;
   align-self: baseline;
+  width: 100%;
 
 }
 
@@ -108,7 +109,7 @@
   align-items: center;
   justify-content: center;
   border: 2px solid $textColor;
-  border-radius: 15px;
+  border-radius: $borderRadius;
   background-color: $inputblue;
   box-shadow: $dropShadow;
   padding: 1rem;
@@ -227,4 +228,6 @@
   box-shadow: $dropShadow;
 }
 
-
+.usr{
+margin: 1.5rem;
+}
