@@ -58,9 +58,7 @@ const GameScreen = () => {
 
   const disconnectPlayer = () => {
     if (player) {
-      console.log("disconnecting player from gamescreen");
       player.disconnect();
-      console.log(player);
     }
   };
 
@@ -136,7 +134,6 @@ const GameScreen = () => {
           if (card.cardId === String(cardContent.value.cardId)) {
             const updatedCard = new CardObject(card.cardId,  card.cardState );
             updatedCard.setContent(cardContent.value)
-            console.log(updatedCard);
 
             return updatedCard;
           }
@@ -151,10 +148,6 @@ const GameScreen = () => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("HTIS IS THE SCOREBOARD");
-    console.log(scoreBoard)
-  }, [scoreBoard]);
 
   // WebSocket setup
   useEffect(() => {

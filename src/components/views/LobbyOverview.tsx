@@ -21,7 +21,6 @@ const LobbyOverview = () => {
     const data = JSON.parse(newDataRaw.body).gameMap
     const key = Object.keys(data)?.[0]
     const update = data[key];
-    console.log(update);
     const updatedLobbies = [];
     let makeNewLobby = true;
     setReceivedGameStates(prevState => {

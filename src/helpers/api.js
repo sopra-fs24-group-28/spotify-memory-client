@@ -48,8 +48,6 @@ export const handleError = error => {
       alert("The server cannot be reached.\nDid you start it?");
     }
 
-    console.log("Something else happened.", error);
-
     return error.message;
   }
 };

@@ -5,6 +5,7 @@ import ProfileCircle from "./ProfileCircle";
 import { Button } from "./Button";
 import PropTypes from "prop-types";
 import { api } from "helpers/api";
+import toastNotify from "../../helpers/Toast";
 
 
 const LobbyObject = (props) => {
@@ -18,7 +19,6 @@ const LobbyObject = (props) => {
         if (response.status === 200) {
           navigate(`/lobby/${lobby.lobbyId}`, { state: { lobby: lobby } });
         } else {
-          console.log("debug");
         }
       } else {
         alert("no valid Game-id could be associated with the selected lobby. Please try again later. ");

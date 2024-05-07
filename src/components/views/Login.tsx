@@ -11,7 +11,6 @@ const Login = () => {
       // const scope: string = "streaming playlist-read-private playlist-read-collaborative user-modify-playback-state user-read-currently-playing playlist-read-private user-read-private app-remote-control streaming user-modify-playback-state";
       const scope: string = "ugc-image-upload user-follow-modify playlist-modify-private playlist-modify-public user-library-modify playlist-read-collaborative user-read-currently-playing user-follow-read user-read-playback-position user-read-playback-state playlist-read-private user-read-recently-played user-top-read user-read-email user-library-read user-read-private app-remote-control streaming user-modify-playback-state"
       const redirect_uri: string = `${window.location.origin}/auth_callback`;
-      console.log(redirect_uri);
       const urlBase: string = "https://accounts.spotify.com/authorize?";
       const params = {
         response_type: "code", client_id: client_id, scope: scope, redirect_uri: redirect_uri,

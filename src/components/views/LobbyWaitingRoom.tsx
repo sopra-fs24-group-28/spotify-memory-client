@@ -21,7 +21,6 @@ const LobbyWaitingRoom = () => {
 
   // navigate back to lobby overview if player did not join lobby through join button
   useEffect(() => {
-    console.log(initialGameId);
     if (initialGameId === undefined) {
       navigate("/lobbyoverview");
     }
@@ -41,9 +40,7 @@ const LobbyWaitingRoom = () => {
         for (const key in gameChanges.value) {
           const changed = gameChanges.value[key].changed;
           const value = gameChanges.value[key].value;
-          // console.log(key, changed, value);
           if (changed) {
-
             newGame = newGame.doUpdate(key, value);
           }
 
@@ -62,7 +59,6 @@ const LobbyWaitingRoom = () => {
     if (data.scoreBoard.changed) {
       setScoreBoard(data.scoreBoard.value.scoraboard);
     }
-    console.log(data);
   };
   const ws = new WSHandler(`/games/${initialGameId}`,
     `/queue/games/${initialGameId}`,

@@ -57,7 +57,6 @@ function WebPlayback(props) {
       });
 
       player.addListener("not_ready", ({ device_id }) => {
-        // console.log("Device ID has gone offline", device_id);
         setDeviceId(null); // Set deviceId state when ready
 
       });
