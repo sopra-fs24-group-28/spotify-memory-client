@@ -24,9 +24,12 @@ const AuthCallback = () => {
         localStorage.setItem("accessToken", getResponse.data?.accessToken);
         navigate("/lobbyoverview"); //TODO: make real once ready
       } catch (error) {
-        console.log(localStorage.getItem("token"));
-        console.log(error);
-        setResponseMessage(`${error.message ?? "There was as error, please try again"} ${error.response?.data?.message ?? ""}`);
+        if (error.response && error.response.status === 424) {
+          setResponseMessage("There was an error with Spotify OAuth. Please contact the admin. Note that each account must be manually accepted once by the admin.");
+        } else {
+          console.log(error);
+          setResponseMessage(`${error.message ?? "There was an error, please try again"} ${error.response?.data?.message ?? ""}`);
+        }
       }
     }
 
@@ -46,7 +49,7 @@ const AuthCallback = () => {
   if (responseMessage) {
     console.log(responseMessage);
     body = (<div>
-      <div className="h2-title">{responseMessage}</div>
+      <div className="h2-title errmsg">{responseMessage}</div>
       <div className="login button-container">
         <Button
           className="spotifyButton"
