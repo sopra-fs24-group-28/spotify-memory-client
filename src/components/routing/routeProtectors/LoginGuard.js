@@ -1,6 +1,8 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { logout } from "../../../helpers/auth/logoutfunction";
+import toastNotify from "../../../helpers/Toast";
 
 /**
  *
@@ -8,12 +10,12 @@ import PropTypes from "prop-types";
  * instead of 'export default' at the end of the file.
  */
 export const LoginGuard = () => {
+  const navigate = useNavigate();
   if (!localStorage.getItem("token")) {
-
     return <Outlet />;
   }
-
-  return <Navigate to="/lobbyOverview" replace />;
+  logout(navigate)
+  return <Navigate to="/login" />;
 };
 
 LoginGuard.propTypes = {
