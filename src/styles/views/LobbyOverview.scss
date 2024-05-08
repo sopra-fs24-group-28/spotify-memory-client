@@ -28,7 +28,12 @@
   align-content: center;
 }
 
-.befirst{;
+.befirst{
   @extend .h2-title;
-  margin: 20vh;
+  color: $textColor;
+  display: flex; /* Use Flexbox */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  margin-top: 10em; 
+
 }
