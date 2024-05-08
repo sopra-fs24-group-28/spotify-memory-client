@@ -79,7 +79,7 @@ const GameScreen = () => {
   }, [game.activePlayer]);
 
   const handleInactive = useCallback(() => {
-      // api.put(`games/${game.gameId}/inactive`);
+      api.put(`games/${game.gameId}/inactive`);
   });
 
   useEffect(() => {
