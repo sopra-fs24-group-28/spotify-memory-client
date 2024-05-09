@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "styles/ui/Player.scss";
 import PropTypes from "prop-types";
 import { api } from "helpers/api";
+import { Button } from "./Button";
 
 
 const track = {
@@ -158,13 +159,14 @@ function WebPlayback(props) {
               <div className="now-playing-name">{current_track?.name}</div>
               <div className="now-playing-artist">{current_track?.artists[0]?.name}</div>
             </div>
-            <div className="button-container">
+            <div className="button-container-2">
               <div className="volumebuttons">
                 <button className="spotifyButtonplayer" onClick={handleDecreaseVolume}>
                   {"-"}
                 </button>
-                <button className="spotifyButtonplayer" onClick={() => {
+                <button className= "spotifyButtonplayer" onClick={() => {
                   player.togglePlay();
+                  setPaused(!is_paused)
                 }}>
                   {is_paused ? "PLAY" : "PAUSE"}
                 </button>
