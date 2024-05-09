@@ -115,7 +115,7 @@ const LobbyOverview = () => {
   } else {
     content = (
       <div className="befirst">
-        Be the first to start a game!
+        <h2>Be the first to start a game!</h2>
       </div>
     )
   }

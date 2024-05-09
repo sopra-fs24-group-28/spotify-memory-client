@@ -5,9 +5,11 @@ import toastNotify from "../../../helpers/Toast";
 
 export const GameGuard = () => {
   if (localStorage.getItem("token")) {
+    
     return <Outlet />;
   }
-  toastNotify("Please log in before trying to access this page", 1000, 'warning')
+  toastNotify("Please log in before trying to access this page", 1000, "warning")
+  
   return <Navigate to="/login" replace />;
 };
 
