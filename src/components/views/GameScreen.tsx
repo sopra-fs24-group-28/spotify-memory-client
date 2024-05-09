@@ -180,15 +180,26 @@ const GameScreen = () => {
 
 
   useEffect(() => {
-    if (game?.gameState === "OPEN") {
-      disconnectPlayer();
-      stompClient.deactivate()
-      navigate(`/lobby/${game.gameId}`, { state: { lobby: {lobbyId : game.gameId}, scoreBoard : scoreBoard } });
-    } else if (game?.gameState === "FINISHED") {
-      disconnectPlayer();
-      stompClient.deactivate()
-      navigate(`/lobbyoverview`);
+    // if (game?.gameState === "OPEN") {
+      if (game?.gameState === "FINISHED") { // either host left or game finished
+        if (!cardsStates.some(card => card.cardState === "FACEDOWN")) {
+          // game is finished, set message and disable timers
+          setShowMessage("Game over!")
+          setCountdown(5);
+          // redirect players to lobby after delay
+          setTimeout(() => {
+            disconnectPlayer();
+            stompClient.deactivate()
+            navigate(`/lobby/${game.gameId}`, { state: { lobby: {lobbyId : game.gameId}, scoreBoard : scoreBoard } });
+          }, 5000); 
+        } else {
+          // host left the lobby
+          disconnectPlayer();
+          stompClient.deactivate()
+          navigate(`/lobbyoverview`);
+      }
     }
+
   }, [game]);
 
   function handleLeaveGame() {
