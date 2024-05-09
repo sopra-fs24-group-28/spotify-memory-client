@@ -7,13 +7,8 @@ import { getSpotifyPlaylist } from "../../helpers/spotifyrelated/getPlaylists";
 import Lobby from "../../models/Lobby";
 import LobbyDTO from "../../communication/websocket/dto/LobbyDTO";
 import toastNotify from "../../helpers/Toast";
-import 'react-tooltip/dist/react-tooltip.css'
-import { Tooltip } from 'react-tooltip'
-
-
-
-
-
+import "react-tooltip/dist/react-tooltip.css"
+import { Tooltip } from "react-tooltip"
 
 
 const CustomizeGameParameter = () => {
