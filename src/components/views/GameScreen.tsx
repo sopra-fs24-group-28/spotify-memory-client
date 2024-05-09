@@ -196,7 +196,7 @@ const GameScreen = () => {
           // host left the lobby
           disconnectPlayer();
           stompClient.deactivate()
-          navigate(`/lobbyoverview`);
+          navigate("/lobbyoverview");
       }
     }
 

@@ -40,10 +40,7 @@ const AppRouter = () => {
           <Route path="" element={<Navigate to="/login" replace />} />
         </Route>
 
-
-
         <Route path="/game/:gameid" element={<GameScreen />} />
-
 
         <Route path="/" element={
           <Navigate to="/login" replace />
