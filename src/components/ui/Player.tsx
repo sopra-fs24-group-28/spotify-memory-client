@@ -143,7 +143,7 @@ function WebPlayback(props) {
             <b> Reconnect the Spotify Player! </b>
           </div>
           <div className="centerwrapper">
-            <button className="spotifyButtonplayer" onClick={handleReconnect}>
+            <button className="spotifyButtonplayer big" onClick={handleReconnect}>
               {"reconnect"}
             </button>
           </div>
@@ -164,7 +164,7 @@ function WebPlayback(props) {
                 <button className="spotifyButtonplayer" onClick={handleDecreaseVolume}>
                   {"-"}
                 </button>
-                <button className= "spotifyButtonplayer" onClick={() => {
+                <button className= "spotifyButtonplayer middle" onClick={() => {
                   player.togglePlay();
                   setPaused(!is_paused)
                 }}>

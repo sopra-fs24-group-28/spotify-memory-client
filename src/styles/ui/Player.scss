@@ -52,7 +52,15 @@
   justify-self: center;
   font-size: medium;
   margin: 0.5rem;
-  width: 60px;
+  width: 30px;
+
+  &.middle{
+    width: 80px;
+  }
+
+  &.big{
+    width: 120px;
+  }
 }
 
 .volumebuttons {

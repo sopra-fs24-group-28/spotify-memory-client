@@ -268,8 +268,8 @@ const GameScreen = () => {
                   </ul>
                 }
               </div>
-              <div>
-              <Button className="leave-button" width={"100%"} onClick={handleLeaveGame}>Leave Game</Button>
+              <div className="buttongroup">
+              <Button className="leave-button" width={"85%"} onClick={handleLeaveGame}>Leave Game</Button>
               </div>
             </div>
           </div>
