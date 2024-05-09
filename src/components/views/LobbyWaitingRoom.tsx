@@ -57,7 +57,8 @@ const LobbyWaitingRoom = () => {
       setCardContent(data.cardContent.value);
     }
     if (data.scoreBoard.changed) {
-      setScoreBoard(data.scoreBoard.value.scoraboard);
+      // ignoring scoreboard here for now
+      // setScoreBoard(data.scoreBoard.value.scoraboard);
     }
   };
   const ws = new WSHandler(`/games/${initialGameId}`,
@@ -122,7 +123,6 @@ const LobbyWaitingRoom = () => {
           game: game.serialize(),
           cardsStates: cardsStates,
           cardContent: cardContent,
-          scoreBoard: scoreBoard,
         },
       });
     } else if (game?.gameState === "FINISHED") {
@@ -224,10 +224,10 @@ const LobbyWaitingRoom = () => {
                 <div>
                   <div className="h3-title">Game Over!</div>
                   {game && game.playerList && (
-                    <ul className="grid-item">
-                      {game.playerList.sort((a, b) => scoreBoard[a.userId] - scoreBoard[b.userId]).map((user) => (
+                    <ul>
+                      {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (
                         <li key={user.userId} className="grid-item">
-                          <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId]} />
+                          <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
                         </li>
                       ))}
                     </ul>
