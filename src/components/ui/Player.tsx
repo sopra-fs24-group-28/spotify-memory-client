@@ -142,9 +142,9 @@ function WebPlayback(props) {
             <b> Reconnect the Spotify Player! </b>
           </div>
           <div className="centerwrapper">
-          <button className="spotifyButtonplayer" onClick={handleReconnect}>
-            {"reconnect"}
-          </button>
+            <button className="spotifyButtonplayer" onClick={handleReconnect}>
+              {"reconnect"}
+            </button>
           </div>
         </div>
       </>);
@@ -152,34 +152,26 @@ function WebPlayback(props) {
     return (
       <>
         <div className="base">
-
-          <img className="albumcoverinplayer" src={current_track?.album.images[0].url} alt="" />
-
+          {/*<img className="albumcoverinplayer" src={current_track?.album.images[0].url} alt="" />*/}
           <div className="now-playingside">
             <div className="textinfo">
               <div className="now-playing-name">{current_track?.name}</div>
               <div className="now-playing-artist">{current_track?.artists[0]?.name}</div>
             </div>
             <div className="button-container">
-
-
               <div className="volumebuttons">
                 <button className="spotifyButtonplayer" onClick={handleDecreaseVolume}>
                   {"-"}
                 </button>
-
                 <button className="spotifyButtonplayer" onClick={() => {
                   player.togglePlay();
                 }}>
                   {is_paused ? "PLAY" : "PAUSE"}
                 </button>
-
                 <button className="spotifyButtonplayer" onClick={handleIncreaseVolume}>
                   {"+"}
                 </button>
               </div>
-
-
             </div>
           </div>
         </div>
@@ -193,5 +185,5 @@ export default WebPlayback;
 WebPlayback.propTypes = {
   token: PropTypes.string,
   onDeviceIdReceived: PropTypes.func.isRequired, // Callback function prop
-  setPlayer: PropTypes.func
+  setPlayer: PropTypes.func,
 };
