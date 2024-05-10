@@ -10,6 +10,7 @@ import CustomizeGameParameter from "../../views/CustomizeGameParameter";
 import Navbar from "../../ui/Navbar";
 import LobbyWaitingRoom from "../../views/LobbyWaitingRoom";
 import GameScreen from "../../views/GameScreen";
+import ProfilePage from "../../views/ProfilePage";
 
 
 const AppRouter = () => {
@@ -37,6 +38,7 @@ const AppRouter = () => {
           <Route path="/lobbyOverview" element={<LobbyOverview />} />
           <Route path="/customizeGame" element={<CustomizeGameParameter />} />
           <Route path="/lobby/:gameid" element={<LobbyWaitingRoom />} />
+          <Route path="/profilePage" element={<ProfilePage />} />
           <Route path="" element={<Navigate to="/login" replace />} />
         </Route>
 

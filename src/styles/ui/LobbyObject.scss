@@ -32,7 +32,7 @@
 }
 
 .second-column-top-item {
-  grid-column: 2 / 3; // Starts at column 2, ends at column 3
+  grid-column: 2 / 3;
   grid-row: 1; // Only in the first row
   align-self: center;
   justify-self: left;

@@ -120,4 +120,13 @@
   overflow: clip;
 }
 
+.second-column-top-item-lw{
+  grid-column: 2 / 3;
+  grid-row: 1; // Only in the first row
+  align-self: center;
+  justify-self: left;
+  color: $textColor;
+  width: 100%;
+  text-overflow: ellipsis !important;
+}
 

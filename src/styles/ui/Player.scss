@@ -4,9 +4,12 @@
 @import "../views/GameScreen";
 
 .base{
+  @include center;
   display: flex;
   flex-direction: column;
   align-content: center;
+  height: 10%;
+  width: 80%;
 }
 
 .albumcoverinplayer{
@@ -49,18 +52,29 @@
   justify-self: center;
   font-size: medium;
   margin: 0.5rem;
+  width: 30px;
+
+  &.middle{
+    width: 80px;
+  }
+
+  &.big{
+    width: 120px;
+  }
 }
 
-.volumebuttons{
+.volumebuttons {
   @include center;
-  width: 200px;
   display: flex;
   flex-direction: row;
   border-radius: $borderRadius;
-  border: 2px solid $textColor;
 
 }
 
 ::-webkit-scrollbar {
   display: none;  /* Hides the scrollbar */
+}
+
+.button-container-2{
+  margin-top: 5px ;
 }

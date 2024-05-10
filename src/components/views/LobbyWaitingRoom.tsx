@@ -180,7 +180,7 @@ const LobbyWaitingRoom = () => {
                   <img
                     src={game?.gameParameters.playlist.playlistImageUrl}
                     alt="Spotify Playlist Image"
-                    className="second-column-top-item img"
+                    className="second-column-top-item-lw img"
                   />
                   <span className="playlist-name">{game?.gameParameters.playlist.playlistName}</span>
                 </div>
@@ -189,12 +189,12 @@ const LobbyWaitingRoom = () => {
               )}
             </div>
             <div className="buttonContainer">
-              <Button width="65%" onClick={handleLeave}>Leave</Button>
+              <Button width="40%" onClick={handleLeave}>Leave</Button>
               {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ? (
-                <Button width="65%" onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button>
+                <Button width="40%" onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button>
               ) : (
                 localStorage.getItem("userId") === String(game?.hostId) ? (
-                  <Button width="65%" disabled={true}>Start (Still Waiting..)</Button>
+                  <Button width="40%" disabled={true}>Start (Still Waiting..)</Button>
                 ) : (
                   <div></div>
                 )
@@ -222,7 +222,7 @@ const LobbyWaitingRoom = () => {
               )}
               {scoreBoard && (
                 <div>
-                  <div className="h3-title">Game Over!</div>
+                  <div className="h3-title">Game Over! Your Scoreboard is:</div>
                   {game && game.playerList && (
                     <ul>
                       {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (

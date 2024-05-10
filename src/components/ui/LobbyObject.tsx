@@ -37,7 +37,7 @@ const LobbyObject = (props) => {
       <div className="user-avatars second-column-bottom-item">
         {lobby.playerList.map((user) => (
           <li key={user.userId}>
-            <ProfileCircle height={40} width={40} url={user.profileImageUrl} />
+            <ProfileCircle height={40} width={40} url={user.imageUrl} />
           </li>
         ))}
       </div>

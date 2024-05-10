@@ -217,6 +217,9 @@ const GameScreen = () => {
       <div>{game.gameParameters.activePlayer}</div>
       <script src="https://sdk.scdn.co/spotify-player.js"></script>
       <div className="BaseContainer">
+        <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>
+          <div className="gameMessage">{showMessage} - {countdown} sec</div>
+        </div>
         <div className="screen-gridhandler">
 
           <div className="BaseDivGame col6">
@@ -240,34 +243,33 @@ const GameScreen = () => {
                              setPlayer={setPlayerCallback} />
               </div>}
               <div className="juhu">
-                <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>
-                  <div className="gameMessage">{showMessage} - {countdown} sec</div>
-                </div>
                 {/* <h2 className="h2-title">Current Score</h2> */}
                 {scoreBoard ?
-                <ul className="grid-item">
+                  <ul className="grid-item">
+                    <div className="h2-title">Current Scoreboard</div>
                     {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (
-                        <li key={user.userId} className="grid-item">
-                          <div className="usr">
-                            <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
-                          </div>
-                        </li>
-                      ))}
-                </ul>
-                :
-                <ul className="grid-item">
-                  {game.playerList.map((user) => (
-                    <li key={user.userId} className="grid-item">
-                      <div className="usr">
-                        <UserStatWithIcon user={user}  currentStanding={1} />
-                      </div>
-                    </li>
+                      <li key={user.userId} className="grid-item">
+                        <div className="usr">
+                          <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
+                        </div>
+                      </li>
                     ))}
-                </ul>
+                  </ul>
+                  :
+                  <ul className="grid-item">
+                    <div className="h2-title">Current Players</div>
+                    {game.playerList.map((user) => (
+                      <li key={user.userId} className="grid-item">
+                        <div className="usr">
+                          <UserStatWithIcon user={user} currentStanding={1} />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 }
               </div>
-              <div>
-                <Button width={"100%"} onClick={handleLeaveGame}>Leave Game</Button>
+              <div className="buttongroup">
+              <Button className="leave-button" width={"85%"} onClick={handleLeaveGame}>Leave Game</Button>
               </div>
             </div>
           </div>
