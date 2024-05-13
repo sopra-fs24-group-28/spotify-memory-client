@@ -179,6 +179,7 @@
 }
 
 .card-inner {
+  transform: rotateY(180deg);
   @include center;
   height: 100%;
   width: 100%;
@@ -190,7 +191,6 @@
   width: 100%;
   height: 100%;
   border-radius: $borderRadius;
-  //border: 1px solid $textColor;
 }
 
 .spotifyplayercontainer {
