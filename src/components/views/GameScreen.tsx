@@ -40,6 +40,7 @@ const GameScreen = () => {
   }, []);
 
   const sendExitRequest = useCallback(() => {
+   handleInactive();
    handleLeaveGame();
   }, [game.gameId]);
 
