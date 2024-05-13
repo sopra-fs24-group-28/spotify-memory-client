@@ -77,10 +77,6 @@ const LobbyOverview = () => {
 
 
   useEffect(() => {
-    toastNotify("Join an existing Lobby or create a new one", 5000, "normal")
-  }, []);
-
-  useEffect(() => {
     const fetchData = async () => {
       // Perform asynchronous operation to fetch initial data
       const data = await wsHandler.fetchData();

@@ -2,11 +2,10 @@ import React from "react";
 import "../../styles/ui/Navbar.scss";
 import GameIconSVG from "./icons-svg/GameIconSVG";
 import LogoutSVG from "./icons-svg/LogoutSVG";
-import MuteSVG from "./icons-svg/MuteSVG";
-import PreferencesSVG from "./icons-svg/PreferencesSVG";
 import { logout } from "../../helpers/auth/logoutfunction";
 import { useLocation, useNavigate } from "react-router-dom";
 import toastNotify from "../../helpers/Toast";
+import UserProfileSVG from "./icons-svg/UserProfileSVG";
 
 const Navbar = () => {
 
@@ -45,12 +44,10 @@ const Navbar = () => {
           <a onClick={handleLogout} className="iconItems" title="Log out!">
             <LogoutSVG />
           </a>)}
-        {/*<a href="/" className="iconItems">*/}
-        {/*  <MuteSVG />*/}
-        {/*</a>*/}
+
         {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
-          <a href="/profilePage" className="iconItems" title="Open your Preferences">
-            <PreferencesSVG width={50} height={50}></PreferencesSVG>
+          <a href="/profilePage" className="iconItems" title="Check out your Profile Page!">
+            <UserProfileSVG/>
           </a>)}
       </div>
     </div>

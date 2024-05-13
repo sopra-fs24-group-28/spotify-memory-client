@@ -11,18 +11,14 @@ import { Client } from "@stomp/stompjs";
 import { getWSDomain } from "helpers/getDomain";
 import toastNotify from "../../helpers/Toast";
 import { api } from "helpers/api";
-import { UserStatWithIcon } from "../ui/UserStatWithIcon"
+import { UserStatWithIcon } from "../ui/UserStatWithIcon";
 
 
 const GameScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [game, setGame] = useState(() => Game.deserialize(location.state.game));
-  const [cardsStates, setCardsStates] = useState(() =>
-    Object.entries(location.state.cardsStates.cardStates).map(([cardId, cardState]) =>
-      new CardObject(cardId, cardState),
-    ),
-  );
+  const [cardsStates, setCardsStates] = useState(() => Object.entries(location.state.cardsStates.cardStates).map(([cardId, cardState]) => new CardObject(cardId, cardState)));
   const [scoreBoard, setScoreBoard] = useState();
   const [stompClient, setStompClient] = useState(null);
   const [gameFinished, setGameFinished] = useState(false);
@@ -40,7 +36,7 @@ const GameScreen = () => {
   }, []);
 
   const sendExitRequest = useCallback(() => {
-   handleLeaveGame();
+    handleLeaveGame();
   }, [game.gameId]);
 
   useEffect(() => {
@@ -50,7 +46,7 @@ const GameScreen = () => {
     };
 
     window.addEventListener("beforeunload", handleTabClose);
-    
+
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
@@ -79,7 +75,7 @@ const GameScreen = () => {
   }, [game.activePlayer]);
 
   const handleInactive = useCallback(() => {
-      api.put(`games/${game.gameId}/inactive`);
+    api.put(`games/${game.gameId}/inactive`);
   });
 
   useEffect(() => {
@@ -89,7 +85,7 @@ const GameScreen = () => {
     } else if (yourTurn) {
       handleInactive();
     }
-    
+
     return () => clearTimeout(timeoutId);
   }, [countdown]);
 
@@ -119,8 +115,7 @@ const GameScreen = () => {
     // Setting up new cards
     if (cardsStates?.changed) {
       setCardsStates(prevCardsStates => {
-        const newCards = Object.entries(cardsStates.value.cardStates).map(([cardId, cardState]) =>
-          new CardObject(cardId, cardState));
+        const newCards = Object.entries(cardsStates.value.cardStates).map(([cardId, cardState]) => new CardObject(cardId, cardState));
 
         return newCards;
       });
@@ -132,8 +127,8 @@ const GameScreen = () => {
 
         return prevCards.map(card => {
           if (card.cardId === String(cardContent.value.cardId)) {
-            const updatedCard = new CardObject(card.cardId,  card.cardState );
-            updatedCard.setContent(cardContent.value)
+            const updatedCard = new CardObject(card.cardId, card.cardState);
+            updatedCard.setContent(cardContent.value);
 
             return updatedCard;
           }
@@ -143,7 +138,7 @@ const GameScreen = () => {
       });
     }
 
-    if (scoreBoard?.changed) {      
+    if (scoreBoard?.changed) {
       setScoreBoard(scoreBoard.value.scoreboard);
     }
   }, []);
@@ -152,8 +147,7 @@ const GameScreen = () => {
   // WebSocket setup
   useEffect(() => {
     const client = new Client({
-      brokerURL: `${getWSDomain()}?token=${localStorage.getItem("token")}`,
-      onConnect: () => {
+      brokerURL: `${getWSDomain()}?token=${localStorage.getItem("token")}`, onConnect: () => {
         client.subscribe(`/queue/games/${game.gameId}`, receiverFunction);
       },
     });
@@ -168,35 +162,36 @@ const GameScreen = () => {
 
   // Flip card function
   function flip(card) {
-    if(!yourTurn){
-      toastNotify("Its not your turn so you cannot flip a card.", 2000, "normal")
+    if (!yourTurn) {
+      toastNotify("Its not your turn so you cannot flip a card.", 2000, "normal");
     } else {
-    const data = JSON.stringify({ cardId: Number(card.cardId) });
-    stompClient.publish({
-      destination: `/app/games/${game.gameId}`,
-      body: data,
-    });
-  }}
+      const data = JSON.stringify({ cardId: Number(card.cardId) });
+      stompClient.publish({
+        destination: `/app/games/${game.gameId}`, body: data,
+      });
+    }
+  }
 
 
   useEffect(() => {
     // if (game?.gameState === "OPEN") {
-      if (game?.gameState === "FINISHED") { // either host left or game finished
-        if (!cardsStates.some(card => card.cardState === "FACEDOWN")) {
-          // game is finished, set message and disable timers
-          setShowMessage("Game over!")
-          setCountdown(5);
-          // redirect players to lobby after delay
-          setTimeout(() => {
-            disconnectPlayer();
-            stompClient.deactivate()
-            navigate(`/lobby/${game.gameId}`, { state: { lobby: {lobbyId : game.gameId}, scoreBoard : scoreBoard } });
-          }, 5000); 
-        } else {
-          // host left the lobby
+    if (game?.gameState === "FINISHED") { // either host left or game finished
+      if (!cardsStates.some(card => card.cardState === "FACEDOWN")) {
+        // game is finished, set message and disable timers
+        setShowMessage("Game over!");
+        setCountdown(5);
+        // redirect players to lobby after delay
+        setTimeout(() => {
           disconnectPlayer();
-          stompClient.deactivate()
-          navigate("/lobbyoverview");
+          stompClient.deactivate();
+          navigate(`/lobby/${game.gameId}`, { state: { lobby: { lobbyId: game.gameId }, scoreBoard: scoreBoard } });
+        }, 5000);
+      } else {
+        // host left the lobby
+        toastNotify("Sorry the host left the current Game. Therefore the Game has been finished", 5000, "warning")
+        disconnectPlayer();
+        stompClient.deactivate();
+        navigate("/lobbyoverview");
       }
     }
 
@@ -206,16 +201,14 @@ const GameScreen = () => {
     try {
       handleInactive();
       api.delete(`/games/${game.gameId}/player`)
-        .then(navigate("/lobbyoverview"))
+        .then(navigate("/lobbyoverview"));
     } catch (error) {
       toastNotify("There was an error trying to leave the game. Please try again.", 1000, "warning");
     }
   }
 
 
-  return (
-    <div>
-      <div>{game.gameParameters.activePlayer}</div>
+  return (<div>
       <script src="https://sdk.scdn.co/spotify-player.js"></script>
       <div className="BaseContainer">
         <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>
@@ -225,9 +218,7 @@ const GameScreen = () => {
 
           <div className="BaseDivGame col6">
             <div className="basicCardContainer">
-              {cardsStates.map((card, index) => (
-                <Card key={card.cardId} cardobj={card} flip={() => flip(card)} />
-              ))}
+              {cardsStates.map((card, index) => (<Card key={card.cardId} cardobj={card} flip={() => flip(card)} />))}
             </div>
           </div>
           <div className="BaseDivGame col7">
@@ -245,32 +236,25 @@ const GameScreen = () => {
               </div>}
               <div className="juhu">
                 {/* <h2 className="h2-title">Current Score</h2> */}
-                {scoreBoard ?
-                  <ul className="grid-item">
-                    <div className="h2-title">Current Scoreboard</div>
-                    {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (
-                      <li key={user.userId} className="grid-item">
-                        <div className="usr">
-                          <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                  :
-                  <ul className="grid-item">
-                    <div className="h2-title">Current Players</div>
-                    {game.playerList.map((user) => (
-                      <li key={user.userId} className="grid-item">
-                        <div className="usr">
-                          <UserStatWithIcon user={user} currentStanding={1} />
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                }
+                {scoreBoard ? <ul className="grid-item">
+                  <div className="h2-title">Current Scoreboard</div>
+                  {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (
+                    <li key={user.userId} className="grid-item">
+                      <div className="usr">
+                        <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
+                      </div>
+                    </li>))}
+                </ul> : <ul className="grid-item">
+                  <div className="h2-title">Current Players</div>
+                  {game.playerList.map((user) => (<li key={user.userId} className="grid-item">
+                      <div className="usr">
+                        <UserStatWithIcon user={user} currentStanding={1} />
+                      </div>
+                    </li>))}
+                </ul>}
               </div>
               <div className="buttongroup">
-              <Button className="leave-button" width={"85%"} onClick={handleLeaveGame}>Leave Game</Button>
+                <Button className="leave-button" width={"85%"} onClick={handleLeaveGame}>Leave Game</Button>
               </div>
             </div>
           </div>
