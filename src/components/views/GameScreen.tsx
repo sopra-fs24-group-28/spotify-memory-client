@@ -261,7 +261,7 @@ const GameScreen = () => {
                     {game.playerList.map((user) => (
                       <li key={user.userId} className="grid-item">
                         <div className="usr">
-                          <UserStatWithIcon user={user} currentStanding={1} />
+                          <UserStatWithIcon user={user} currentStanding={0} />
                         </div>
                       </li>
                     ))}
