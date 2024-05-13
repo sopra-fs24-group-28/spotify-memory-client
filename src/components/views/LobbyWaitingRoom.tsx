@@ -112,7 +112,6 @@ const LobbyWaitingRoom = () => {
   }, []);
 
   useEffect(() => {
-    // TODO: this should show a message to a user
     if (game?.gameState === "ONPLAY") {
       toastNotify("The game starts shortly. Your being redirected...", 500, "normal");
       async () => {
@@ -129,6 +128,8 @@ const LobbyWaitingRoom = () => {
       async () => {
         await ws.disconnect();
       };
+      if(!(localStorage.getItem("userId") === String(game?.hostId))){
+      toastNotify("The current lobby has been closed by the host. Create or join another one!", 5000, "warning")}
       navigate("/lobbyOverview");
     }
   }, [game]);
