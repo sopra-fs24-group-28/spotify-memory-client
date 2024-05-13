@@ -81,6 +81,7 @@ const CustomizeGameParameter = () => {
     if (errorMessage) {
       setStartDisabled(true);
       setErrorMessages(errorMessage);
+
       return;
     }
     setStartDisabled(false);
