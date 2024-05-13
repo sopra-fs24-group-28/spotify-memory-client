@@ -40,7 +40,6 @@ const GameScreen = () => {
   }, []);
 
   const sendExitRequest = useCallback(() => {
-   handleInactive();
    handleLeaveGame();
   }, [game.gameId]);
 
@@ -205,6 +204,7 @@ const GameScreen = () => {
 
   function handleLeaveGame() {
     try {
+      handleInactive();
       api.delete(`/games/${game.gameId}/player`)
       navigate("/lobbyoverview")
     } catch (error) {
