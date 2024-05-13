@@ -150,7 +150,6 @@
   margin: 2%;
   opacity: 0.7;
   background: #0E525E;
-  border: solid 1px $textColor;
   border-radius: $borderRadius;
   transition: transform 0.5s ease;
 }
@@ -158,15 +157,15 @@
 
 .card.flipped {
   transform: rotateY(180deg);
-  background-color: $inputblue;
+  background-color: #7C304E;
   color: white;
-  border: solid 1px $textColor;
+  border: solid 2px $textColor;
 
 }
 
 .card.excluded {
-  background-color: grey;
-  opacity: 0.5;
+  background-color: #95B0B6;
+  opacity: 0.1;
   border: none;
 }
 
