@@ -87,5 +87,6 @@ const ProfiilePage = () => {
     </div>);
 
 };
+
 export default ProfiilePage;
 
