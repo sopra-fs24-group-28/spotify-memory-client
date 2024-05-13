@@ -57,7 +57,7 @@
   border: 0;
   box-shadow: None;
   padding: 0;
-  align-items: baseline;
+  align-items: baseline !important;
   @include center;
 }
 
@@ -68,6 +68,10 @@
   &:hover {
     border: 2px solid $textColor;
   }
+}
+
+.imgandtext{
+  width: 100%;
 }
 
 .buttonContainer {
@@ -99,6 +103,11 @@
 
 }
 
+.grid-item {
+  overflow: visible;
+  align-content: center;
+}
+
 .h3-title {
   font-size: large;
   font-weight: bold;
@@ -110,3 +119,14 @@
   margin: 5px;
   overflow: clip;
 }
+
+.second-column-top-item-lw{
+  grid-column: 2 / 3;
+  grid-row: 1; // Only in the first row
+  align-self: center;
+  justify-self: left;
+  color: $textColor;
+  width: 100%;
+  text-overflow: ellipsis !important;
+}
+

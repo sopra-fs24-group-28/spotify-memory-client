@@ -1,6 +1,7 @@
 import GameParameter from "./GameParameter";
 import User from "./User";
 import { Change } from "../communication/websocket/dto/Change";
+import toastNotify from "../helpers/Toast";
 
 class Game {
   private gameId: any;
@@ -48,7 +49,6 @@ class Game {
 
   // Static method to deserialize the object back to a Game instance
   static deserialize = (data: any) => {
-    console.log("deserializin", data);
     const gameStart = {
       gameParameters: new GameParameter(data.gameParameters), // Ensure GameParameter has a deserialize method
       playerList: data.playerList.map(playerData => playerData ? new User(playerData) : null), // Ensure User has a deserialize method
@@ -68,6 +68,9 @@ class Game {
   // Additional setters for each property should be defined here...
   public doUpdate = (key: string, value: any) => {
     if (key === "playerList") {
+      if (this.playerList.length > value.length) {
+        toastNotify("One Player left", 2000, "warning")
+      }
       this.playerList = value;
     }
     else if (key === "gameState") {
@@ -92,7 +95,6 @@ class Game {
       this.scoreboard = value;
     }
     else if(key === "activePlayer") {
-      console.log("updating active player", value)
       this.activePlayer = value;
     }
     else if(key === "quickTurn") {

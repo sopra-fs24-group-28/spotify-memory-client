@@ -21,7 +21,6 @@ const LobbyOverview = () => {
     const data = JSON.parse(newDataRaw.body).gameMap
     const key = Object.keys(data)?.[0]
     const update = data[key];
-    console.log(update);
     const updatedLobbies = [];
     let makeNewLobby = true;
     setReceivedGameStates(prevState => {
@@ -88,7 +87,6 @@ const LobbyOverview = () => {
       setReceivedGameStates(data); // this displays the data
       wsHandler.connect()
     };
-    console.log("REST ENDPOINT CALLED!!!!!!!!!!!!!!!!!!!!!!!!!");
     fetchData();
     
 
@@ -117,7 +115,7 @@ const LobbyOverview = () => {
   } else {
     content = (
       <div className="befirst">
-        Be the first to start a game!
+        <h2>Be the first to start a game!</h2>
       </div>
     )
   }
@@ -126,7 +124,7 @@ const LobbyOverview = () => {
     <div className="BaseDivLobby">
       <div>
         <div className="newGameButton">
-          <Button width={"40%"} height={"30%"} className={"primary-button"} onClick={createlobby}>Create new Lobby</Button>
+          <Button width={"40%"} height={"30%"} className={"create-lobby"} onClick={createlobby}>Create new Lobby</Button>
         </div>
         {content}
       </div>

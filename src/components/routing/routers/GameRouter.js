@@ -8,12 +8,8 @@ const GameRouter = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <Routes>
-
         <Route path="*" element={<Navigate to="dashboard" replace />} />
-
-
       </Routes>
-
     </div>
   );
 };

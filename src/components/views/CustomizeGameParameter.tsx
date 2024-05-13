@@ -7,12 +7,14 @@ import { getSpotifyPlaylist } from "../../helpers/spotifyrelated/getPlaylists";
 import Lobby from "../../models/Lobby";
 import LobbyDTO from "../../communication/websocket/dto/LobbyDTO";
 import toastNotify from "../../helpers/Toast";
+import "react-tooltip/dist/react-tooltip.css"
+import { Tooltip } from "react-tooltip"
 
 
 const CustomizeGameParameter = () => {
   const navigate = useNavigate();
-  const [playerLimit, setPlayerLimit] = useState(4);
-  const [numOfSets, setNumOfSets] = useState(1);
+  const [playerLimit, setPlayerLimit] = useState(6);
+  const [numOfSets, setNumOfSets] = useState(5);
   const [numOfCardsPerSet, setNumOfCardsPerSet] = useState(2);
   const [gameCategory, setGameCategory] = useState("STANDARDALBUMCOVER");
   const [playlist, setPlaylist] = useState();
@@ -24,6 +26,7 @@ const CustomizeGameParameter = () => {
   const [errorMessages, setErrorMessages] = useState<string>("");
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [startDisabled, setStartDisabled] = useState(false);
 
   useEffect(() => {
     async function fetchAvailablePlaylists() {
@@ -45,6 +48,7 @@ const CustomizeGameParameter = () => {
   }, [availablePlaylists]);
 
   function startGame(e) {
+    setStartDisabled(true);
     e.preventDefault();
     // Validation conditions
     const validations: {
@@ -121,6 +125,8 @@ const CustomizeGameParameter = () => {
       }
     } catch (error) {
       alert(`Something went wrong setting up the lobby. \n${handleError(error)}`);
+    } finally {
+      setStartDisabled(false);
     }
   }
 
@@ -137,7 +143,7 @@ const CustomizeGameParameter = () => {
           </div>
           <form className="input-section" onSubmit={startGame}>
             <div className="gridtop">
-              <div className="inputpair">
+              <div className="inputpair" title="Specify the category of the game.">
                 <label className="label" htmlFor="gameCategory">Game Category:</label>
                 <select
                   id="gameCategory"
@@ -149,7 +155,7 @@ const CustomizeGameParameter = () => {
                   <option value="STANDARDALBUMCOVER">Album Cover</option>
                 </select>
               </div>
-              <div className={"inputpair"}>
+              <div className="inputpair" title="Choose any of your playlist. Choose one that surely has as many songs as your number of cards.">
                 <label className="label" htmlFor="playlist">Playlist:</label>
                 <select
                   id="playlist"
@@ -161,6 +167,27 @@ const CustomizeGameParameter = () => {
                     <option key={index} value={playlist.id}>{playlist.name}</option>
                   ))}
                 </select>
+              </div>
+              <div className="inputpair" title="Limit the amount of players that can join your lobby.">
+                <label className="label" htmlFor="playerLimit">Player Limit:</label>
+                <input
+                  id="playerLimit"
+                  className="normalInput"
+                  value={playerLimit}
+                  type="number"
+                  onChange={e => setPlayerLimit(e.target.value)}
+                />
+              </div>
+              <div className="inputpair" title="The number of sets defines how many pairs, trios etc. will be in the game.">
+                <label className="label" htmlFor="numOfSets">Number of Sets:</label>
+                <input
+                  id="numOfSets"
+                  className="normalInput"
+                  type="number"
+
+                  value={numOfSets}
+                  onChange={e => setNumOfSets(e.target.value)}
+                />
               </div>
               </div>
               <button 
@@ -174,28 +201,7 @@ const CustomizeGameParameter = () => {
               </button>
             {showAdvanced ? 
             <div className="grid">
-              <div className={"inputpair"}>
-                <label className="label" htmlFor="playerLimit">Player Limit:</label>
-                <input
-                  id="playerLimit"
-                  className="normalInput"
-                  value={playerLimit}
-                  type="number"
-                  onChange={e => setPlayerLimit(e.target.value)}
-                />
-              </div>
-              <div className={"inputpair"}>
-                <label className="label" htmlFor="numOfSets">Number of Sets:</label>
-                <input
-                  id="numOfSets"
-                  className="normalInput"
-                  type="number"
-
-                  value={numOfSets}
-                  onChange={e => setNumOfSets(e.target.value)}
-                />
-              </div>
-              <div className={"inputpair"}>
+              <div className="inputpair" title="Adjust more specific parameters by pressing on this button.">
                 <label className="label" htmlFor="numOfCardsPerSet">Cards per Set:</label>
                 <input
                   id="numOfCardsPerSet"
@@ -206,7 +212,7 @@ const CustomizeGameParameter = () => {
                   onChange={e => setNumOfCardsPerSet(e.target.value)}
                 />
               </div>
-              <div className={"inputpair"}>
+              <div className="inputpair" title="Define what is a streak for you. This might influence the points.">
                 <label className="label" htmlFor="streakStart">Streak Start:</label>
                 <input
                   id="streakStart"
@@ -217,7 +223,7 @@ const CustomizeGameParameter = () => {
                   onChange={e => setStreakStart(e.target.value)}
                 />
               </div>
-              <div className={"inputpair"}>
+              <div className="inputpair" title="Adjust the factor that players get with streaks.">
                 <label className="label" htmlFor="streakMultiplier">Streak Multiplier:</label>
                 <input
                   id="streakMultiplier"
@@ -228,7 +234,7 @@ const CustomizeGameParameter = () => {
                   onChange={e => setStreakMultiplier(e.target.value)}
                 />
               </div>
-              <div className={"inputpair"}>
+              <div className="inputpair" title="Adjust how many seconds the player has time to make a turn.">
                 <label className="label" htmlFor="timePerTurn">Time per Turn (Normal):</label>
                 <input
                   id="timePerTurn"
@@ -239,7 +245,7 @@ const CustomizeGameParameter = () => {
                   onChange={e => setTmePerTurn(e.target.value)}
                 />
               </div>
-              <div className={"inputpair"}>
+              <div className="inputpair" title="Adjust more specific parameters by pressing on this button.">
                 <label className="label" htmlFor="timePerTurnPowerUp">Time per Turn (Powerup):</label>
                 <input
                   id="timePerTurnPowerUp"
@@ -257,7 +263,9 @@ const CustomizeGameParameter = () => {
               <button
                 type="submit"
                 className="customizebtn"
-                onClick={startGame}>Start Game
+                onClick={startGame}
+                disabled={startDisabled}>
+                  Start Game
               </button>
               <button className="customizebtn" style={{ "margin": "10px" }} onClick={cancel}>Cancel</button>
             </div>

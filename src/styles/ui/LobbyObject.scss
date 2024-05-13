@@ -32,12 +32,13 @@
 }
 
 .second-column-top-item {
-  grid-column: 2 / 3; // Starts at column 2, ends at column 3
+  grid-column: 2 / 3;
   grid-row: 1; // Only in the first row
   align-self: center;
   justify-self: left;
   color: $textColor;
-  width: 100% !important;
+  width: 100%;
+  max-width: 250px;
   text-overflow: ellipsis !important;
 
 
@@ -50,7 +51,7 @@
   overflow: hidden;
   align-self: baseline;
   justify-self: left;
-  width: 100% !important;
+  max-width: 100% !important;
 
 }
 
@@ -79,7 +80,7 @@
   font-weight: bold;
   font-size: 1.5rem;
   white-space: nowrap;
-  width: 125px;
+  //width: 125px;
   overflow: hidden;
   text-overflow: clip;
 }

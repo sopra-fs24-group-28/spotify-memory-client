@@ -16,11 +16,8 @@ class WSHandler {
 
   async connect() {
     this.client.brokerURL = getWSDomain() + "?token=" + `${localStorage.getItem("token")}`;
-    // console.log(this.client.brokerURL);
     this.client.onConnect = (frame) => {
-      console.log("Connected to Websocket ...");
       this.client.subscribe(this.wsEndpoint, this.receiverFunction);
-      console.log("... and Subscribed");
     };
 
     // this.client.onStompError = (frame) => {
@@ -64,8 +61,6 @@ class WSHandler {
   }
 
   send(data) {
-    console.log("IN SEND");
-    console.log(this.client);
     if (!this.client.connected) {
       this.connect().then(() =>
         this.client.publish({
@@ -80,11 +75,6 @@ class WSHandler {
     }
 
   }
-
-  echo() {
-    console.log(this.client);
-  }
-
 
 }
 

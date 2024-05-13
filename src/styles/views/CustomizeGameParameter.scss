@@ -64,7 +64,7 @@
 
 .customizebtn {
   @include center;
-  @extend .join-button;
+  @extend .cstm-button;
   height: 40px;
   width: 200px;
   text-size-adjust: auto;

@@ -31,9 +31,27 @@
   justify-self: center;
 }
 
+
+
 .join-button {
   @extend .primary-button;
+  min-width: 100px;
+  max-width: 100px;
   background: $turquise;
+  
+}
+
+.cstm-button {
+  @extend .primary-button;
+  background: $turquise;
+
+}
+
+.create-lobby {
+  @extend .primary-button;
+  min-width: 250px;
+  max-width: 250px;
+  
 }
 
 .lobby-overview-button {
@@ -44,7 +62,8 @@
 .spotifyButton {
   @extend .primary-button;
   background: $spotifygreen;
-  padding: 10px
+  padding: 10px;
+  max-width: 30vw;
 
 }
 

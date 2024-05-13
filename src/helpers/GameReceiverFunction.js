@@ -15,18 +15,6 @@ const receiverFunction = (newDataRaw) => {
     setGame(new Game(gameData.value))
   }
 
-  //Todo Niklas
-  if (cardData.changed){
-    //
-    console.log(contentData.value)
-    console.log(cardId.value)
-  }
 
-  //Todo Niklas
-  if (cardsStates.changed){
-    //
-    console.log(cardsStates.value)
-
-  }
 }
 

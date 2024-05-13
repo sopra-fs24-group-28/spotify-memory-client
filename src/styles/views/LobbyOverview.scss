@@ -2,14 +2,6 @@
 @import "../views/Login";
 @import "../views/CustomizeGameParameter";
 
-.BaseDivLobby {
-  @extend .BaseDiv;
-  //border: solid red;
-  max-height: 80vh;
-  min-height: 100px; // Adjust this value based on your needs
-  padding: 20px;
-  overflow-x: clip !important;
-}
 
 .gridhandler {
   display: grid;
@@ -32,11 +24,16 @@
 }
 
 .grid-item {
-  overflow-wrap: anywhere;
-  //padding: 10px;
+  overflow: clip;
+  align-content: center;
 }
 
-.befirst{;
+.befirst{
   @extend .h2-title;
-  margin: 20vh;
+  color: $textColor;
+  display: flex; /* Use Flexbox */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  margin-top: 10em; 
+
 }

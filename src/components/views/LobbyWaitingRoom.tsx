@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "styles/views/LobbyWaitingRoom.scss";
 import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
@@ -13,14 +13,20 @@ import toastNotify from "../../helpers/Toast";
 const LobbyWaitingRoom = () => {
   const navigate: NavigateFunction = useNavigate();
   const location = useLocation();
-  // TODO: handle situation where location.state.lobby is undefined
-  const initialGameId = location.state.lobby.lobbyId;
+  const initialGameId = location.state?.lobby?.lobbyId;
   const [game, setGame] = useState<Game>();
   const [cardsStates, setCardsStates] = useState();
   const [cardContent, setCardContent] = useState();
   const [scoreBoard, setScoreBoard] = useState(location.state?.scoreBoard || undefined);
 
-  
+  // navigate back to lobby overview if player did not join lobby through join button
+  useEffect(() => {
+    if (initialGameId === undefined) {
+      navigate("/lobbyoverview");
+    }
+
+  }, [initialGameId]);
+
   //Websocket specific
   const receiverFunction = (newDataRaw) => {
     const data = JSON.parse(newDataRaw.body);
@@ -34,9 +40,7 @@ const LobbyWaitingRoom = () => {
         for (const key in gameChanges.value) {
           const changed = gameChanges.value[key].changed;
           const value = gameChanges.value[key].value;
-          // console.log(key, changed, value);
           if (changed) {
-
             newGame = newGame.doUpdate(key, value);
           }
 
@@ -53,9 +57,9 @@ const LobbyWaitingRoom = () => {
       setCardContent(data.cardContent.value);
     }
     if (data.scoreBoard.changed) {
-      setScoreBoard(data.scoreBoard.value);
+      // ignoring scoreboard here for now
+      // setScoreBoard(data.scoreBoard.value.scoraboard);
     }
-    console.log(data);
   };
   const ws = new WSHandler(`/games/${initialGameId}`,
     `/queue/games/${initialGameId}`,
@@ -64,17 +68,34 @@ const LobbyWaitingRoom = () => {
 
   async function fetchData() {
     try {
-      const response = await api.get(`/games/${initialGameId}`);
-      const gameStart = response.data;
-      // instantiating a lobby object here instead of a game object
-      // as the ws returns data appropriate for this class. But object is later cast into game when appropriate
+      if (!(initialGameId === undefined)) {
+        const response = await api.get(`/games/${initialGameId}`);
+        const gameStart = response.data;
+        // instantiating a lobby object here instead of a game object
+        // as the ws returns data appropriate for this class. But object is later cast into game when appropriate
 
-      return new Game(initialGameId, gameStart);
-
+        return new Game(initialGameId, gameStart);
+      }
     } catch (error) {
       console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
     }
   }
+
+  const sendExitRequest = useCallback(() => {
+    handleLeave().then();
+  }, []);
+
+  useEffect(() => {
+    const handleTabClose = (event) => {
+      sendExitRequest();
+    };
+
+    window.addEventListener("beforeunload", handleTabClose);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClose);
+    };
+  }, [sendExitRequest]);
 
 
   useEffect(() => {
@@ -87,12 +108,13 @@ const LobbyWaitingRoom = () => {
     fetchDataAndConnect()
       .catch(error => {
         toastNotify("There was an error fetching the data. Please try again.", 1000, "warning");
-      });  }, []);
+      });
+  }, []);
 
   useEffect(() => {
     // TODO: this should show a message to a user
     if (game?.gameState === "ONPLAY") {
-      toastNotify("The game starts shortly. Your being redirected...", 500, "normal")
+      toastNotify("The game starts shortly. Your being redirected...", 500, "normal");
       async () => {
         await ws.disconnect();
       };
@@ -101,7 +123,6 @@ const LobbyWaitingRoom = () => {
           game: game.serialize(),
           cardsStates: cardsStates,
           cardContent: cardContent,
-          scoreBoard: scoreBoard,
         },
       });
     } else if (game?.gameState === "FINISHED") {
@@ -153,15 +174,13 @@ const LobbyWaitingRoom = () => {
             <div
               className={game?.gameParameters.playlist.playlistImageUrl ? "imgContainer" : "spotifyPlaylistContainer"}>
               {game?.gameParameters.playlist.playlistImageUrl ? (
-                <div>
+                <div className="imgandtext">
                   {/*<span*/}
                   {/*  className="playlist-name second-column-top-item">{game?.gameParameters.playlist.playlistName}</span>*/}
                   <img
                     src={game?.gameParameters.playlist.playlistImageUrl}
                     alt="Spotify Playlist Image"
-                    width="100%"
-                    height="100%"
-                    className="second-column-top-item img"
+                    className="second-column-top-item-lw img"
                   />
                   <span className="playlist-name">{game?.gameParameters.playlist.playlistName}</span>
                 </div>
@@ -170,12 +189,18 @@ const LobbyWaitingRoom = () => {
               )}
             </div>
             <div className="buttonContainer">
-              <Button width="65%" onClick={handleLeave}>Leave</Button>
-
-              {/* only show this if player is host and */}
-              {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ?
-                <Button width="65%" onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button> : <div></div>}
+              <Button width="40%" onClick={handleLeave}>Leave</Button>
+              {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ? (
+                <Button width="40%" onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button>
+              ) : (
+                localStorage.getItem("userId") === String(game?.hostId) ? (
+                  <Button width="40%" disabled={true}>Start (Still Waiting..)</Button>
+                ) : (
+                  <div></div>
+                )
+              )}
             </div>
+
 
           </div>
           <div className="centerwrapper">
@@ -195,16 +220,14 @@ const LobbyWaitingRoom = () => {
                   )}
                 </div>
               )}
-
-              {/* Display players with scoreboard when scoreBoard is available */}
               {scoreBoard && (
                 <div>
-                  <div className="h3-title">Game Over!</div>
+                  <div className="h3-title">Game Over! Your Scoreboard is:</div>
                   {game && game.playerList && (
-                    <ul className="grid-item">
-                    {game.playerList.sort((a, b) => scoreBoard[a.userId] - scoreBoard[b.userId]).map((user) => (
+                    <ul>
+                      {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (
                         <li key={user.userId} className="grid-item">
-                          <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId]} />
+                          <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
                         </li>
                       ))}
                     </ul>

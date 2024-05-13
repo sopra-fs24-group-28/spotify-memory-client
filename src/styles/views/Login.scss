@@ -5,9 +5,11 @@
     width: 100%;
     display: flex;
     margin-top: 2em;
-    min-height: 30vh;
     @include center;
     flex-direction: column;
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
+    min-height: 80vh;
 
   }
 
@@ -16,12 +18,11 @@
     flex-direction: column;
     justify-content: center;
     width: 80vw;
-    height: 25em;
+    height: 60vh;
     font-size: 16px;
     font-weight: 300;
     padding: 1rem;
     border-radius: $borderRadius;
-    //border: solid $textColor 2px;
     background-color: $lightviolet;
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;
@@ -40,8 +41,16 @@
       justify-content: center;
       align-items: center;
       opacity: 0.8;
+      margin: 2rem;
     }
   }
+}
 
+.button-container{
+  @include center;
+  margin: 2rem;
+}
 
+.errmsg{
+  text-align: justify !important; ;
 }

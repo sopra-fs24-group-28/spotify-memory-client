@@ -11,6 +11,7 @@ import { Client } from "@stomp/stompjs";
 import { getWSDomain } from "helpers/getDomain";
 import toastNotify from "../../helpers/Toast";
 import { api } from "helpers/api";
+import { UserStatWithIcon } from "../ui/UserStatWithIcon"
 
 
 const GameScreen = () => {
@@ -22,30 +23,42 @@ const GameScreen = () => {
       new CardObject(cardId, cardState),
     ),
   );
-  const [scoreBoard, setScoreBoard] = useState(location.state.scoreBoard);
+  const [scoreBoard, setScoreBoard] = useState();
   const [stompClient, setStompClient] = useState(null);
   const [gameFinished, setGameFinished] = useState(false);
-  const [showMessage, SetShowMessage] = useState("");
+  const [showMessage, setShowMessage] = useState("");
 
   const [deviceIdGame, setDeviceIdGame] = useState("");
   const [player, setPlayer] = useState(null);
-  const [yourTurn, setYourTurn] = useState(false);
 
-  useEffect(() => {
-    toastNotify("One Player left", 2000, "warning")
-    console.log(game.playerList);
-  }, [game.playerList]);
+  const [yourTurn, setYourTurn] = useState(false);
+  const [countdown, setCountdown] = useState(0); // Timer state
 
 
   const setPlayerCallback = useCallback((playerObj) => {
     setPlayer(playerObj);
   }, []);
 
+  const sendExitRequest = useCallback(() => {
+   handleLeaveGame();
+  }, [game.gameId]);
+
+  useEffect(() => {
+    const handleTabClose = (event) => {
+      event.preventDefault();
+      sendExitRequest();
+    };
+
+    window.addEventListener("beforeunload", handleTabClose);
+    
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClose);
+    };
+  }, [sendExitRequest]);
+
   const disconnectPlayer = () => {
     if (player) {
-      console.log("disconnecting player from gamescreen");
       player.disconnect();
-      console.log(player);
     }
   };
 
@@ -53,22 +66,33 @@ const GameScreen = () => {
     setDeviceIdGame(deviceId);
   };
 
-  const updatePlayerindiction = () => {
+
+  const updatePlayerIndication = () => {
     const currentPlayer = game.playerList.find(user => user.userId === game.activePlayer);
-    if (currentPlayer.userId === Number(localStorage.getItem("userId"))) {
-      setYourTurn(true);
-      toastNotify("Pay attention its your Turn", game?.gameParameters?.timePerTurn * 1000, "warning");
-    } else {
-      setYourTurn(false);
-      toastNotify(`It's currently ${currentPlayer.username + "'s"} turn`, game?.gameParameters?.timePerTurn * 1000, "normal");
-
-    }
-
-    SetShowMessage(`It's currently ${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "your" : currentPlayer.username + "'s"} turn`);
+    setYourTurn(currentPlayer.userId === Number(localStorage.getItem("userId")));
+    setShowMessage(`${currentPlayer.userId === Number(localStorage.getItem("userId")) ? "Your" : currentPlayer.username + "'s"} Turn`);
+    setCountdown(game.gameParameters.timePerTurn);
   };
+
   useEffect(() => {
-    updatePlayerindiction();
+    updatePlayerIndication();
   }, [game.activePlayer]);
+
+  const handleInactive = useCallback(() => {
+      api.put(`games/${game.gameId}/inactive`);
+  });
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (countdown > 0) {
+      timeoutId = setTimeout(() => setCountdown(countdown - 1), 1000);
+    } else if (yourTurn) {
+      handleInactive();
+    }
+    
+    return () => clearTimeout(timeoutId);
+  }, [countdown]);
+
 
   // Receiver function
   const receiverFunction = useCallback((newDataRaw) => {
@@ -81,6 +105,9 @@ const GameScreen = () => {
         for (const key in gameChangesDto.value) {
           const { changed, value } = gameChangesDto.value[key];
           if (changed) {
+            if (key === "activePlayer" && value === game.activePlayer) {
+              updatePlayerIndication();
+            }
             newGame = newGame.doUpdate(key, value);
           }
         }
@@ -107,7 +134,6 @@ const GameScreen = () => {
           if (card.cardId === String(cardContent.value.cardId)) {
             const updatedCard = new CardObject(card.cardId,  card.cardState );
             updatedCard.setContent(cardContent.value)
-            console.log(updatedCard);
 
             return updatedCard;
           }
@@ -117,8 +143,8 @@ const GameScreen = () => {
       });
     }
 
-    if (scoreBoard?.changed) {
-      console.error("Scoreboard changed, but not implemented yet");
+    if (scoreBoard?.changed) {      
+      setScoreBoard(scoreBoard.value.scoreboard);
     }
   }, []);
 
@@ -154,11 +180,26 @@ const GameScreen = () => {
 
 
   useEffect(() => {
-    if (game?.gameState === "FINISHED") {
-      disconnectPlayer();
-      stompClient.deactivate()
-      navigate(`/lobby/${game.gameId}`, { state: { lobby: {lobbyId : game.gameId}, scoreBoard : scoreBoard } });
+    // if (game?.gameState === "OPEN") {
+      if (game?.gameState === "FINISHED") { // either host left or game finished
+        if (!cardsStates.some(card => card.cardState === "FACEDOWN")) {
+          // game is finished, set message and disable timers
+          setShowMessage("Game over!")
+          setCountdown(5);
+          // redirect players to lobby after delay
+          setTimeout(() => {
+            disconnectPlayer();
+            stompClient.deactivate()
+            navigate(`/lobby/${game.gameId}`, { state: { lobby: {lobbyId : game.gameId}, scoreBoard : scoreBoard } });
+          }, 5000); 
+        } else {
+          // host left the lobby
+          disconnectPlayer();
+          stompClient.deactivate()
+          navigate("/lobbyoverview");
+      }
     }
+
   }, [game]);
 
   function handleLeaveGame() {
@@ -176,7 +217,11 @@ const GameScreen = () => {
       <div>{game.gameParameters.activePlayer}</div>
       <script src="https://sdk.scdn.co/spotify-player.js"></script>
       <div className="BaseContainer">
+        <div className={yourTurn ? "gameMessageContaineralert" : "gameMessageContainer"}>
+          <div className="gameMessage">{showMessage} - {countdown} sec</div>
+        </div>
         <div className="screen-gridhandler">
+
           <div className="BaseDivGame col6">
             <div className="basicCardContainer">
               {cardsStates.map((card, index) => (
@@ -197,15 +242,34 @@ const GameScreen = () => {
                 <WebPlayback token={localStorage.getItem("accessToken")} onDeviceIdReceived={handleDeviceIdReceived}
                              setPlayer={setPlayerCallback} />
               </div>}
-              <div className="stats">
-                <h2 className="h2-title">Current Score</h2>
-                {/*<UserStatWithIcon className="test" username={"Henry"} currentStanding={"1"} />*/}
-                {/*<UserStatWithIcon username={"Elias"} currentStanding={"2"} />*/}
-                {/*<UserStatWithIcon username={"Niklas"} currentStanding={"3"} />*/}
-                {/*<UserStatWithIcon username={"Diyar"} currentStanding={"4"} />*/}
+              <div className="juhu">
+                {/* <h2 className="h2-title">Current Score</h2> */}
+                {scoreBoard ?
+                  <ul className="grid-item">
+                    <div className="h2-title">Current Scoreboard</div>
+                    {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (
+                      <li key={user.userId} className="grid-item">
+                        <div className="usr">
+                          <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  :
+                  <ul className="grid-item">
+                    <div className="h2-title">Current Players</div>
+                    {game.playerList.map((user) => (
+                      <li key={user.userId} className="grid-item">
+                        <div className="usr">
+                          <UserStatWithIcon user={user} currentStanding={1} />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                }
               </div>
-              <div>
-                <Button width={"100%"} onClick={handleLeaveGame}>Leave Game</Button>
+              <div className="buttongroup">
+              <Button className="leave-button" width={"85%"} onClick={handleLeaveGame}>Leave Game</Button>
               </div>
             </div>
           </div>
