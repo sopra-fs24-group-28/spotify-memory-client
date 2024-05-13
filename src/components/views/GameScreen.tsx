@@ -21,14 +21,22 @@ const GameScreen = () => {
   const [cardsStates, setCardsStates] = useState(() => Object.entries(location.state.cardsStates.cardStates).map(([cardId, cardState]) => new CardObject(cardId, cardState)));
   const [scoreBoard, setScoreBoard] = useState();
   const [stompClient, setStompClient] = useState(null);
-  const [gameFinished, setGameFinished] = useState(false);
   const [showMessage, setShowMessage] = useState("");
-
   const [deviceIdGame, setDeviceIdGame] = useState("");
   const [player, setPlayer] = useState(null);
-
   const [yourTurn, setYourTurn] = useState(false);
   const [countdown, setCountdown] = useState(0); // Timer state
+
+
+  useEffect(() => {
+    if (game.activePlayerStreakActive) {
+      if (yourTurn) {
+        toastNotify("Attention! You have an active Streak (increased Points)", 2000, "warning");
+      } else {
+        toastNotify(`Player ${game.activePlayer} has an active Streak (increased Points)`, 2000, "normal");
+      }
+    }
+  }, [game.activePlayerStreakActive]);
 
 
   const setPlayerCallback = useCallback((playerObj) => {
@@ -188,7 +196,7 @@ const GameScreen = () => {
         }, 5000);
       } else {
         // host left the lobby
-        toastNotify("Sorry the host left the current Game. Therefore the Game has been finished", 5000, "warning")
+        toastNotify("Sorry the host left the current Game. Therefore the Game has been finished", 5000, "warning");
         disconnectPlayer();
         stompClient.deactivate();
         navigate("/lobbyoverview");
@@ -247,10 +255,10 @@ const GameScreen = () => {
                 </ul> : <ul className="grid-item">
                   <div className="h2-title">Current Players</div>
                   {game.playerList.map((user) => (<li key={user.userId} className="grid-item">
-                      <div className="usr">
-                        <UserStatWithIcon user={user} currentStanding={1} />
-                      </div>
-                    </li>))}
+                    <div className="usr">
+                      <UserStatWithIcon user={user} currentStanding={1} />
+                    </div>
+                  </li>))}
                 </ul>}
               </div>
               <div className="buttongroup">
