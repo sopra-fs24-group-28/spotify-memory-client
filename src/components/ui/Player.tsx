@@ -67,7 +67,6 @@ function WebPlayback(props) {
           return;
         }
         setTrack(state.track_window.current_track);
-        // setPaused(state.paused);
         player.getCurrentState().then(state => {
           (!state) ? setActive(false) : setActive(true);
         });
@@ -110,23 +109,6 @@ function WebPlayback(props) {
     props.setPlayer(player); // Pass the player object to GameScreen
   }, [player, props]);
 
-  const handleDecreaseVolume = () => {
-    if (player && volume > 0) {
-      const newVolume = Math.max(0, volume - 0.1); // Decrease volume by 0.1
-      setVolume(newVolume);
-      player.setVolume(newVolume).then(() => {
-      });
-    }
-  };
-
-  const handleIncreaseVolume = () => {
-    if (player && volume >= 0) {
-      const newVolume = Math.min(1, volume + 0.1); // Decrease volume by 0.1
-      setVolume(newVolume);
-      player.setVolume(newVolume).then(() => {
-      });
-    }
-  };
 
   const handleReconnect = () => {
     if (player) {
@@ -161,18 +143,13 @@ function WebPlayback(props) {
             </div>
             <div className="button-container-2">
               <div className="volumebuttons">
-                <button className="spotifyButtonplayer" onClick={handleDecreaseVolume}>
-                  {"-"}
-                </button>
                 <button className= "spotifyButtonplayer middle" onClick={() => {
                   player.togglePlay();
                   setPaused(!is_paused)
                 }}>
                   {is_paused ? "PLAY" : "PAUSE"}
                 </button>
-                <button className="spotifyButtonplayer" onClick={handleIncreaseVolume}>
-                  {"+"}
-                </button>
+
               </div>
             </div>
           </div>
