@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../styles/ui/Navbar.scss";
 import GameIconSVG from "./icons-svg/GameIconSVG";
 import LogoutSVG from "./icons-svg/LogoutSVG";
+import InfoIconSVG from "./icons-svg/InfoIconSVG"; 
 import InfoBox from "./InfoBox";
 import { logout } from "../../helpers/auth/logoutfunction";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -53,7 +54,7 @@ const Navbar = () => {
         <div className="navbar-icons">
           {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
             <a onClick={showInfo} className="iconItems" title="Information">
-              <GameIconSVG></GameIconSVG>
+              <InfoIconSVG></InfoIconSVG>
             </a>)}
           {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
             <a href="/lobbyoverview" className="iconItems" title="Return to the Lobby Overview">

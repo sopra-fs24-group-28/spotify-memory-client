@@ -8,6 +8,7 @@ const InfoBox = (props) => {
 
   return (
     <div className="info-box">
+      <div className="info-box overlay"></div> {/* Transparent overlay */}
       <div className="button-container-exit">
         <button onClick={() => {closeFunc()}} className="exit-button">✕</button>
       </div>

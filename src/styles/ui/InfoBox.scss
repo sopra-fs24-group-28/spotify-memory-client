@@ -45,3 +45,13 @@
   border-radius: 50px;
   color: $textColor;
 }
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 500%;
+  height: 500%;
+  background-color: rgba(15, 0, 40, 0.5); /* Adjust the transparency here (0.5 means 50% transparency) */
+  z-index: -3; /* Ensure the overlay appears above other content */
+}
