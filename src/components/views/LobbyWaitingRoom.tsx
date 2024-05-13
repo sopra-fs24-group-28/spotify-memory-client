@@ -18,6 +18,8 @@ const LobbyWaitingRoom = () => {
   const [cardsStates, setCardsStates] = useState();
   const [cardContent, setCardContent] = useState();
   const [scoreBoard, setScoreBoard] = useState(location.state?.scoreBoard || undefined);
+  const [leaveInProgress, setLeaveInProgress] = useState(false);
+
 
   // navigate back to lobby overview if player did not join lobby through join button
   useEffect(() => {
@@ -74,17 +76,27 @@ const LobbyWaitingRoom = () => {
         return new Game(initialGameId, gameStart);
       }
     } catch (error) {
-      console.error(`Something went wrong while fetching the Game: \n${handleError(error)}`);
+      navigate("/lobbyoverview")
+      console.log(`Something went wrong while fetching the Game: \n${handleError(error)}`);
     }
   }
 
-  const sendExitRequest = useCallback(() => {
-    handleLeave().then();
+  const sendExitRequest = useCallback(async () => {
+    try {
+      setLeaveInProgress(true);
+      await handleLeave();
+      window.history.replaceState({}, '');
+    } finally {
+      setLeaveInProgress(false);
+    }
   }, []);
-
+  
   useEffect(() => {
     const handleTabClose = (event) => {
-      sendExitRequest();
+      if (!leaveInProgress) {
+        event.preventDefault();
+        sendExitRequest();
+      }
     };
 
     window.addEventListener("beforeunload", handleTabClose);
@@ -92,7 +104,10 @@ const LobbyWaitingRoom = () => {
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
-  }, [sendExitRequest]);
+  }, [leaveInProgress, sendExitRequest]);
+
+  
+
 
 
   useEffect(() => {
@@ -141,6 +156,7 @@ const LobbyWaitingRoom = () => {
       if (response.status === 204) {
         await ws.disconnect();
         navigate("/lobbyOverview");
+        return response.status === 204;
       } else {
         alert("There was a error when trying to leave the lobby. Please try again later");
       }
