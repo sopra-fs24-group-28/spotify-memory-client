@@ -3,6 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 const toastNotify = (msg, timeout, type) => {
+  toast.dismiss()
   toast(msg, {
     position: "top-center",
     autoClose: timeout,
