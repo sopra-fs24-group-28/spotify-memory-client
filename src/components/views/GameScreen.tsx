@@ -188,6 +188,7 @@ const GameScreen = () => {
         }, 5000);
       } else {
         // host left the lobby
+        toastNotify("Sorry the host left the current Game. Therefore the Game has been finished", 5000, "warning")
         disconnectPlayer();
         stompClient.deactivate();
         navigate("/lobbyoverview");
