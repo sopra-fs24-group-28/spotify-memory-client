@@ -40,7 +40,6 @@ const GameScreen = () => {
   }, []);
 
   const sendExitRequest = useCallback(() => {
-   handleInactive();
    handleLeaveGame();
   }, [game.gameId]);
 
@@ -205,8 +204,9 @@ const GameScreen = () => {
 
   function handleLeaveGame() {
     try {
+      handleInactive();
       api.delete(`/games/${game.gameId}/player`)
-      navigate("/lobbyoverview")
+        .then(navigate("/lobbyoverview"))
     } catch (error) {
       toastNotify("There was an error trying to leave the game. Please try again.", 1000, "warning");
     }

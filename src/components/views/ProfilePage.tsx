@@ -62,7 +62,7 @@ const ProfiilePage = () => {
               <span>{userInformation.gamesAborted}</span>
             </div>
             <div className="stat-item">
-              <span>Correctly Depicted Sets</span>
+              <span>Total Points Won</span>
               <span>{userInformation.setsWon}</span>
             </div>
           </div>
