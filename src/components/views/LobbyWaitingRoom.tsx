@@ -225,9 +225,20 @@ const LobbyWaitingRoom = () => {
                   <div className="h3-title">Game Over! Your Scoreboard is:</div>
                   {game && game.playerList && (
                     <ul>
-                      {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (
-                        <li key={user.userId} className="grid-item">
-                          <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
+                      {game.playerList
+                        .sort((a, b) => {
+                          const rankA = scoreBoard[a.userId]?.rank;
+                          const rankB = scoreBoard[b.userId]?.rank;
+                          // If rankA or rankB is undefined, treat them as Infinity so they appear at the end
+                          
+                          return (rankA ?? Infinity) - (rankB ?? Infinity);
+                        })
+                        .map((user) => (
+                          <li key={user.userId} className="grid-item">
+                          <UserStatWithIcon
+                            user={user}
+                            currentStanding={scoreBoard[user.userId]?.rank ?? 0 /* Default value */}
+                          />
                         </li>
                       ))}
                     </ul>
