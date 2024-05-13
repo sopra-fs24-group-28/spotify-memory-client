@@ -40,6 +40,7 @@ const GameScreen = () => {
   }, []);
 
   const sendExitRequest = useCallback(() => {
+   handleInactive();
    handleLeaveGame();
   }, [game.gameId]);
 
@@ -261,7 +262,7 @@ const GameScreen = () => {
                     {game.playerList.map((user) => (
                       <li key={user.userId} className="grid-item">
                         <div className="usr">
-                          <UserStatWithIcon user={user} currentStanding={0} />
+                          <UserStatWithIcon user={user} currentStanding={1} />
                         </div>
                       </li>
                     ))}
