@@ -206,7 +206,7 @@ const GameScreen = () => {
     try {
       handleInactive();
       api.delete(`/games/${game.gameId}/player`)
-      navigate("/lobbyoverview")
+        .then(navigate("/lobbyoverview"))
     } catch (error) {
       toastNotify("There was an error trying to leave the game. Please try again.", 1000, "warning");
     }
