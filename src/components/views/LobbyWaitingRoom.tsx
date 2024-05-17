@@ -142,7 +142,7 @@ const LobbyWaitingRoom = () => {
       if (!(localStorage.getItem("userId") === String(game?.hostId))) {
         toastNotify("The current lobby has been closed by the host. Create or join another one!", 5000, "warning");
       }
-      navigate("/lobbyOverview");
+      navigate("/lobbyoverview");
     }
   }, [game]);
 
@@ -156,7 +156,7 @@ const LobbyWaitingRoom = () => {
       const response = await api.delete(`games/${initialGameId}/player`);
       if (response.status === 204) {
         await ws.disconnect();
-        navigate("/lobbyOverview");
+        navigate("/lobbyoverview");
 
         return response.status === 204;
       } else {

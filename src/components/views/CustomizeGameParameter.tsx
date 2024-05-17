@@ -32,7 +32,9 @@ const CustomizeGameParameter = () => {
     async function fetchAvailablePlaylists() {
       setPlaylistFetchCounter(playlistFetchCounter + 1);
       const playlists = await getSpotifyPlaylist();
-      if (playlists === null) {
+      console.log("playlists", playlists);
+      
+      if (playlists === null || playlists.length === 0) {
         setStartDisabled(true)
       } else {
         setAvailablePlaylists(playlists);
@@ -40,7 +42,7 @@ const CustomizeGameParameter = () => {
     }
 
     fetchAvailablePlaylists();
-  }, []);
+  }, [startDisabled]);
 
   useEffect(() => {
     if (availablePlaylists.length > 0) {
@@ -145,7 +147,7 @@ const CustomizeGameParameter = () => {
   }
 
   function cancel() {
-    navigate("/lobbyOverview");
+    navigate("/lobbyoverview");
   }
 
 
