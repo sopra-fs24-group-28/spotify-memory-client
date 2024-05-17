@@ -229,7 +229,7 @@ const LobbyWaitingRoom = () => {
                   .map((user) => (<li key={user.userId} className="grid-item">
                     <UserStatWithIcon
                       user={user}
-                      currentStanding={scoreBoard[user.userId]?.rank ?? 0 /* Default value */}
+                      currentStanding={scoreBoard[user.userId]?.score ?? 0 /* Default value */}
                     />
                   </li>))}
               </ul>)}
