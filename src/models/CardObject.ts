@@ -11,9 +11,7 @@ class CardObject {
     this.imageUrl = null;
   }
 
-  public setContent(content: any) {
-    console.log(content);
-    
+  public setContent(content: any) {    
     this.songId = content[1];
     this.imageUrl = content[2];
   }
