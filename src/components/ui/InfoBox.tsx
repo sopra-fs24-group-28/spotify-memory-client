@@ -7,7 +7,7 @@ const InfoBox = (props) => {
   let closeFunc = props?.closeFunc
 
   return (
-    <div className="info-box">
+    <div className="info-box main-box">
       <div className="info-box overlay"></div> {/* Transparent overlay */}
       <div className="button-container-exit">
         <button onClick={() => {closeFunc()}} className="exit-button">✕</button>
@@ -20,7 +20,7 @@ const InfoBox = (props) => {
             If they do not match, they are turned face down again and play passes to the next player.
             The game ends when the last pair has been picked up. The winner is the player with the most pairs. 
           </p>
-          <Button className="info-wiki-button" width="70%" onClick={() => {window.open("https://en.wikipedia.org/wiki/Concentration_(card_game)")}}>Read more on Wikipedia</Button>
+          <Button className="info-wiki-button" width="50%" onClick={() => {window.open("https://en.wikipedia.org/wiki/Concentration_(card_game)")}}>More on Wikipedia</Button>
       </div>
       <div className="column">
           <h2>Hints for Smooth Gameplay</h2>
@@ -31,6 +31,7 @@ const InfoBox = (props) => {
               <li className="list">Disable Ad Blockers</li>
               <li className="list">Allow Popups</li>
               <li className="list">Disable Tracking Preventions</li>
+              <li className="list">Select Playlist available in local markets</li>
             </ol>
             </p>
       </div>

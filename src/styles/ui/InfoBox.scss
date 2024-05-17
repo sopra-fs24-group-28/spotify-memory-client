@@ -3,9 +3,6 @@
 .info-box {
   display: flex;
   position: fixed;
-  width: 80vw;
-  height: fit-content;
-  //max-height: 80vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -14,10 +11,14 @@
   color: $textColor;
   border-radius: 10px;
   box-shadow: $dropShadow;
-  overflow: scroll;
-  @media screen and (min-width: 1100px) {
-    width: 60vw;
-  }
+
+}
+
+.main-box {
+  min-width: 480px;
+  max-width: 1000px;
+  width: 80vw;
+  height: fit-content;
 
 }
 
@@ -27,7 +28,7 @@
 }
 
 .column + .column {
-  padding: 20px;
+  // padding: 20px;
   border-left: 1.5px solid $textColor; /* Add a left border to the second column */
 }
 
