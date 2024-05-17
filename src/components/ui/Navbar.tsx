@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/ui/Navbar.scss";
 import GameIconSVG from "./icons-svg/GameIconSVG";
 import LogoutSVG from "./icons-svg/LogoutSVG";
+import InfoIconSVG from "./icons-svg/InfoIconSVG"; 
+import InfoBox from "./InfoBox";
 import { logout } from "../../helpers/auth/logoutfunction";
 import { useLocation, useNavigate } from "react-router-dom";
 import toastNotify from "../../helpers/Toast";
@@ -11,6 +13,9 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [infoContent, setInfoContent] = useState(<div></div>);
+
 
   //conditional rendering over
   const isProfilePage = location.pathname.toLowerCase() === "/profilepage";
@@ -23,35 +28,53 @@ const Navbar = () => {
     logout(navigate).then( () =>{toastNotify("successfully logged out", 500, "normal")})
   };
 
-  return (<nav className="navbar">
-    <div className="navbar-container">
-      {(isLoginPage || isGamePage) ?
-      <a className="navbar-brand">
-        Spotymemory
-      </a>
-      :
-      <p className="navbar-brand">
-        Spotymemory
-      </p>
-}
+  const showInfo = () => {
+    setInfoContent(<InfoBox closeFunc={closeInfo}/>);   
+  }
 
-      <div className="navbar-icons">
-        {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
-          <a href="/lobbyoverview" className="iconItems" title="Return to the Lobby Overview">
-            <GameIconSVG></GameIconSVG>
-          </a>)}
-        {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
-          <a onClick={handleLogout} className="iconItems" title="Log out!">
-            <LogoutSVG />
-          </a>)}
+  const closeInfo = () => {    
+    setInfoContent(<div></div>);    
+  }
 
-        {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
-          <a href="/profilePage" className="iconItems" title="Check out your Profile Page!">
-            <UserProfileSVG/>
-          </a>)}
-      </div>
+
+  return (
+    <div>
+    <nav className="navbar">
+      <div className="navbar-container">
+        {(isLoginPage || isGamePage) ?
+        <a className="navbar-brand">
+          Spotymemory
+        </a>
+        :
+        <p className="navbar-brand">
+          Spotymemory
+        </p>
+  }
+
+        <div className="navbar-icons">
+          {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
+            <a onClick={showInfo} className="iconItems" title="Information">
+              <InfoIconSVG></InfoIconSVG>
+            </a>)}
+          {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
+            <a href="/lobbyoverview" className="iconItems" title="Return to the Lobby Overview">
+              <GameIconSVG></GameIconSVG>
+            </a>)}
+          {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
+            <a onClick={handleLogout} className="iconItems" title="Log out!">
+              <LogoutSVG />
+            </a>)}
+
+          {!(isGamePage || isLoginPage || isLobbyPage && !isLobbyOverviewPage) && (
+            <a href="/profilePage" className="iconItems" title="Check out your Profile Page!">
+              <UserProfileSVG/>
+            </a>)}
+        </div>
+        </div>
+    </nav>
+    {infoContent}
     </div>
-  </nav>);
+  );
 };
 
 export default Navbar;
