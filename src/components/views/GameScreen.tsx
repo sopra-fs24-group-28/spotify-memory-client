@@ -258,14 +258,14 @@ const GameScreen = () => {
                   {game.playerList.sort((a, b) => scoreBoard[a.userId].rank - scoreBoard[b.userId].rank).map((user) => (
                     <li key={user.userId} className="grid-item">
                       <div className="usr">
-                        <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].rank} />
+                        <UserStatWithIcon user={user} currentStanding={scoreBoard[user.userId].score} />
                       </div>
                     </li>))}
                 </ul> : <ul className="grid-item">
                   <div className="h2-title">Current Players</div>
                   {game.playerList.map((user) => (<li key={user.userId} className="grid-item">
                     <div className="usr">
-                      <UserStatWithIcon user={user} currentStanding={1} />
+                      <UserStatWithIcon user={user} currentStanding={0} />
                     </div>
                   </li>))}
                 </ul>}

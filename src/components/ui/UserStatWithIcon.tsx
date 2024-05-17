@@ -13,7 +13,7 @@ export const UserStatWithIcon = (props) => {
   </span>
 
   <span className="button-label">{user.username}</span>
-  {props.currentStanding > 0 && ( // Check if currentStanding is larger than 0
+  {props.currentStanding > -1 && ( // Check if currentStanding is larger than 0
         <span className="notification-bubble">{props.currentStanding}</span>
       )}
   </span>);
