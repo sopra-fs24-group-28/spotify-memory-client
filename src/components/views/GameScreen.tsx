@@ -101,7 +101,7 @@ const GameScreen = () => {
   // Receiver function
   const receiverFunction = useCallback((newDataRaw) => {
     const data = JSON.parse(newDataRaw.body);
-    const { gameChangesDto, cardsStates, cardContent, scoreBoard } = data;
+    const { gameChangesDto, cardsStates, cardContents, scoreBoard } = data;
 
     if (gameChangesDto?.changed) {
       setGame(prevGame => {
@@ -130,17 +130,24 @@ const GameScreen = () => {
     }
 
     // Updating card content
-    if (cardContent?.changed) {
+    if (cardContents?.changed) {
+      const updates = (cardContents?.value.cardContents);
+      
       setCardsStates(prevCards => {
 
         return prevCards.map(card => {
-          if (card.cardId === String(cardContent.value.cardId)) {
-            const updatedCard = new CardObject(card.cardId, card.cardState);
-            updatedCard.setContent(cardContent.value);
-
-            return updatedCard;
+          for (const key in updates) {
+                  
+            // for all cards for which cardContents is updated, we create a new card
+            if (card.cardId === String(updates[key][0])) {
+              const updatedCard = new CardObject(card.cardId, card.cardState);
+              updatedCard.setContent(updates[key]);
+              
+              return updatedCard;
+            }
           }
 
+          // if the card is not updated, we keep it as it is
           return card;
         });
       });
