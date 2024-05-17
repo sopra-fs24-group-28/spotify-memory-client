@@ -77,5 +77,9 @@
 
 .info-wiki-button {
   @extend .primary-button;
-  font-size: medium;
+  font-size: medium; 
+  translate: 3.5vw 3vh; 
+  min-width: 160px;
+  max-width: 300px;
+
 }
