@@ -67,8 +67,11 @@ class Game {
   // Additional setters for each property should be defined here...
   public doUpdate = (key: string, value: any) => {
     if (key === "playerList") {
-      if (this.playerList.length > value.length) {
-        toastNotify("One Player left", 2000, "warning")
+      // shows toasty notification if playerList has decreased and if player is not the one who left     
+      if (this.playerList.length > value.length && value.map(obj => obj.userId).includes(Number(localStorage.getItem("userId")))) {
+        setTimeout(() => { // timeout trick to prevent toasty from firing right when react is in the middle of a re-render
+          toastNotify("One Player left", 2000, "warning");
+        }, 0);  
       }
       this.playerList = value;
     }

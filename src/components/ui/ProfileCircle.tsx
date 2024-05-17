@@ -27,7 +27,7 @@ const ProfileCircle = (props) => {
 export default ProfileCircle;
 
 ProfileCircle.propTypes = {
-  width: PropTypes.string,
-  height: PropTypes.string,
+  width: PropTypes.string || PropTypes.number,
+  height: PropTypes.string || PropTypes.number,
   url: PropTypes.string,
 };
