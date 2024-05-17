@@ -26,7 +26,7 @@ const InfoBox = (props) => {
       </div>
       <div className="column">
           <h2>Hints for Smooth Gameplay</h2>
-          <p>The target browser for this app is a recent version of Google Chrome. While other browseres may also work, Safari does not work reliably.</p>
+          <p>The target browser for this app is a recent version of Google Chrome.</p>
           <p>Furthermore, due to the Spotify APIs used to facillitate gameplay, we have found that some settings may prevent a smooth experience. If you are having trouble playing the game, please ensure that you:</p>
           <ol>
             <li className="list">Disable VPN</li>
