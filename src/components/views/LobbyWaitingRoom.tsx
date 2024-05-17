@@ -16,7 +16,7 @@ const LobbyWaitingRoom = () => {
   const initialGameId = location.state?.lobby?.lobbyId;
   const [game, setGame] = useState<Game>();
   const [cardsStates, setCardsStates] = useState();
-  const [cardContent, setCardContent] = useState();
+  const [cardContents, setCardContents] = useState();
   const [scoreBoard, setScoreBoard] = useState(location.state?.scoreBoard || undefined);
   const [leaveInProgress, setLeaveInProgress] = useState(false);
 
@@ -52,13 +52,13 @@ const LobbyWaitingRoom = () => {
       });
     }
     // store all other ws updates to send on later
-    if (data.cardsStates.changed) {
+    if (data.cardsStates?.changed) {
       setCardsStates(data.cardsStates.value);
     }
-    if (data.cardContent.changed) {
-      setCardContent(data.cardContent.value);
+    if (data.cardContents?.changed) {
+      setCardContents(data.cardContents.value);
     }
-    if (data.scoreBoard.changed) {
+    if (data.scoreBoard?.changed) {
       // ignoring scoreboard here for now
       // setScoreBoard(data.scoreBoard.value.scoraboard);
     }
@@ -118,6 +118,10 @@ const LobbyWaitingRoom = () => {
       .catch(error => {
         toastNotify("There was an error fetching the data. Please try again.", 1000, "warning");
       });
+
+    return () => {
+      ws.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -128,7 +132,7 @@ const LobbyWaitingRoom = () => {
       };
       navigate(`/game/${game.gameId}`, {
         state: {
-          game: game.serialize(), cardsStates: cardsStates, cardContent: cardContent,
+          game: game.serialize(), cardsStates: cardsStates, cardContents: cardContents,
         },
       });
     } else if (game?.gameState === "FINISHED") {

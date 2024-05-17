@@ -102,7 +102,7 @@ const LobbyOverview = () => {
     content = (
       <div className="gridhandler">
         {receivedGameStates.filter(lobby => lobby.gameState === "OPEN").map(lobby => (
-          <div key={lobby.id} className="grid-item">
+          <div key={lobby.lobbyId} className="grid-item">
             <LobbyObject lobby={lobby} />
           </div>
         ))}
