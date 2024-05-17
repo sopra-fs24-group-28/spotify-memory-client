@@ -9,7 +9,7 @@ export const LoginGuard = () => {
   }
   localStorage.clear()
   
-  return <Navigate to="/login" />;
+  return <Outlet/>;
 };
 
 LoginGuard.propTypes = {

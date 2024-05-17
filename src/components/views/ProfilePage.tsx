@@ -34,7 +34,7 @@ const ProfiilePage = () => {
   }
 
   function doReturn() {
-    navigate("/lobbyOverview");
+    navigate("/lobbyoverview");
   }
 
 

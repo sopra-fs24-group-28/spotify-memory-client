@@ -145,7 +145,7 @@ const CustomizeGameParameter = () => {
   }
 
   function cancel() {
-    navigate("/lobbyOverview");
+    navigate("/lobbyoverview");
   }
 
 
