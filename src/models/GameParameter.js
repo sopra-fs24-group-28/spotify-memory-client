@@ -8,7 +8,6 @@ class GameParameter {
     this.streakStart = data.streakStart;
     this.streakMultiplier = data.streakMultiplier;
     this.timePerTurn = data.timePerTurn;
-    this.timePerTurnPowerUp = data.timePerTurnPowerUp;
     Object.assign(this, data);
   }
 }
