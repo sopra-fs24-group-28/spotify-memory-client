@@ -32,7 +32,7 @@ const CustomizeGameParameter = () => {
       setPlaylistFetchCounter(playlistFetchCounter + 1);
       const playlists = await getSpotifyPlaylist();
       console.log("playlists", playlists);
-      
+
       if (playlists === null || playlists.length === 0) {
         setStartDisabled(true)
       } else {
@@ -48,6 +48,12 @@ const CustomizeGameParameter = () => {
       setPlaylist(availablePlaylists[0].id);
     }
   }, [availablePlaylists]);
+
+  const handleBlur = (value, setValue, min, max, def) => {
+    if (value < min || value > max) {
+      setValue(def);
+    }
+  };
 
   const validateInputs = () => {
     const validations: {
@@ -187,6 +193,7 @@ const CustomizeGameParameter = () => {
                   className="normalInput"
                   value={playerLimit}
                   type="number"
+                  onBlur={() => handleBlur(playerLimit, setPlayerLimit, 2,4,2)}
                   onChange={e => setPlayerLimit(e.target.value)}
                 />
               </div>
@@ -197,8 +204,8 @@ const CustomizeGameParameter = () => {
                   id="numOfSets"
                   className="normalInput"
                   type="number"
-
                   value={numOfSets}
+                  onBlur={() => handleBlur(numOfSets, setNumOfSets, 1,10,3)}
                   onChange={e => setNumOfSets(e.target.value)}
                 />
               </div>
@@ -222,6 +229,7 @@ const CustomizeGameParameter = () => {
                     type="number"
                     placeholder="Number of Cards per Set"
                     value={numOfCardsPerSet}
+                    onBlur={() => handleBlur(numOfCardsPerSet, setNumOfCardsPerSet, 2,4,2)}
                     onChange={e => setNumOfCardsPerSet(e.target.value)}
                   />
                 </div>
@@ -233,6 +241,7 @@ const CustomizeGameParameter = () => {
                     type="number"
                     placeholder="Streak Start"
                     value={streakStart}
+                    onBlur={() => handleBlur(streakStart, setStreakStart, 2,10,2)}
                     onChange={e => setStreakStart(e.target.value)}
                   />
                 </div>
@@ -244,6 +253,7 @@ const CustomizeGameParameter = () => {
                     type="number"
                     placeholder="Streak Multiplier"
                     value={streakMultiplier}
+                    onBlur={() => handleBlur(streakMultiplier, setStreakMultiplier, 1,100,2)}
                     onChange={e => setStreakMultiplier(e.target.value)}
                   />
                 </div>
@@ -255,6 +265,7 @@ const CustomizeGameParameter = () => {
                     type="number"
                     placeholder="Time per Turn Normal"
                     value={timePerTurn}
+                    onBlur={() => handleBlur(timePerTurn, setTmePerTurn, 10,60,15)}
                     onChange={e => setTmePerTurn(e.target.value)}
                   />
                 </div>
