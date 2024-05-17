@@ -76,7 +76,7 @@ const LobbyWaitingRoom = () => {
         return new Game(initialGameId, gameStart);
       }
     } catch (error) {
-      navigate("/lobbyoverview")
+      navigate("/lobbyoverview");
       console.log(`Something went wrong while fetching the Game: \n${handleError(error)}`);
     }
   }
@@ -85,12 +85,12 @@ const LobbyWaitingRoom = () => {
     try {
       setLeaveInProgress(true);
       await handleLeave();
-      window.history.replaceState({}, '');
+      window.history.replaceState({}, "");
     } finally {
       setLeaveInProgress(false);
     }
   }, []);
-  
+
   useEffect(() => {
     const handleTabClose = (event) => {
       if (!leaveInProgress) {
@@ -105,9 +105,6 @@ const LobbyWaitingRoom = () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
   }, [leaveInProgress, sendExitRequest]);
-
-  
-
 
 
   useEffect(() => {
@@ -156,6 +153,7 @@ const LobbyWaitingRoom = () => {
       if (response.status === 204) {
         await ws.disconnect();
         navigate("/lobbyOverview");
+
         return response.status === 204;
       } else {
         alert("There was a error when trying to leave the lobby. Please try again later");
@@ -180,67 +178,67 @@ const LobbyWaitingRoom = () => {
   }
 
   return (<div className="BaseContainer">
-      <div className="BaseDivLobby">
-        <div className="gridhandler">
-          <div className="centerwrapper">
-            <div
-              className={game?.gameParameters.playlist.playlistImageUrl ? "imgContainer" : "spotifyPlaylistContainer"}>
-              {game?.gameParameters.playlist.playlistImageUrl ? (<div className="imgandtext">
-                  {/*<span*/}
-                  {/*  className="playlist-name second-column-top-item">{game?.gameParameters.playlist.playlistName}</span>*/}
-                  <img
-                    src={game?.gameParameters.playlist.playlistImageUrl}
-                    alt="Spotify Playlist Image"
-                    className="second-column-top-item-lw img"
-                  />
-                  <span className="playlist-name">{game?.gameParameters.playlist.playlistName}</span>
-                </div>) : (<SpotifyLogoWithTextSVG width="0.8" height="0.8" />)}
-            </div>
-            <div className="buttonContainer">
-              <Button width="40%" onClick={handleLeave}>Leave</Button>
-              {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ? (
-                <Button width="40%"
-                        onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button>) : (localStorage.getItem("userId") === String(game?.hostId) ? (
-                  <Button width="40%" disabled={true}>Start (Still Waiting..)</Button>) : (<div></div>))}
-            </div>
-
-
+    <div className="BaseDivLobby">
+      <div className="gridhandler">
+        <div className="centerwrapper">
+          <div
+            className={game?.gameParameters.playlist.playlistImageUrl ? "imgContainer" : "spotifyPlaylistContainer"}>
+            {game?.gameParameters.playlist.playlistImageUrl ? (<div className="imgandtext">
+              {/*<span*/}
+              {/*  className="playlist-name second-column-top-item">{game?.gameParameters.playlist.playlistName}</span>*/}
+              <img
+                src={game?.gameParameters.playlist.playlistImageUrl}
+                alt="Spotify Playlist Image"
+                className="second-column-top-item-lw img"
+              />
+              <span className="playlist-name">{game?.gameParameters.playlist.playlistName}</span>
+            </div>) : (<SpotifyLogoWithTextSVG width="0.8" height="0.8" />)}
           </div>
-          <div className="centerwrapper">
-            <div className="playergrid">
-              {/* Display players when scoreBoard is not available */}
-              {!scoreBoard && (<div>
-                  <div className="h3-title">These players are already waiting!!</div>
-                  {game && game.playerList && (<ul className="grid-item">
-                      {game.playerList.map((user) => (<li key={user.userId} className="grid-item">
-                          <UserStatWithIcon user={user} currentStanding={0} />
-                        </li>))}
-                    </ul>)}
-                </div>)}
-              {scoreBoard && (<div>
-                  <div className="h3-title">Game Over! Your Scoreboard is:</div>
-                  {game && game.playerList && (<ul>
-                      {game.playerList
-                        .sort((a, b) => {
-                          const rankA = scoreBoard[a.userId]?.rank;
-                          const rankB = scoreBoard[b.userId]?.rank;
-                          // If rankA or rankB is undefined, treat them as Infinity so they appear at the end
+          <div className="buttonContainer">
+            <Button width="40%" onClick={handleLeave}>Leave</Button>
+            {localStorage.getItem("userId") === String(game?.hostId) && game?.playerList.length >= 2 ? (
+              <Button width="40%"
+                      onClick={handleStart}>{scoreBoard ? "Restart" : "Start"}</Button>) : (localStorage.getItem("userId") === String(game?.hostId) ? (
+              <Button width="40%" disabled={true}>Start (Still Waiting..)</Button>) : (<div></div>))}
+          </div>
 
-                          return (rankA ?? Infinity) - (rankB ?? Infinity);
-                        })
-                        .map((user) => (<li key={user.userId} className="grid-item">
-                            <UserStatWithIcon
-                              user={user}
-                              currentStanding={scoreBoard[user.userId]?.rank ?? 0 /* Default value */}
-                            />
-                          </li>))}
-                    </ul>)}
-                </div>)}
-            </div>
+
+        </div>
+        <div className="centerwrapper">
+          <div className="playergrid">
+            {/* Display players when scoreBoard is not available */}
+            {!scoreBoard && (<div>
+              <div className="h3-title">These players are already waiting!!</div>
+              {game && game.playerList && (<ul className="grid-item">
+                {game.playerList.map((user) => (<li key={user.userId} className="grid-item">
+                  <UserStatWithIcon user={user} currentStanding={0} />
+                </li>))}
+              </ul>)}
+            </div>)}
+            {scoreBoard && (<div>
+              <div className="h3-title">Game Over! Your Scoreboard is:</div>
+              {game && game.playerList && (<ul>
+                {game.playerList
+                  .sort((a, b) => {
+                    const rankA = scoreBoard[a.userId]?.rank;
+                    const rankB = scoreBoard[b.userId]?.rank;
+                    // If rankA or rankB is undefined, treat them as Infinity so they appear at the end
+
+                    return (rankA ?? Infinity) - (rankB ?? Infinity);
+                  })
+                  .map((user) => (<li key={user.userId} className="grid-item">
+                    <UserStatWithIcon
+                      user={user}
+                      currentStanding={scoreBoard[user.userId]?.rank ?? 0 /* Default value */}
+                    />
+                  </li>))}
+              </ul>)}
+            </div>)}
           </div>
         </div>
       </div>
-    </div>);
+    </div>
+  </div>);
 };
 
 
