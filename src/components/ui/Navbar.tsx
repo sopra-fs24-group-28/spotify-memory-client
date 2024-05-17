@@ -18,7 +18,7 @@ const Navbar = () => {
 
 
   //conditional rendering over
-  const isProfilePage = location.pathname.toLowerCase() === "/profilepage";
+  //const isProfilePage = location.pathname.toLowerCase() === "/profilepage";
   const isLobbyOverviewPage = location.pathname.toLowerCase() === "/lobbyoverview";
   const isLoginPage = location.pathname.toLowerCase() === "/login";
   const isGamePage = location.pathname.toLowerCase().includes("game") //|| location.pathname.toLowerCase().includes("");

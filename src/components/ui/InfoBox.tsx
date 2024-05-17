@@ -20,7 +20,9 @@ const InfoBox = (props) => {
             If they do not match, they are turned face down again and play passes to the next player.
             The game ends when the last pair has been picked up. The winner is the player with the most pairs. 
           </p>
-          <Button className="info-wiki-button" width="50%" onClick={() => {window.open("https://en.wikipedia.org/wiki/Concentration_(card_game)")}}>More on Wikipedia</Button>
+          <div className="button-container-wiki">
+            <Button className="info-wiki-button" width="50%" onClick={() => {window.open("https://en.wikipedia.org/wiki/Concentration_(card_game)")}}>More on Wikipedia</Button>
+          </div>
       </div>
       <div className="column">
           <h2>Hints for Smooth Gameplay</h2>
