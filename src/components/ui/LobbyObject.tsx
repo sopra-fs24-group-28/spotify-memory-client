@@ -11,7 +11,7 @@ import toastNotify from "../../helpers/Toast";
 const LobbyObject = (props) => {
   const navigate = useNavigate();
   let lobby = props.lobby ? props.lobby : null;
-
+  
   async function join() {
     try {
       if (lobby.lobbyId) {
@@ -37,7 +37,7 @@ const LobbyObject = (props) => {
       <div className="user-avatars second-column-bottom-item">
         {lobby.playerList.map((user) => (
           <li key={user.userId}>
-            <ProfileCircle height={40} width={40} url={user.imageUrl} />
+            <ProfileCircle height={"40px"} width={"40px"} url={user.imageUrl} />
           </li>
         ))}
       </div>

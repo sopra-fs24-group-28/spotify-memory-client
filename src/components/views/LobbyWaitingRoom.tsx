@@ -16,7 +16,7 @@ const LobbyWaitingRoom = () => {
   const initialGameId = location.state?.lobby?.lobbyId;
   const [game, setGame] = useState<Game>();
   const [cardsStates, setCardsStates] = useState();
-  const [cardContent, setCardContent] = useState();
+  const [cardContents, setCardContents] = useState();
   const [scoreBoard, setScoreBoard] = useState(location.state?.scoreBoard || undefined);
   const [leaveInProgress, setLeaveInProgress] = useState(false);
 
@@ -52,13 +52,13 @@ const LobbyWaitingRoom = () => {
       });
     }
     // store all other ws updates to send on later
-    if (data.cardsStates.changed) {
+    if (data.cardsStates?.changed) {
       setCardsStates(data.cardsStates.value);
     }
-    if (data.cardContent.changed) {
-      setCardContent(data.cardContent.value);
+    if (data.cardContents?.changed) {
+      setCardContents(data.cardContents.value);
     }
-    if (data.scoreBoard.changed) {
+    if (data.scoreBoard?.changed) {
       // ignoring scoreboard here for now
       // setScoreBoard(data.scoreBoard.value.scoraboard);
     }
@@ -118,6 +118,10 @@ const LobbyWaitingRoom = () => {
       .catch(error => {
         toastNotify("There was an error fetching the data. Please try again.", 1000, "warning");
       });
+
+    return () => {
+      ws.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -128,7 +132,7 @@ const LobbyWaitingRoom = () => {
       };
       navigate(`/game/${game.gameId}`, {
         state: {
-          game: game.serialize(), cardsStates: cardsStates, cardContent: cardContent,
+          game: game.serialize(), cardsStates: cardsStates, cardContents: cardContents,
         },
       });
     } else if (game?.gameState === "FINISHED") {
@@ -138,7 +142,7 @@ const LobbyWaitingRoom = () => {
       if (!(localStorage.getItem("userId") === String(game?.hostId))) {
         toastNotify("The current lobby has been closed by the host. Create or join another one!", 5000, "warning");
       }
-      navigate("/lobbyOverview");
+      navigate("/lobbyoverview");
     }
   }, [game]);
 
@@ -152,7 +156,7 @@ const LobbyWaitingRoom = () => {
       const response = await api.delete(`games/${initialGameId}/player`);
       if (response.status === 204) {
         await ws.disconnect();
-        navigate("/lobbyOverview");
+        navigate("/lobbyoverview");
 
         return response.status === 204;
       } else {
@@ -229,7 +233,7 @@ const LobbyWaitingRoom = () => {
                   .map((user) => (<li key={user.userId} className="grid-item">
                     <UserStatWithIcon
                       user={user}
-                      currentStanding={scoreBoard[user.userId]?.rank ?? 0 /* Default value */}
+                      currentStanding={scoreBoard[user.userId]?.score ?? 0 /* Default value */}
                     />
                   </li>))}
               </ul>)}

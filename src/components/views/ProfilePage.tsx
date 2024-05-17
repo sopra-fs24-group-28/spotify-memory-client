@@ -34,7 +34,7 @@ const ProfiilePage = () => {
   }
 
   function doReturn() {
-    navigate("/lobbyOverview");
+    navigate("/lobbyoverview");
   }
 
 
@@ -43,7 +43,7 @@ const ProfiilePage = () => {
       <div className="BaseDiv">
 
         <div className="user-profile-header">
-          <ProfileCircle height={140} width={140} url={userInformation.profileImageUrl} />
+          <ProfileCircle height={"140px"} width={"140px"} url={userInformation.profileImageUrl} />
           <h2 className="user-profile-name">{userInformation.username}</h2>
         </div>
         <div className="user-profile-stats">
