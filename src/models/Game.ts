@@ -9,7 +9,7 @@ class Game {
   public playerList: any;
   private gameState: Change | undefined;
   private hostId: Change | undefined;
-  private activePlayerStreak: any;
+  private activePlayerStreakActive: any;
   private history: any;
   private scoreboard: any;
   public activePlayer: any;
@@ -21,13 +21,12 @@ class Game {
     this.playerList = gameStart.playerList?.map(userData => userData ? new User(userData) : null) || [];
     this.gameState = gameStart?.gameState;
     this.hostId = gameStart?.hostId;
-
-    this.activePlayerStreak =  gameStart.activePlayerid; //todo change name
     this.history = gameStart.history;
     this.scoreboard = gameStart.scoreboard;
     this.activePlayer = gameStart?.activePlayer; //todo change name to sync with backend
-    this.quickTurn =  gameStart?.activePlayerid;//todo change name
-    this.quickTurnActive =  gameStart?.activePlayerid; //todo change name
+    this.activePlayerStreakActive = gameStart?.activePlayerStreakActive
+    // this.quickTurn =  gameStart?.activePlayerid;//todo change name
+    // this.quickTurnActive =  gameStart?.activePlayerid; //todo change name
   }
 
   // Method to serialize the Game object to a plain object
@@ -38,7 +37,7 @@ class Game {
       playerList: this.playerList.map(player => player ? player : null), // Ensure User class has a serialize method
       gameState: this.gameState,
       hostId: this.hostId,
-      activePlayerStreak: this.activePlayerStreak,
+      activePlayerStreakActive: this.activePlayerStreakActive,
       history: this.history,
       scoreboard: this.scoreboard,
       activePlayer: this.activePlayer,
@@ -54,7 +53,7 @@ class Game {
       playerList: data.playerList.map(playerData => playerData ? new User(playerData) : null), // Ensure User has a deserialize method
       gameState: data.gameState,
       hostId: data.hostId,
-      activePlayerid: data.activePlayerStreak,
+      activePlayerStreakActive: data.activePlayerStreakActive,
       history: data.history,
       scoreboard: data.scoreboard,
       activePlayer: data.activePlayer,
@@ -85,8 +84,8 @@ class Game {
     else if(key === "hostId") {
       this.hostId = value;
     }
-    else if(key === "activePlayerStreak") {
-      this.activePlayerStreak = value;
+    else if(key === "activePlayerStreakActive") {
+      this.activePlayerStreakActive = value;
     }
     else if(key === "history") {
       this.history = value;
@@ -110,38 +109,6 @@ class Game {
     return this;
   }
 
-  setPlayers(players){
-    this.playerList = players?.map(userData => userData ? new User(userData) : null) || [];
-  }
-
-  // Methods to manage players
-  addPlayer(userID) {
-    this.playerList.push(userID);
-  }
-
-  removePlayer(userID) {
-    // Logic to remove a player by userID
-    // Return true if successful, false otherwise
-  }
-
-  // Game control methods
-  terminateGame() {
-    // Logic to terminate the game
-    // Return true if successful, false otherwise
-  }
-
-  startGame() {
-    // Logic to start the game
-  }
-
-  runTurn() {
-    // Logic for running a turn
-  }
-
-  resetGame(resetScoreboard = false) {
-    // Logic to reset the game
-    // Optionally reset the scoreboard based on the argument
-  }
 }
 
 
