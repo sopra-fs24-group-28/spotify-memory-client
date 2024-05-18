@@ -1,8 +1,7 @@
 ## Introduction
 
-By combining the concentration game with Spotify, Spotimemory creates a competitive and fun game to play among friends.
-This is the
-repository of the front-end part of our implementation, you'll find the back-end part of our
+By combining `concentration game` with music, Spotimemory creates a competitive and fun game to play among friends.
+This is the repository of the front-end part of our implementation, you'll find the back-end part of our
 application [here](https://github.com/sopra-fs24-group-28/spotify-memory-server).
 
 ## Technologies
@@ -10,49 +9,56 @@ application [here](https://github.com/sopra-fs24-group-28/spotify-memory-server)
 The client is written in TypeScript and JavaScript using React.
 
 We used REST communication to communicate between the front and backend for basic communication. In order to get a
-smooth in game experience, a stomp websocket connection gets established.
+smooth in game experience, stomp websockets were used.
 
 ## High-level components
 
+The [Login screen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/Login.tsx)
+allows users to log in with their spotify credentials. Upon successfull login (spotify premium acoount required) the user can enjoy the main part of our application:
+
 The [LobbyOverview](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx)
-view allows the users to either create a new lobby or join an existing one.
-When creating a new lobby, this player is regarded as the host and can thus define various game parameters
+allows the users to either create a new lobby or join an existing one.
+When creating a new lobby the role of the player changes to `host`. The user can thus define various game parameters
 in [the customization view](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/CustomizeGameParameter.tsx)
 such as the game mode, the number of cards, number of decks etc. In
-addition, the user can choose one of his personal playlists for this round. After customising, the lobby is visible for
-the other players and can be joined by them. Then will lead to a rerouting to the lobby waiting room which is an
-intermediate state where the host waits until all his
+addition, the host can choose one of his personal playlists for this round. So make sure that you already have a playlist in your spotify account.
+After customising, the lobby is visible for other players and can be joined by them. These players can already see who is in the respective lobby and what playlist is set.
+Joining a lobby leads to a rerouting to the [lobby waiting room](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyWaitingRoom.tsx) which is an
+intermediate place where the host can wait until all his
 friends joined the lobby.
 
 The host can decide to start a round by pressing `start` in
-the [waiting room](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyWaitingRoom.tsx).
+the [LobbyWaitingRoom](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyWaitingRoom.tsx).
 This will reroute all users to
-the [main game page](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/GameScreen.tsx).
+the [GameScreen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/GameScreen.tsx).
 
-Depending on the game customization settings the players now pick cards, listen to the respective songs (or inspect the
+Depending on the game customization settings the active player now pick a facedown card, listen to the respective songs (or inspect the
 albumcover) and try to match pairs.
-The observing players can see the same content at the same time thanks to our websockets.
+All other observing players can consume the same content at the same time thanks to our websockets.
 Whenever the active player matches two or more correct cards he or she will get another chance.
-In
-the [main game page](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/GameScreen.tsx)
-all players can observe the current scoreboard.
+Besides the actual game, all players can see the current scoreboard. 
 
 The game ends when the last set of cards was correctly picked. In that case all players are redirected to
-the [PostGame screen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx).
+the [GameOverScreen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx).
 All Players can inspect the scoreboard.
 Non-hosts can leave the current lobby and are then redirected to
 the [LobbyOverview](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx)
 while the host also has the option to start the next round with the current players or wait for others to join.
 
 Lastly,
-the [Profilepage](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/ProfilePage.tsx)
-allows users to inspect their account and get statistics about their performance.
+the [ProfilePage](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/ProfilePage.tsx)
+allows users to inspect their account and consume statistics about their past performance.
 
-The [GameController](https://github.com/sopra-fs22-group-17/RaveWave-client/blob/master/src/components/views/GameController.tsx)
-controls the game states as soon as the stomp websocket connection is established. The GameController subscribes as a
-listener and handles the different game states and decides which views are rendered.
 
 ## Launch & Deployment
+
+Firstly, make sure that your browser does not have any of the following properties enabled: 
+- active vpn connections
+- active popup-blockers
+- active tracking-blockers
+- active xyy was Diyar
+
+Once these prerequisites are fulfilled you can start launching the application with: 
 
 - npm run dev
 
