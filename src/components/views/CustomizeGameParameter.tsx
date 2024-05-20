@@ -12,15 +12,14 @@ import "react-tooltip/dist/react-tooltip.css";
 
 const CustomizeGameParameter = () => {
   const navigate = useNavigate();
-  const [playerLimit, setPlayerLimit] = useState(6);
+  const [playerLimit, setPlayerLimit] = useState(2);
   const [numOfSets, setNumOfSets] = useState(5);
   const [numOfCardsPerSet, setNumOfCardsPerSet] = useState(2);
   const [gameCategory, setGameCategory] = useState("STANDARDALBUMCOVER");
   const [playlist, setPlaylist] = useState();
-  const [streakStart, setStreakStart] = useState(3);
-  const [streakMultiplier, setStreakMultiplier] = useState(2);
-  const [timePerTurn, setTmePerTurn] = useState(10);
-  const [timePerTurnPowerUp, setTmePerTurnPowerUp] = useState(12);
+  const [streakStart, setStreakStart] = useState(2);
+  const [streakMultiplier, setStreakMultiplier] = useState(3);
+  const [timePerTurn, setTmePerTurn] = useState(15);
   const [gameParameters, setGameParameters] = useState();
   const [errorMessages, setErrorMessages] = useState<string>("");
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
@@ -33,7 +32,7 @@ const CustomizeGameParameter = () => {
       setPlaylistFetchCounter(playlistFetchCounter + 1);
       const playlists = await getSpotifyPlaylist();
       console.log("playlists", playlists);
-      
+
       if (playlists === null || playlists.length === 0) {
         setStartDisabled(true)
       } else {
@@ -49,6 +48,12 @@ const CustomizeGameParameter = () => {
       setPlaylist(availablePlaylists[0].id);
     }
   }, [availablePlaylists]);
+
+  const handleBlur = (value, setValue, min, max, def) => {
+    if (value < min || value > max) {
+      setValue(def);
+    }
+  };
 
   const validateInputs = () => {
     const validations: {
@@ -72,9 +77,6 @@ const CustomizeGameParameter = () => {
     }, {
       check: () => !timePerTurn || timePerTurn < 10 || timePerTurn > 60,
       errorMessage: "Please select a positive number between 10 and 60 seconds for normal turn time.",
-    }, {
-      check: () => !timePerTurnPowerUp || timePerTurnPowerUp < 10 || timePerTurnPowerUp > 60,
-      errorMessage: "Please select a positive number between 10 and 60 seconds for powerup turn time.",
     }];
 
     // Check each validation condition
@@ -104,7 +106,6 @@ const CustomizeGameParameter = () => {
         streakStart: streakStart,
         streakMultiplier: streakMultiplier,
         timePerTurn: timePerTurn,
-        timePerTurnPowerUp: timePerTurnPowerUp,
       }));
     }
   }
@@ -123,7 +124,7 @@ const CustomizeGameParameter = () => {
 
   useEffect(() => {
     validateInputs();
-  }, [playerLimit, numOfSets, numOfCardsPerSet, gameCategory, playlist, streakStart, streakMultiplier, timePerTurn, timePerTurnPowerUp]);
+  }, [playerLimit, numOfSets, numOfCardsPerSet, gameCategory, playlist, streakStart, streakMultiplier, timePerTurn]);
 
 
   async function sendLobbyCreationRequest() {
@@ -192,6 +193,7 @@ const CustomizeGameParameter = () => {
                   className="normalInput"
                   value={playerLimit}
                   type="number"
+                  onBlur={() => handleBlur(playerLimit, setPlayerLimit, 2,4,2)}
                   onChange={e => setPlayerLimit(e.target.value)}
                 />
               </div>
@@ -202,8 +204,8 @@ const CustomizeGameParameter = () => {
                   id="numOfSets"
                   className="normalInput"
                   type="number"
-
                   value={numOfSets}
+                  onBlur={() => handleBlur(numOfSets, setNumOfSets, 1,10,3)}
                   onChange={e => setNumOfSets(e.target.value)}
                 />
               </div>
@@ -227,10 +229,11 @@ const CustomizeGameParameter = () => {
                     type="number"
                     placeholder="Number of Cards per Set"
                     value={numOfCardsPerSet}
+                    onBlur={() => handleBlur(numOfCardsPerSet, setNumOfCardsPerSet, 2,4,2)}
                     onChange={e => setNumOfCardsPerSet(e.target.value)}
                   />
                 </div>
-                <div className="inputpair" title="Define what is a streak for you. This might influence the points.">
+                <div className="inputpair" title="Define after how many correct picks a streak starts">
                   <label className="label" htmlFor="streakStart">Streak Start:</label>
                   <input
                     id="streakStart"
@@ -238,10 +241,11 @@ const CustomizeGameParameter = () => {
                     type="number"
                     placeholder="Streak Start"
                     value={streakStart}
+                    onBlur={() => handleBlur(streakStart, setStreakStart, 2,10,2)}
                     onChange={e => setStreakStart(e.target.value)}
                   />
                 </div>
-                <div className="inputpair" title="Adjust the factor that players get with streaks.">
+                <div className="inputpair" title="Adjust the factor that points get multiplied during a streak.">
                   <label className="label" htmlFor="streakMultiplier">Streak Multiplier:</label>
                   <input
                     id="streakMultiplier"
@@ -249,6 +253,7 @@ const CustomizeGameParameter = () => {
                     type="number"
                     placeholder="Streak Multiplier"
                     value={streakMultiplier}
+                    onBlur={() => handleBlur(streakMultiplier, setStreakMultiplier, 1,100,2)}
                     onChange={e => setStreakMultiplier(e.target.value)}
                   />
                 </div>
@@ -260,18 +265,8 @@ const CustomizeGameParameter = () => {
                     type="number"
                     placeholder="Time per Turn Normal"
                     value={timePerTurn}
+                    onBlur={() => handleBlur(timePerTurn, setTmePerTurn, 10,60,15)}
                     onChange={e => setTmePerTurn(e.target.value)}
-                  />
-                </div>
-                <div className="inputpair" title="Adjust more specific parameters by pressing on this button.">
-                  <label className="label" htmlFor="timePerTurnPowerUp">Time per Turn (Powerup):</label>
-                  <input
-                    id="timePerTurnPowerUp"
-                    className="normalInput"
-                    type="number"
-                    placeholder="Time per Turn Powerup"
-                    value={timePerTurnPowerUp}
-                    onChange={e => setTmePerTurnPowerUp(e.target.value)}
                   />
                 </div>
               </div> :

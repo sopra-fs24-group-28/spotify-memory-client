@@ -13,8 +13,7 @@ class Game {
   private history: any;
   private scoreboard: any;
   public activePlayer: any;
-  private quickTurnActive: any;
-  private quickTurn: any;
+
   constructor(gameId: any, gameStart) {
     this.gameId = gameId;
     this.gameParameters = new GameParameter(gameStart.gameParameters);
@@ -23,10 +22,8 @@ class Game {
     this.hostId = gameStart?.hostId;
     this.history = gameStart.history;
     this.scoreboard = gameStart.scoreboard;
-    this.activePlayer = gameStart?.activePlayer; //todo change name to sync with backend
+    this.activePlayer = gameStart?.activePlayer;
     this.activePlayerStreakActive = gameStart?.activePlayerStreakActive
-    // this.quickTurn =  gameStart?.activePlayerid;//todo change name
-    // this.quickTurnActive =  gameStart?.activePlayerid; //todo change name
   }
 
   // Method to serialize the Game object to a plain object
@@ -41,8 +38,6 @@ class Game {
       history: this.history,
       scoreboard: this.scoreboard,
       activePlayer: this.activePlayer,
-      quickTurnActive: this.quickTurnActive,
-      quickTurn: this.quickTurn
     };
   }
 
@@ -57,8 +52,6 @@ class Game {
       history: data.history,
       scoreboard: data.scoreboard,
       activePlayer: data.activePlayer,
-      quickTurn: data.quickTurn,
-      quickTurnActive: data.quickTurnActive
     };
 
     return new Game(data.gameId, gameStart);
@@ -98,12 +91,6 @@ class Game {
     }
     else if(key === "activePlayer") {
       this.activePlayer = value;
-    }
-    else if(key === "quickTurn") {
-      this.quickTurn = value;
-    }
-    else if(key === "quickTurnActive") {
-      this.quickTurnActive = value;
     }
     else {
       console.error("NOT IMPLEMENTED", key);

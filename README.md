@@ -1,65 +1,183 @@
-# SoPra FS24 - Client Template with build pack
+## Introduction
 
-## Getting started
+By combining `concentration game` with music, Spotimemory creates a competitive and fun game to play among friends.
+This is the repository of the front-end part of our implementation, you'll find the back-end part of our
+application [here](https://github.com/sopra-fs24-group-28/spotify-memory-server).
 
-Read and go through these Tutorials. It will make your life easier:)
+## Technologies
 
-- Read the React [Docs](https://react.dev/learn)
-- Do this React [Getting Started](https://react.dev/learn/tutorial-tic-tac-toe) Tutorial (it doesn't assume any existing React knowledge)
-- Get an Understanding of [CSS](https://www.w3schools.com/Css/), [SCSS](https://sass-lang.com/documentation/syntax), and [HTML](https://www.w3schools.com/html/html_intro.asp)!
+The client is written in TypeScript and JavaScript using React.
 
-Next, there are two other technologies that you should look at:
+We used REST communication to communicate between the front and backend for basic communication. In order to get a
+smooth in game experience, stomp websockets were used.
 
-* [react-router-dom](https://reactrouter.com/en/main/start/concepts) offers declarative routing for React. It is a collection of navigational components that fit nicely with the application. 
-* [react-hooks](https://blog.logrocket.com/using-hooks-react-router/) let you access the router's state and perform navigation from inside your components.
+## High-level components
 
-## Prerequisites and Installation
-For your local development environment, you will need Node.js.\
-We urge you to install the exact version **v20.11.0** which comes with the npm package manager. You can download it [here](https://nodejs.org/download/release/v20.11.0/).\
-If you are confused about which download to choose, feel free to use these direct links:
+The [Login screen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/Login.tsx)
+allows users to log in with their spotify credentials. Upon successfull login (spotify premium acoount required) the user can enjoy the main part of our application:
 
-- **MacOS:** [node-v20.11.0.pkg](https://nodejs.org/download/release/v20.11.0/node-v20.11.0.pkg)
-- **Windows 32-bit:** [node-v20.11.0-x86.msi](https://nodejs.org/download/release/v20.11.0/node-v20.11.0-x86.msi)
-- **Windows 64-bit:** [node-v20.11.0-x64.msi](https://nodejs.org/download/release/v20.11.0/node-v20.11.0-x64.msi)
-- **Linux:** [node-v20.11.0.tar.xz](https://nodejs.org/dist/v20.11.0/node-v20.11.0.tar.xz) (use this [installation guide](https://medium.com/@tgmarinho/how-to-install-node-js-via-binary-archive-on-linux-ab9bbe1dd0c2) if you are new to Linux)
+The [LobbyOverview](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx)
+allows the users to either create a new lobby or join an existing one.
+When creating a new lobby the role of the player changes to `host`. The user can thus define various game parameters
+in [the customization view](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/CustomizeGameParameter.tsx)
+such as the game mode, the number of cards, number of decks etc. In
+addition, the host can choose one of his personal playlists for this round. So make sure that you already have a playlist in your spotify account.
+After customising, the lobby is visible for other players and can be joined by them. These players can already see who is in the respective lobby and what playlist is set.
+Joining a lobby leads to a rerouting to the [lobby waiting room](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyWaitingRoom.tsx) which is an
+intermediate place where the host can wait until all his
+friends joined the lobby.
 
-If you happen to have a package manager the following commands can be used:
+The host can decide to start a round by pressing `start` in
+the [LobbyWaitingRoom](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyWaitingRoom.tsx).
+This will reroute all users to
+the [GameScreen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/GameScreen.tsx).
 
-- **Homebrew:** `brew install node@20.11.0`
-- **Chocolatey:** `choco install nodejs-lts --version=20.11.0`
+Depending on the game customization settings the active player now pick a facedown card, listen to the respective songs (or inspect the
+albumcover) and try to match pairs.
+All other observing players can consume the same content at the same time thanks to our websockets.
+Whenever the active player matches two or more correct cards he or she will get another chance.
+Besides the actual game, all players can see the current scoreboard. 
 
-After the installation, update the npm package manager to **10.4.0** by running ```npm install -g npm@10.4.0```\
-You can ensure the correct version of node and npm by running ```node -v``` and ```npm --version```, which should give you **v20.11.0** and **10.4.0** respectively.\
-Before you start your application for the first time, run this command to install all other dependencies, including React:
+The game ends when the last set of cards was correctly picked. In that case all players are redirected to
+the [GameOverScreen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx).
+All Players can inspect the scoreboard.
+Non-hosts can leave the current lobby and are then redirected to
+the [LobbyOverview](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx)
+while the host also has the option to start the next round with the current players or wait for others to join.
 
-```npm install```
-
-Next, you can start the app with:
-
-```npm run dev```
-
-Now you can open [http://localhost:3000](http://localhost:3000) to view it in the browser.\
-Notice that the page will reload if you make any edits. You will also see any lint errors in the console (use a Chrome-based browser).\
-The client will send HTTP requests to the server which can be found [here](https://github.com/HASEL-UZH/sopra-fs24-template-server).\
-In order for these requests to work, you need to install and start the server as well.
-
-### Testing
-Testing is optional, and you can run the tests with `npm run test`\
-This launches the test runner in an interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-> For macOS user running into a 'fsevents' error: https://github.com/jest-community/vscode-jest/issues/423
-
-### Build
-Finally, `npm run build` builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance:\
-The build is minified, and the filenames include hashes.<br>
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-## Learn More
-
-To learn React, check out the [React documentation](https://react.dev/).
+Lastly,
+the [ProfilePage](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/ProfilePage.tsx)
+allows users to inspect their account and consume statistics about their past performance.
 
 
-> Thanks to Lucas Pelloni Kyrill Hux and Marco Leder for working on the template.
+## Launch & Deployment
+
+Firstly, make sure that your browser does not have any of the following properties enabled: 
+- active vpn connections
+- active popup-blockers
+- active tracking-blockers
+- active xyy was Diyar
+
+Once these prerequisites are fulfilled you can start launching the application with: 
+
+- npm run dev
+
+  Runs the app in the development mode.
+  Open http://localhost:3000 to view it in the browser.
+
+  The page will reload if you make edits.
+  You will also see any lint errors in the console.
+
+- npm run build
+
+  Builds the app for production to the build folder.
+  It correctly bundles React in production mode and optimizes the build for the best performance.
+
+  Your app is ready to be deployed!
+
+## Illustrations
+
+[//]: # (<h3 align="center">)
+
+[//]: # (  <br>)
+
+[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/a.png" alt="RaveWave" width="200"></a>)
+
+[//]: # (  <br>)
+
+[//]: # (  Landinghost - As a host you can log in or register.)
+
+[//]: # (  <br>)
+
+[//]: # (</h3>)
+
+[//]: # (<h3 align="center">)
+
+[//]: # (  <br>)
+
+[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/b.png" alt="RaveWave" width="200"></a>)
+
+[//]: # (  <br>)
+
+[//]: # (  Selectgamemode - This is where the host can adjust game parameters.)
+
+[//]: # (  <br>)
+
+[//]: # (</h3>)
+
+[//]: # (<h3 align="center">)
+
+[//]: # (  <br>)
+
+[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/c.png" alt="RaveWave" width="200"></a>)
+
+[//]: # (  <br>)
+
+[//]: # (  DisplayQR - The host displays a QR-code which other players can scan in order to join the lobby. )
+
+[//]: # (  <br>)
+
+[//]: # (</h3>)
+
+[//]: # (<h3 align="center">)
+
+[//]: # (  <br>)
+
+[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/d.png" alt="RaveWave" width="200"></a>)
+
+[//]: # (  <br>)
+
+[//]: # (  Guess the song - The players can give give their guesses.)
+
+[//]: # (  <br>)
+
+[//]: # (</h3>)
+
+[//]: # (<h3 align="center">)
+
+[//]: # (  <br>)
+
+[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/e.png" alt="RaveWave" width="200"></a>)
+
+[//]: # (  <br>)
+
+[//]: # (  EndRound - A leaderboard is shown after each round.)
+
+[//]: # (  <br>)
+
+[//]: # (</h3>)
+
+[//]: # (<h3 align="center">)
+
+[//]: # (  <br>)
+
+[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/f.png" alt="RaveWave" width="200"></a>)
+
+[//]: # (  <br>)
+
+[//]: # (  EndGame - A final leaderboard is shown after all game rounds are played.)
+
+[//]: # (  </br>)
+
+[//]: # (</h3>)
+
+## Roadmap
+
+- New game mode: Artists matching
+- Global Spotimemory leaderboard
+- Submit Quota Extension request (takes about six weeks)
+
+## Authors and acknoledgment
+
+SoPra Group 28 2024 consists
+of [Diyar Taskiran](https://github.com/DTaskiran), [Elias Müller](https://github.com/EliasWJMuller),
+[Henry Kim](https://github.com/hs-kim1990), [Niklas Schmidt](https://github.com/niklasschm1dt)
+and [Nicolas Schuler](https://github.com/NicSchuler).
+
+Lastly, want to thank our teaching
+assistant [Cedric von Rausch](https://github.com/cedric-vr) for his help during the
+last semester.
+
+## License
+
+Apache-2.0 license
