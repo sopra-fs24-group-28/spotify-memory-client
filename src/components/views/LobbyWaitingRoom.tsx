@@ -215,7 +215,7 @@ const LobbyWaitingRoom = () => {
               <div className="h3-title">These players are already waiting!!</div>
               {game && game.playerList && (<ul className="grid-item">
                 {game.playerList.map((user) => (<li key={user.userId} className="grid-item">
-                  <UserStatWithIcon user={user} currentStanding={0} />
+                  <UserStatWithIcon user={user} currentStanding={-1} />
                 </li>))}
               </ul>)}
             </div>)}
