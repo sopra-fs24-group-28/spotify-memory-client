@@ -24,7 +24,7 @@ const CustomizeGameParameter = () => {
   const [errorMessages, setErrorMessages] = useState<string>("");
   const [availablePlaylists, setAvailablePlaylists] = useState([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [startDisabled, setStartDisabled] = useState(false);
+  const [startDisabled, setStartDisabled] = useState(true);
   const [playlistFetchCounter, setPlaylistFetchCounter] = useState(0);
 
   useEffect(() => {
@@ -36,6 +36,7 @@ const CustomizeGameParameter = () => {
       if (playlists === null || playlists.length === 0) {
         setStartDisabled(true)
       } else {
+        setStartDisabled(false); // only enable start if playlists load 
         setAvailablePlaylists(playlists);
       }
     }
