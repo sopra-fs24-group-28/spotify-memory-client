@@ -83,12 +83,10 @@ const CustomizeGameParameter = () => {
     const invalidMessages = validations.filter(({ check }) => check()).map(({ errorMessage }) => errorMessage);
     const errorMessage = invalidMessages.join("\n").trim();
     if (errorMessage) {
-      // setStartDisabled(true);
       setErrorMessages(errorMessage);
 
       return;
     }
-    // setStartDisabled(false);
     setErrorMessages(errorMessage);
   };
 
