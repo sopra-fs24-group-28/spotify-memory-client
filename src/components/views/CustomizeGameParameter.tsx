@@ -207,7 +207,7 @@ const CustomizeGameParameter = () => {
                   type="number"
                   value={numOfSets}
                   onBlur={() => handleBlur(numOfSets, setNumOfSets, 1,10,3)}
-                  onChange={e => setNumOfSets(e.target.value)}
+                  onChange={e => setNumOfSets(Number(e.target.value))}
                 />
               </div>
             </div>
