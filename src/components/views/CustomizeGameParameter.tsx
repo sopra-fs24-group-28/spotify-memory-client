@@ -63,7 +63,7 @@ const CustomizeGameParameter = () => {
       check: () => !playerLimit || playerLimit < 2,
       errorMessage: "Please enter a positive player limit greater than 1.",
     }, {
-      check: () => !numOfSets || numOfSets <= 0, errorMessage: "Please enter a positive number of sets.",
+      check: () => !numOfSets || (numOfSets > 10 || numOfSets < 2), errorMessage: "Please select between 2 and 10 sets.",
     }, {
       check: () => !numOfCardsPerSet || numOfCardsPerSet <= 0,
       errorMessage: "Please enter a positive number of cards per set.",
@@ -205,7 +205,7 @@ const CustomizeGameParameter = () => {
                   className="normalInput"
                   type="number"
                   value={numOfSets}
-                  onBlur={() => handleBlur(numOfSets, setNumOfSets, 1,10,3)}
+                  onBlur={() => handleBlur(numOfSets, setNumOfSets, 2,10,3)}
                   onChange={e => setNumOfSets(Number(e.target.value))}
                 />
               </div>
