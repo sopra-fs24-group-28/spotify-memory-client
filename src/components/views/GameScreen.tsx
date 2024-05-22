@@ -12,6 +12,7 @@ import { getWSDomain } from "helpers/getDomain";
 import toastNotify from "../../helpers/Toast";
 import { api } from "helpers/api";
 import { UserStatWithIcon } from "../ui/UserStatWithIcon";
+import { isEmptyBindingElement } from "typescript";
 
 
 const GameScreen = () => {
@@ -26,6 +27,8 @@ const GameScreen = () => {
   const [player, setPlayer] = useState(null);
   const [yourTurn, setYourTurn] = useState(false);
   const [countdown, setCountdown] = useState(0); // Timer state
+  const [globalTimeoutID, setGlobalTimeoutID] = useState(null); // Timer state
+
 
 
   useEffect(() => {
@@ -194,15 +197,17 @@ const GameScreen = () => {
       // game is finished, set message and disable timers
       setShowMessage("Game over!");
       setCountdown(5);
-      setTimeout(() => {
+      const timeoutID = setTimeout(() => {
         disconnectPlayer();
         stompClient.deactivate();
         navigate(`/lobby/${game.gameId}`, { state: { lobby: { lobbyId: game.gameId }, scoreBoard: scoreBoard } });
       }, 5000);
+      setGlobalTimeoutID(timeoutID)
       } if (game?.gameState === "FINISHED") {
         // host left the lobby
         toastNotify("Sorry the host left the current Game. Therefore the Game has been finished", 5000, "warning");
         disconnectPlayer();
+        clearTimeout(globalTimeoutID);
         stompClient.deactivate();
         navigate("/lobbyoverview");
       }
