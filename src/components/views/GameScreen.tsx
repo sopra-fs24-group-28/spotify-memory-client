@@ -28,6 +28,7 @@ const GameScreen = () => {
   const [yourTurn, setYourTurn] = useState(false);
   const [countdown, setCountdown] = useState(0); // Timer state
   const [globalTimeoutID, setGlobalTimeoutID] = useState(null); // Timer state
+  const [leaveDisabled, setLeaveDisabled] = useState(false);
 
 
   useEffect(() => {
@@ -201,6 +202,7 @@ const GameScreen = () => {
         stompClient.deactivate();
         navigate(`/lobby/${game.gameId}`, { state: { lobby: { lobbyId: game.gameId }, scoreBoard: scoreBoard } });
       }, 5000);
+      setLeaveDisabled(true); 
       setGlobalTimeoutID(timeoutID)
       } if (game?.gameState === "FINISHED") {
         // host left the lobby
@@ -271,7 +273,7 @@ const GameScreen = () => {
                 </ul>}
               </div>
               <div className="buttongroup">
-                <Button className="leave-button" width={"85%"} onClick={handleLeaveGame}>Leave Game</Button>
+                <Button className="leave-button" width={"85%"} onClick={handleLeaveGame} disabled={leaveDisabled}>Leave Game</Button>
               </div>
             </div>
           </div>
