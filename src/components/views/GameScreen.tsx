@@ -30,7 +30,6 @@ const GameScreen = () => {
   const [globalTimeoutID, setGlobalTimeoutID] = useState(null); // Timer state
 
 
-
   useEffect(() => {
     if (game.activePlayerStreakActive) {
       if (yourTurn) {
