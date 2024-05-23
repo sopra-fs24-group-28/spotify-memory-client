@@ -1,183 +1,95 @@
 ## Introduction
 
-By combining `concentration game` with music, Spotimemory creates a competitive and fun game to play among friends.
-This is the repository of the front-end part of our implementation, you'll find the back-end part of our
-application [here](https://github.com/sopra-fs24-group-28/spotify-memory-server).
+While music streaming services have transformed the listening experience of everybody over the past decade; they have also deteriorated the social aspects of music enjoyment. In the era of streaming, it is difficult to discover, share, and enjoy music with friends.
+
+This project intends to provide a playful shared listening experience in the form of a Spotify based memory game. Memory is a game in which players take turns to collect points by matching pairs of face-down cards. In our game, Spotymemory, the cards represent elements of music, such as snippets of a song or album art, depending on the game mode.
+
+Through this game, players have the chance to discover new music with friends. This game is also a great web application project for this course, as it takes advantage of the powerful Spotify API and presents a broad range of design possibilities.
+
+This is the front-end part of our implementation – the corresponding back-end can be found [here](https://github.com/sopra-fs24-group-28/spotify-memory-server).
+
+This application was developed as part of the FS24 – Software Engineering Lab (SoPra) taught by Prof. Dr. Thomas Fritz. [More information](https://hasel.dev/teachings/fs24-sopra/).
 
 ## Technologies
 
-The client is written in TypeScript and JavaScript using React.
+The client is developed using React with TypeScript and JavaScript.
 
-We used REST communication to communicate between the front and backend for basic communication. In order to get a
-smooth in game experience, stomp websockets were used.
+The application is deployed on Google Cloud. To ensure a smooth in-game experience, we utilized a REST interface for basic communication between the front and backend, while incorporating STOMP WebSockets for more seamless and efficient real-time interactions.
 
-## High-level components
+## High-level Components
 
-The [Login screen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/Login.tsx)
-allows users to log in with their spotify credentials. Upon successfull login (spotify premium acoount required) the user can enjoy the main part of our application:
+The [Login](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/Login.tsx) allows users to access the app using their Spotify credentials though OAuth. A successful login requires a Spotify Premium subscription and linking the Spotify account to a Spotify API App.
 
-The [LobbyOverview](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx)
-allows the users to either create a new lobby or join an existing one.
-When creating a new lobby the role of the player changes to `host`. The user can thus define various game parameters
-in [the customization view](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/CustomizeGameParameter.tsx)
-such as the game mode, the number of cards, number of decks etc. In
-addition, the host can choose one of his personal playlists for this round. So make sure that you already have a playlist in your spotify account.
-After customising, the lobby is visible for other players and can be joined by them. These players can already see who is in the respective lobby and what playlist is set.
-Joining a lobby leads to a rerouting to the [lobby waiting room](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyWaitingRoom.tsx) which is an
-intermediate place where the host can wait until all his
-friends joined the lobby.
+The [LobbyOverview](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx) allows the users to either create a new lobby or join an existing one. When creating a new lobby, the user can define various game parameters in [the customization view](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/CustomizeGameParameter.tsx) such as the game mode, the number of cards, number of decks, and more. Moreover, the user can choose one of their personal playlists to serve as the basic game contents. Note that a user can only create a lobby if they have a Spotify playlist in their library. 
 
-The host can decide to start a round by pressing `start` in
-the [LobbyWaitingRoom](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyWaitingRoom.tsx).
-This will reroute all users to
-the [GameScreen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/GameScreen.tsx).
+Upon creation, the lobby becomes public and can be joined by other players form the [LobbyOverview](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx). All players who join are directed to the [lobby waiting room](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyWaitingRoom.tsx) until the host decides to start the game.
 
-Depending on the game customization settings the active player now pick a facedown card, listen to the respective songs (or inspect the
-albumcover) and try to match pairs.
-All other observing players can consume the same content at the same time thanks to our websockets.
-Whenever the active player matches two or more correct cards he or she will get another chance.
-Besides the actual game, all players can see the current scoreboard. 
+In the primary [GameScreen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/GameScreen.tsx) users are faced with a deck of face down cards which they can interact with (during their turns). They also see a turn timer, as well as a scoreboard. The active player can select a set of cards, consume the respective contents (depending on the game mode, music or cover art) and try to match pairs. All observing players can consume the same content at the same time.
 
-The game ends when the last set of cards was correctly picked. In that case all players are redirected to
-the [GameOverScreen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx).
-All Players can inspect the scoreboard.
-Non-hosts can leave the current lobby and are then redirected to
-the [LobbyOverview](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx)
-while the host also has the option to start the next round with the current players or wait for others to join.
-
-Lastly,
-the [ProfilePage](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/ProfilePage.tsx)
-allows users to inspect their account and consume statistics about their past performance.
-
+The game ends when all set of cards are correctly picked. Players are redirected to the [GameOverScreen](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/main/src/components/views/LobbyOverview.tsx), form where the host can restart the game.
 
 ## Launch & Deployment
 
-Firstly, make sure that your browser does not have any of the following properties enabled: 
-- active vpn connections
-- active popup-blockers
-- active tracking-blockers
-- active xyy was Diyar
+Before running the app, install dependencies using `npm install`.
 
-Once these prerequisites are fulfilled you can start launching the application with: 
+The app can be launched in development mode locally using `npm run dev` (default: localhost:3000).
 
-- npm run dev
+To create a build of the app for production, run `npm run build`. For cloud deployment, see our workflow [here](https://github.com/sopra-fs24-group-28/spotify-memory-client/blob/599e219ac15e7ce4cb23da2230e03a768d94d00c/.github/workflows/main.yml). 
 
-  Runs the app in the development mode.
-  Open http://localhost:3000 to view it in the browser.
-
-  The page will reload if you make edits.
-  You will also see any lint errors in the console.
-
-- npm run build
-
-  Builds the app for production to the build folder.
-  It correctly bundles React in production mode and optimizes the build for the best performance.
-
-  Your app is ready to be deployed!
+If any errors are encountered, ensure that you comply with the troubleshooting steps below. 
+<ol>
+  <li>Disable VPN</li>
+  <li>Disable Ad Blockers</li>
+  <li>Allow Popups</li>
+  <li>Disable Tracking Preventions</li>
+  <li>Select Playlist available in local markets</li>
+</ol>
 
 ## Illustrations
 
-[//]: # (<h3 align="center">)
+<div style="text-align: center;">
+    <h3>Login page</h3>
+    <p>Users can log in using their Spotify credentials</p>
+    <img src="assets/Login.png" alt="Login page with single button" width="50%" />
+</div>
 
-[//]: # (  <br>)
+<div style="text-align: center;">
+    <h3>Lobby overview</h3>
+    <p>From the overview, users can join existing lobbies or create a new one</p>
+    <img src="assets/LobbyOverview.png" alt="Page with two full lobbies and option to create new one" width="50%" />
+</div>
 
-[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/a.png" alt="RaveWave" width="200"></a>)
+<div style="text-align: center;">
+    <h3>Lobby waiting room </h3>
+    <p>Players are gathered in a waiting room until the host starts the game</p>
+    <img src="assets/LobbyWaitingRoom.png" alt="Lobby waiting room containing two players" width="50%" />
+</div>
 
-[//]: # (  <br>)
+<div style="text-align: center;">
+    <h3>Main game screen</h3>
+    <p>Memory board game, with turn indicator and scoreboard. 
+    <br> Active players can select cards which are then displayed for all players.</p>
+    <img src="assets/GameScreen.png" alt="Memory board game, two cards are flipped" width="50%" />
+</div>
 
-[//]: # (  Landinghost - As a host you can log in or register.)
-
-[//]: # (  <br>)
-
-[//]: # (</h3>)
-
-[//]: # (<h3 align="center">)
-
-[//]: # (  <br>)
-
-[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/b.png" alt="RaveWave" width="200"></a>)
-
-[//]: # (  <br>)
-
-[//]: # (  Selectgamemode - This is where the host can adjust game parameters.)
-
-[//]: # (  <br>)
-
-[//]: # (</h3>)
-
-[//]: # (<h3 align="center">)
-
-[//]: # (  <br>)
-
-[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/c.png" alt="RaveWave" width="200"></a>)
-
-[//]: # (  <br>)
-
-[//]: # (  DisplayQR - The host displays a QR-code which other players can scan in order to join the lobby. )
-
-[//]: # (  <br>)
-
-[//]: # (</h3>)
-
-[//]: # (<h3 align="center">)
-
-[//]: # (  <br>)
-
-[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/d.png" alt="RaveWave" width="200"></a>)
-
-[//]: # (  <br>)
-
-[//]: # (  Guess the song - The players can give give their guesses.)
-
-[//]: # (  <br>)
-
-[//]: # (</h3>)
-
-[//]: # (<h3 align="center">)
-
-[//]: # (  <br>)
-
-[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/e.png" alt="RaveWave" width="200"></a>)
-
-[//]: # (  <br>)
-
-[//]: # (  EndRound - A leaderboard is shown after each round.)
-
-[//]: # (  <br>)
-
-[//]: # (</h3>)
-
-[//]: # (<h3 align="center">)
-
-[//]: # (  <br>)
-
-[//]: # (  <a href="https://github.com/soprafs22-group17"><img src="/ReadMePics/f.png" alt="RaveWave" width="200"></a>)
-
-[//]: # (  <br>)
-
-[//]: # (  EndGame - A final leaderboard is shown after all game rounds are played.)
-
-[//]: # (  </br>)
-
-[//]: # (</h3>)
 
 ## Roadmap
 
-- New game mode: Artists matching
-- Global Spotimemory leaderboard
+- Add further game modes, such as:
+  - Matching different songs from the same artist
+  - Matching different songs from the same genre
+- Create a global leaderboard
 - Submit Quota Extension request (takes about six weeks)
 
-## Authors and acknoledgment
+## Authors and Acknowledgment
 
-SoPra Group 28 2024 consists
+SoPra FS24 – Group 28 consists
 of [Diyar Taskiran](https://github.com/DTaskiran), [Elias Müller](https://github.com/EliasWJMuller),
 [Henry Kim](https://github.com/hs-kim1990), [Niklas Schmidt](https://github.com/niklasschm1dt)
 and [Nicolas Schuler](https://github.com/NicSchuler).
 
-Lastly, want to thank our teaching
-assistant [Cedric von Rausch](https://github.com/cedric-vr) for his help during the
-last semester.
+We want to thank our teaching assistant [Cedric von Rausch](https://github.com/cedric-vr) for his guidance during the project.
 
 ## License
 
-Apache-2.0 license
+Apache-2.0
