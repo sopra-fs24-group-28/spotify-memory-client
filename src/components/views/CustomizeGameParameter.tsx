@@ -60,23 +60,23 @@ const CustomizeGameParameter = () => {
     const validations: {
       check: () => boolean, errorMessage: string
     }[] = [{
-      check: () => !playerLimit || playerLimit < 2,
-      errorMessage: "Please enter a positive player limit greater than 1.",
+      check: () => !playerLimit || (playerLimit > 4 || playerLimit < 2),
+      errorMessage: "Please enter a player limit between 2 and 4.",
     }, {
       check: () => !numOfSets || (numOfSets > 10 || numOfSets < 2), errorMessage: "Please select between 2 and 10 sets.",
     }, {
-      check: () => !numOfCardsPerSet || numOfCardsPerSet <= 0,
-      errorMessage: "Please enter a positive number of cards per set.",
+      check: () => !numOfCardsPerSet || (numOfCardsPerSet > 4 || numOfCardsPerSet < 2),
+      errorMessage: "Please enter a number of cards per set between 2 and 4.",
     }, { check: () => !gameCategory, errorMessage: "Please select a gameCategory." }, {
       check: () => !playlist && playlistFetchCounter > 1, errorMessage: "Please select a playlist.",
     }, {
-      check: () => !streakStart || streakStart <= 0,
-      errorMessage: "Please select a positive number for the streak start.",
+      check: () => !streakStart || (streakStart > 10 || streakStart < 2),
+      errorMessage: "Please select a streak start between 2 and 10.",
     }, {
-      check: () => !streakMultiplier || streakMultiplier <= 1,
-      errorMessage: "Please select a positive number greater than one for the streak multiplier.",
+      check: () => !streakMultiplier || (streakMultiplier > 100 || streakMultiplier < 1),
+      errorMessage: "Please select a streak multiplier between 1 and 100.",
     }, {
-      check: () => !timePerTurn || timePerTurn < 10 || timePerTurn > 60,
+      check: () => !timePerTurn || (timePerTurn < 10 || timePerTurn > 60),
       errorMessage: "Please select a positive number between 10 and 60 seconds for normal turn time.",
     }];
 
@@ -168,7 +168,7 @@ const CustomizeGameParameter = () => {
                   value={gameCategory}
                   onChange={e => setGameCategory(e.target.value)}
                 >
-                  <option value="STANDARDSONG">Normal</option>
+                  <option value="STANDARDSONG">Songs</option>
                   <option value="STANDARDALBUMCOVER">Album Cover</option>
                 </select>
               </div>
@@ -187,11 +187,13 @@ const CustomizeGameParameter = () => {
                 </select>
               </div>
               <div className="inputpair" title="Limit the amount of players that can join your lobby.">
-                <label className="label" htmlFor="playerLimit">Player Limit:</label>
+                <label className="label" htmlFor="playerLimit">Player Limit (2 - 4)</label>
                 <input
                   id="playerLimit"
                   className="normalInput"
                   value={playerLimit}
+                  min="2"
+                  max="4"
                   type="number"
                   onBlur={() => handleBlur(playerLimit, setPlayerLimit, 2,4,2)}
                   onChange={e => setPlayerLimit(Number(e.target.value))}
@@ -199,12 +201,14 @@ const CustomizeGameParameter = () => {
               </div>
               <div className="inputpair"
                    title="The number of sets defines how many pairs, trios etc. will be in the game.">
-                <label className="label" htmlFor="numOfSets">Number of Sets:</label>
+                <label className="label" htmlFor="numOfSets">Number of Sets (2 - 10)</label>
                 <input
                   id="numOfSets"
                   className="normalInput"
                   type="number"
                   value={numOfSets}
+                  min="2"
+                  max="10"
                   onBlur={() => handleBlur(numOfSets, setNumOfSets, 2,10,3)}
                   onChange={e => setNumOfSets(Number(e.target.value))}
                 />
@@ -222,49 +226,57 @@ const CustomizeGameParameter = () => {
             {showAdvanced ?
               <div className="grid">
                 <div className="inputpair" title="Adjust more specific parameters by pressing on this button.">
-                  <label className="label" htmlFor="numOfCardsPerSet">Cards per Set:</label>
+                  <label className="label" htmlFor="numOfCardsPerSet">Cards per Set (2 - 4)</label>
                   <input
                     id="numOfCardsPerSet"
                     className="normalInput"
                     type="number"
                     placeholder="Number of Cards per Set"
                     value={numOfCardsPerSet}
+                    min="2"
+                    max="4"
                     onBlur={() => handleBlur(numOfCardsPerSet, setNumOfCardsPerSet, 2,4,2)}
                     onChange={e => setNumOfCardsPerSet(Number(e.target.value))}
                   />
                 </div>
                 <div className="inputpair" title="Define after how many correct picks a streak starts">
-                  <label className="label" htmlFor="streakStart">Streak Start:</label>
+                  <label className="label" htmlFor="streakStart">Streak Start (2 - 10)</label>
                   <input
                     id="streakStart"
                     className="normalInput"
                     type="number"
                     placeholder="Streak Start"
                     value={streakStart}
+                    min="2"
+                    max="10"
                     onBlur={() => handleBlur(streakStart, setStreakStart, 2,10,2)}
                     onChange={e => setStreakStart(Number(e.target.value))}
                   />
                 </div>
                 <div className="inputpair" title="Adjust the factor that points get multiplied during a streak.">
-                  <label className="label" htmlFor="streakMultiplier">Streak Multiplier:</label>
+                  <label className="label" htmlFor="streakMultiplier">Streak Multiplier (1 - 100)</label>
                   <input
                     id="streakMultiplier"
                     className="normalInput"
                     type="number"
                     placeholder="Streak Multiplier"
                     value={streakMultiplier}
+                    min="1"
+                    max="100"
                     onBlur={() => handleBlur(streakMultiplier, setStreakMultiplier, 1,100,2)}
                     onChange={e => setStreakMultiplier(Number(e.target.value))}
                   />
                 </div>
                 <div className="inputpair" title="Adjust how many seconds the player has time to make a turn.">
-                  <label className="label" htmlFor="timePerTurn">Time per Turn (Normal):</label>
+                  <label className="label" htmlFor="timePerTurn">Time per Turn (10 - 60)</label>
                   <input
                     id="timePerTurn"
                     className="normalInput"
                     type="number"
                     placeholder="Time per Turn Normal"
                     value={timePerTurn}
+                    min="10"
+                    max="60"
                     onBlur={() => handleBlur(timePerTurn, setTmePerTurn, 10,60,15)}
                     onChange={e => setTmePerTurn(Number(e.target.value))}
                   />
