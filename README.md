@@ -6,7 +6,7 @@ This project intends to provide a playful shared listening experience in the for
 
 Through this game, players have the chance to discover new music with friends. This game is also a great web application project for this course, as it takes advantage of the powerful Spotify API and presents a broad range of design possibilities.
 
-This is the front-end part of our implementation – the corresponding back-end can be found [here](https://github.com/sopra-fs24-group-28/spotify-memory-server).
+This is the front-end part of our implementation – the corresponding back-end can be found [here](https://github.com/sopra-fs24-group-28/spotify-memory-server). Find the application currently deployed [here](https://sopra-fs24-group-28-client.oa.r.appspot.com/login).
 
 This application was developed as part of the FS24 – Software Engineering Lab (SoPra) taught by Prof. Dr. Thomas Fritz. [More information](https://hasel.dev/teachings/fs24-sopra/).
 
